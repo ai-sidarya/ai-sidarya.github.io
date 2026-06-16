@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sid Arya — Engineer. Empower. Elevate. Repeat." />
+  <title>Sid Arya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:    #0A0F1E;
+      --navy-2:  #0D1526;
+      --grid:    #1E3A5F;
+      --gold:    #C9A84C;
+      --gold-dim: rgba(201,168,76,0.18);
+      --steel:   #7FA8C9;
+      --slate:   #4A6B8A;
+      --slate-2: #2A4A6A;
+      --text:    #F0EDE6;
+      --muted:   rgba(240,237,230,0.55);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── background texture ── */
+    .page-wrap {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(30,58,95,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,58,95,0.3) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .gold-rule {
+      position: absolute;
+      top: 0; right: 88px;
+      width: 1px;
+      bottom: 0;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(201,168,76,0.15) 15%,
+        rgba(201,168,76,0.4) 40%,
+        rgba(201,168,76,0.4) 60%,
+        rgba(201,168,76,0.15) 85%,
+        transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── layout ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+
+    section { padding: 5rem 0; }
+    section + section { border-top: 0.5px solid var(--grid); }
+
+    /* ── type ── */
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .mono  { font-family: 'JetBrains Mono', monospace; }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 2.5rem;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: var(--slate);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── hero ── */
+    .hero { padding: 7rem 0 5rem; }
+
+    .hero-headline {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(52px, 9vw, 86px);
+      font-weight: 700;
+      line-height: 1.03;
+      letter-spacing: -1.5px;
+      color: var(--text);
+      margin-bottom: 2.5rem;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--steel);
+      max-width: 520px;
+      margin-bottom: 3.5rem;
+      letter-spacing: 0.4px;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+
+    .pillars {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 2px;
+    }
+    .pillars .sep { color: var(--gold); }
+
+    /* ── stats ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .stat {
+      background: var(--navy-2);
+      border: 0.5px solid var(--grid);
+      padding: 2rem 1.5rem;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--slate);
+      letter-spacing: 2px;
+      line-height: 1.7;
+    }
+
+    /* ── philosophy quote ── */
+    .statement {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 3.5vw, 34px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--text);
+      border-left: 2px solid var(--gold);
+      padding-left: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .statement-attr {
+      font-size: 11px;
+      color: var(--slate);
+      letter-spacing: 2px;
+      padding-left: 2rem;
+      line-height: 1.8;
+    }
+
+    /* ── frameworks ── */
+    .framework-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .fw-card {
+      background: var(--navy-2);
+      border: 0.5px solid var(--grid);
+      padding: 1.5rem;
+      transition: border-color 0.25s;
+    }
+    .fw-card:hover { border-color: rgba(201,168,76,0.45); }
+    .fw-card.full  { grid-column: span 2; }
+
+    .fw-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .fw-desc {
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.7;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── beliefs ── */
+    .belief-list { list-style: none; }
+
+    .belief-item {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 2.8vw, 26px);
+      font-weight: 600;
+      color: var(--text);
+      padding: 1.5rem 0;
+      border-bottom: 0.5px solid var(--grid);
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      line-height: 1.4;
+    }
+    .belief-item:first-child { border-top: 0.5px solid var(--grid); }
+
+    .belief-dash {
+      color: var(--gold);
+      font-size: 18px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .belief-item em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* ── cta ── */
+    .cta-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      padding-bottom: 7rem;
+    }
+
+    .cta-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 700;
+      color: var(--text);
+      max-width: 340px;
+      line-height: 1.3;
+    }
+    .cta-headline em { color: var(--gold); font-style: italic; }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .cta-link:hover { background: var(--gold-dim); }
+    .cta-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    /* ── footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 0.5px solid var(--grid);
+      padding: 2rem 2.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 10px;
+      color: var(--slate-2);
+      letter-spacing: 3px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* ── responsive ── */
+    @media (max-width: 600px) {
+      main { padding: 0 1.25rem; }
+      .stat-row { grid-template-columns: 1fr; }
+      .framework-grid { grid-template-columns: 1fr; }
+      .fw-card.full { grid-column: span 1; }
+      .gold-rule { display: none; }
+      .cta-section { flex-direction: column; align-items: flex-start; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="gold-rule" aria-hidden="true"></div>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Introduction">
+      <div class="eyebrow">Planet Earth | &nbsp; Engineer &nbsp;·&nbsp; Empower &nbsp;·&nbsp; Elevate &nbsp;·&nbsp; Repeat </div>
+      <h1 class="hero-headline">
+        I don't fix<br>
+        systems.<br>
+        I <em>redesign</em><br>
+        what's possible.
+      </h1>
+      <p class="hero-sub">
+        12 years. 3 Tier-1 OEMs. 5 proprietary frameworks.<br>
+        <strong>One obsession:</strong> technology that empowers every single person it touches—<br>
+        not just the ones at the top of the org chart.
+      </p>
+      <div class="pillars" aria-label="Brand pillars">
+        Product <span class="sep">·</span> People <span class="sep">·</span> Platform
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section aria-label="Career at a glance">
+      <div class="section-label">BY THE NUMBERS</div>
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-number">12</div>
+          <div class="stat-label">YEARS BUILDING<br>SAFETY-CRITICAL SYSTEMS</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">5</div>
+          <div class="stat-label">PROPRIETARY<br>FRAMEWORKS BUILT</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">3</div>
+          <div class="stat-label">GLOBAL TIER-1<br>AUTOMOTIVE OEMS</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section aria-label="Philosophy">
+      <div class="section-label">THE PHILOSOPHY</div>
+      <blockquote class="statement">
+        "Advancement in technology should create space for people to truly be themselves — not draw boundaries that separate us."
+      </blockquote>
+      <p class="statement-attr">
+        This isn't a mission statement. It's an engineering constraint.<br>
+        Every system Sid builds is governed by it.
+      </p>
+    </section>
+
+    <!-- FRAMEWORKS -->
+    <section aria-label="Proprietary frameworks">
+      <div class="section-label">THE FRAMEWORKS</div>
+      <p style="font-size:12px; color:var(--steel); margin-bottom:2rem; line-height:1.9; letter-spacing:0.3px;">
+        When Sid encounters a problem twice, he doesn't patch it a third time.<br>He architects a system.
+      </p>
+      <div class="framework-grid">
+        <div class="fw-card">
+          <div class="fw-name">LITE</div>
+          <div class="fw-desc">Lean Infrastructure Through Engineering<br>DevSecOps at enterprise scale</div>
+        </div>
+        <div class="fw-card">
+          <div class="fw-name">FORT</div>
+          <div class="fw-desc">Framework for Operational Resilience<br>Systems engineered to survive</div>
+        </div>
+        <div class="fw-card">
+          <div class="fw-name">CUBBE</div>
+          <div class="fw-desc">Cloud Unified Build Backend Environment<br>CI/CD without the entropy</div>
+        </div>
+        <div class="fw-card">
+          <div class="fw-name">CI-Deft</div>
+          <div class="fw-desc">Continuous Integration Deployment Frameworks for Tech<br>Ship fast. Break nothing.</div>
+        </div>
+        <div class="fw-card full">
+          <div class="fw-name">MeSOFIL</div>
+          <div class="fw-desc">Modular Embedded Systems Operations Framework for Integrated Lifecycle<br>Embedded systems that actually scale across the full product lifecycle</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BELIEFS -->
+    <section aria-label="Core beliefs">
+      <div class="section-label">WHAT SID BELIEVES</div>
+      <ul class="belief-list">
+        <li class="belief-item">
+          <span class="belief-dash">—</span>
+          <span>Every engineer is a <em>leader</em> waiting for the right system.</span>
+        </li>
+        <li class="belief-item">
+          <span class="belief-dash">—</span>
+          <span>Security and speed are <em>not</em> a tradeoff. That's a design failure.</span>
+        </li>
+        <li class="belief-item">
+          <span class="belief-dash">—</span>
+          <span>The best platform is one people <em>don't notice</em> — because it just works.</span>
+        </li>
+        <li class="belief-item">
+          <span class="belief-dash">—</span>
+          <span>Technology that <em>exploits</em> is a system with the wrong objective function.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section aria-label="Call to action">
+      <div class="cta-section">
+        <h2 class="cta-headline">
+          Building something that <em>matters</em>?<br>Let's talk.
+        </h2>
+        <a href="https://linkedin.com/in/thesidarya" class="cta-link" target="_blank" rel="noopener noreferrer">
+          CONNECT ON LINKEDIN &nbsp;→
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>SID ARYA</span>
+    <span>ENGINEER · EMPOWER · ELEVATE · REPEAT</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
