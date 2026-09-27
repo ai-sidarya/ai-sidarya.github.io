@@ -322,9 +322,69 @@
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; }
     }
+
+    /* ── nav ── */
+    section, .hero { scroll-margin-top: 88px; }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(10,15,30,0.88);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--grid);
+    }
+    .site-nav-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .site-nav-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: 1px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+    }
+    .site-nav-links a {
+      color: var(--steel);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .site-nav-links a:hover,
+    .site-nav-links a:focus-visible { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .site-nav-inner { padding: 1rem 1.25rem; }
+      .site-nav-links { gap: 1rem; font-size: 10px; }
+    }
+
   </style>
 </head>
 <body>
+
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="site-nav-inner">
+    <a href="#hero" class="site-nav-mark">SID ARYA</a>
+    <div class="site-nav-links">
+      <a href="https://ai-sidarya.github.io/mindlessgames/" target="_blank" rel="noopener noreferrer">MINDLESSGAMES</a>
+      <a href="#connect">CONNECT</a>
+    </div>
+  </div>
+</nav>
 
 <div class="page-wrap">
   <div class="grid-bg" aria-hidden="true"></div>
@@ -333,7 +393,7 @@
   <main>
 
     <!-- HERO -->
-    <section class="hero" aria-label="Introduction">
+    <section class="hero" id="hero" aria-label="Introduction">
       <div class="eyebrow">Planet Earth | &nbsp; Engineer &nbsp;·&nbsp; Empower &nbsp;·&nbsp; Elevate &nbsp;·&nbsp; Repeat </div>
       <h1 class="hero-headline">
         I don't fix<br>
@@ -347,7 +407,7 @@
       <p class="hero-sub">
         12 years. 3 Tier-1 OEMs. 5 proprietary frameworks.<br>
         <strong>One obsession:</strong> technology that empowers every single person it touches—
-        not just the ones previledged.
+        not just the ones privileged.
       </p>
       <div class="pillars" aria-label="Brand pillars">
         Product <span class="sep">·</span> People <span class="sep">·</span> Platform
@@ -386,7 +446,7 @@
     </section>
 
     <!-- FRAMEWORKS -->
-    <section aria-label="Proprietary frameworks">
+    <section id="frameworks" aria-label="Proprietary frameworks">
       <div class="section-label">THE FRAMEWORKS</div>
       <p style="font-size:12px; color:var(--steel); margin-bottom:2rem; line-height:1.9; letter-spacing:0.3px;">
         When Sid encounters a problem twice, he doesn't patch it a third time.<br>He architects a system.
@@ -410,7 +470,7 @@
         </div>
         <div class="fw-card full">
           <div class="fw-name">MeSOFIL</div>
-          <div class="fw-desc">'Meetings-Support-Optimization-Features-Innovation-Learning'<br>Framework to for engineering teams to thrive best in an intermediate environemnt</div>
+          <div class="fw-desc">'Meetings-Support-Optimization-Features-Innovation-Learning'<br>Framework for engineering teams to thrive in an intermediate environment</div>
         </div>
       </div>
     </section>
@@ -439,7 +499,7 @@
     </section>
 
     <!-- CTA -->
-    <section aria-label="Call to action">
+    <section id="connect" aria-label="Call to action">
       <div class="cta-section">
         <h2 class="cta-headline">
           Building something that <em>matters</em>?<br>Let's talk.
