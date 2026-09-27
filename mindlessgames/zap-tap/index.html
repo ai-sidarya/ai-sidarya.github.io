@@ -1,10 +1,529 @@
-<!-- PLACEHOLDER: drop your existing Tap Twist Pull prototype HTML here as index.html -->
-<!-- This file was built in an earlier conversation and isn't in this session's workspace. -->
-<!-- Paste the original single-file prototype's content into this file, replacing this comment. -->
 <!DOCTYPE html>
-<html>
-<head><title>Tap Twist Pull — placeholder</title></head>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Zap-Tap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#180F2E;
+    --bg2:#241640;
+    --tap:#FF3D7F;
+    --twist:#FFD23F;
+    --pull:#3FE8E0;
+    --fail:#FF5233;
+    --text:#FFF8EC;
+    --muted:#B8A9D9;
+    --accent:#FF3D7F;
+    --pulse-duration: 1600ms;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; height:100%; overflow:hidden;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Nunito Sans', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select:none;
+    touch-action:none;
+  }
+  .display{ font-family:'Bungee', sans-serif; letter-spacing:1px; }
+  #app{ position:relative; width:100%; height:100vh; overflow:hidden; }
+  .screen{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:24px; text-align:center;
+    transition:opacity .25s ease;
+  }
+  .hidden{ display:none; }
+
+  /* ---------- SELECT SCREEN ---------- */
+  #screen-select .title{
+    font-size:clamp(28px,8vw,48px);
+    margin:0 0 6px;
+    line-height:1.05;
+  }
+  #screen-select .subtitle{
+    color:var(--muted); margin:0 0 28px; font-size:14px; max-width:320px;
+  }
+  .cards{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; max-width:420px; }
+  .card{
+    width:120px; padding:16px 10px 14px;
+    background:var(--bg2);
+    border:3px solid transparent;
+    border-radius:16px;
+    cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .card:active{ transform:scale(0.96); }
+  .card.selected{ border-color:var(--accent); box-shadow:0 0 24px var(--accent); }
+  .card .emoji{ font-size:34px; display:block; margin-bottom:6px; }
+  .card .name{ font-family:'Bungee'; font-size:13px; margin-bottom:4px; }
+  .card .tag{ font-size:11px; color:var(--muted); line-height:1.3; }
+
+  #start-btn{
+    margin-top:26px;
+    font-family:'Bungee';
+    font-size:16px;
+    padding:14px 36px;
+    border-radius:40px;
+    border:none;
+    background:var(--accent);
+    color:#180F2E;
+    opacity:0.4;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .1s ease;
+  }
+  #start-btn.ready{ opacity:1; pointer-events:auto; }
+  #start-btn:active{ transform:scale(0.95); }
+
+  /* ---------- HOW TO PLAY ---------- */
+  .howto-rows{ display:flex; flex-direction:column; gap:20px; width:100%; max-width:300px; }
+  .howto-row{ display:flex; align-items:center; gap:16px; }
+  .howto-demo{
+    width:56px; height:56px; border-radius:50%;
+    background:var(--bg2); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .howto-text{ display:flex; flex-direction:column; text-align:left; }
+  .howto-label{ font-family:'Bungee'; font-size:14px; margin-bottom:2px; }
+  .howto-desc{ font-size:12px; color:var(--muted); }
+  .tap-demo .dot{
+    width:14px; height:14px; border-radius:50%; background:var(--tap);
+    animation:tapPulse 1.1s ease-in-out infinite;
+  }
+  @keyframes tapPulse{
+    0%,100%{ transform:scale(0.6); opacity:0.5; }
+    50%{ transform:scale(1.3); opacity:1; }
+  }
+  .twist-demo .dot{
+    width:10px; height:10px; border-radius:50%; background:var(--twist);
+    animation:twistOrbit 1.4s linear infinite;
+  }
+  @keyframes twistOrbit{
+    0%{ transform:rotate(0deg) translateX(16px) rotate(0deg); }
+    100%{ transform:rotate(360deg) translateX(16px) rotate(-360deg); }
+  }
+  .pull-demo .arrow{
+    color:var(--pull); font-size:24px; font-weight:900;
+    animation:pullDown 1.1s ease-in-out infinite;
+  }
+  @keyframes pullDown{
+    0%{ transform:translateY(-8px); opacity:0.4; }
+    60%{ transform:translateY(8px); opacity:1; }
+    100%{ transform:translateY(-8px); opacity:0.4; }
+  }
+  #begin-btn{
+    margin-top:24px;
+    font-family:'Bungee'; font-size:15px;
+    padding:14px 32px; border-radius:40px; border:none;
+    background:var(--accent); color:#180F2E;
+  }
+  #begin-btn:active{ transform:scale(0.95); }
+
+  /* ---------- GAME SCREEN ---------- */
+  #screen-game{ justify-content:space-between; padding:16px 20px; }
+  .hud{ display:flex; justify-content:space-between; width:100%; font-family:'Bungee'; }
+  .hud .label{ font-size:10px; color:var(--muted); display:block; margin-bottom:2px; letter-spacing:1px;}
+  .hud .val{ font-size:22px; }
+
+  .stage{
+    position:relative;
+    flex:1; width:100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .glow{
+    position:absolute;
+    width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle, var(--action-color, var(--accent)) 0%, transparent 70%);
+    opacity:0.5;
+    animation:pulse var(--pulse-duration) ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ transform:scale(0.85); opacity:0.35; }
+    50%{ transform:scale(1.15); opacity:0.6; }
+  }
+  .prompt-word{
+    position:relative;
+    font-size:clamp(38px,13vw,64px);
+    color:var(--action-color, var(--text));
+    text-shadow:0 0 30px var(--action-color, transparent);
+    z-index:2;
+  }
+  .prompt-sub{
+    position:absolute; bottom:-30px; left:0; right:0;
+    font-size:12px; color:var(--muted); z-index:2;
+  }
+  .target-dot{
+    position:absolute;
+    left:50%; top:50%;
+    width:54px; height:54px;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,0.8);
+    box-shadow:0 0 22px currentColor;
+    z-index:3;
+    cursor:pointer;
+    animation:targetPulse 0.75s ease-in-out infinite;
+    transform:translate(-50%, -50%);
+  }
+  .target-dot.hidden{ display:none; }
+  @keyframes targetPulse{
+    0%,100%{ transform:translate(-50%, -50%) scale(0.9); opacity:0.8; }
+    50%{ transform:translate(-50%, -50%) scale(1.15); opacity:1; }
+  }
+  .footer-hint{
+    font-size:11px; color:var(--muted); margin-top:8px;
+  }
+
+  /* ---------- GAME OVER ---------- */
+  #screen-over .title{ font-size:clamp(26px,7vw,40px); margin-bottom:6px; color:var(--fail); }
+  #screen-over .line{ color:var(--text); font-size:15px; margin-bottom:22px; max-width:280px; }
+  .stats{ display:flex; gap:28px; margin-bottom:26px; }
+  .stat .n{ font-family:'Bungee'; font-size:28px; }
+  .stat .l{ font-size:10px; color:var(--muted); letter-spacing:1px; }
+  #retry-btn{
+    font-family:'Bungee'; font-size:15px;
+    padding:14px 34px; border-radius:40px; border:none;
+    background:var(--text); color:var(--bg);
+  }
+  #retry-btn:active{ transform:scale(0.95); }
+</style>
+</head>
 <body>
-  <p>Replace this file with the existing Tap Twist Pull prototype.</p>
+<div id="app">
+
+  <!-- CHARACTER SELECT -->
+  <div id="screen-select" class="screen">
+    <h1 class="title display">ZAP<br>TAP</h1>
+    <p class="subtitle">Tap the dots. Stay alive. Pick your host.</p>
+    <div class="cards">
+      <div class="card" data-char="barker" data-color="#FF3D7F">
+        <span class="emoji">🎪</span>
+        <div class="name display">BARKER</div>
+        <div class="tag">Loud, proud, not sorry when you lose.</div>
+      </div>
+      <div class="card" data-char="robot" data-color="#3FE8E0">
+        <span class="emoji">🤖</span>
+        <div class="name display">UNIT-7</div>
+        <div class="tag">Zero enthusiasm. Zero mercy.</div>
+      </div>
+      <div class="card" data-char="grandma" data-color="#FFD23F">
+        <span class="emoji">👵</span>
+        <div class="name display">GIGI</div>
+        <div class="tag">Sweet as pie. Ruthless as ever.</div>
+      </div>
+    </div>
+    <button id="start-btn" class="display">START</button>
+  </div>
+
+  <!-- HOW TO PLAY -->
+  <div id="screen-howto" class="screen hidden">
+    <h2 class="title display" style="font-size:clamp(22px,6vw,32px); margin-bottom:22px;">HOW TO PLAY</h2>
+    <div class="howto-rows">
+      <div class="howto-row">
+        <div class="howto-demo tap-demo"><span class="dot"></span></div>
+        <div class="howto-text"><span class="howto-label" style="color:var(--tap)">TAP</span><span class="howto-desc">Tap the colored dot before it disappears</span></div>
+      </div>
+    </div>
+    <p class="subtitle" style="margin-top:22px; max-width:280px;">A dot appears at random. Hit it fast and keep the streak alive. The pace speeds up as you score.</p>
+    <button id="begin-btn" class="display">GOT IT — GO!</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="screen-game" class="screen hidden">
+    <div class="hud">
+      <div><span class="label">SCORE</span><span class="val" id="score-val">0</span></div>
+      <div style="text-align:right;"><span class="label">BEST</span><span class="val" id="best-val">0</span></div>
+    </div>
+    <div class="stage" id="gesture-zone">
+      <div class="glow" id="glow"></div>
+      <div class="prompt-word display" id="prompt-word">GET READY</div>
+      <div id="target-dot" class="target-dot hidden" aria-label="target dot"></div>
+      <div class="prompt-sub" id="prompt-sub"></div>
+    </div>
+    <div class="footer-hint" id="footer-hint">tap the moving dot before it vanishes</div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="screen-over" class="screen hidden">
+    <h2 class="title display" id="over-title">AW, DANG IT</h2>
+    <p class="line" id="over-line">"That was rough, dear."</p>
+    <div class="stats">
+      <div class="stat"><div class="n" id="final-score">0</div><div class="l">SCORE</div></div>
+      <div class="stat"><div class="n" id="final-best">0</div><div class="l">BEST</div></div>
+    </div>
+    <button id="retry-btn" class="display">TRY AGAIN</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- DATA ----------
+  const CHARACTERS = {
+    barker: {
+      name:"BARKER", color:"#FF3D7F",
+      overTitle:"AWWW, SHUCKS!",
+      fails:[
+        "OHHH so close, folks!","Aw, shucks — step right off.",
+        "The crowd... is disappointed.","Ehh. Not your night, pal.",
+        "Big buildup, small finish.","That's a dud, folks.",
+        "Ouch. Right in front of everybody.","Well, that happened.",
+        "Curtains. For now.","Tough break, kid."
+      ]
+    },
+    robot: {
+      name:"UNIT-7", color:"#3FE8E0",
+      overTitle:"FAILURE.",
+      fails:[
+        "Error. You have failed.","Correct action not detected.",
+        "That was... not correct.","Processing disappointment.",
+        "Input rejected.","Unimpressive. As expected.",
+        "Failure logged. Try again.","Reaction time: insufficient.",
+        "Well. That's unfortunate.","Calculating your inadequacy."
+      ]
+    },
+    grandma: {
+      name:"GIGI", color:"#FFD23F",
+      overTitle:"OH, SWEETIE...",
+      fails:[
+        "Oh sweetie. No.","Bless your heart, that was bad.",
+        "Grandma's seen better from the cat.","Oh honey, sit back down.",
+        "That was rough, dear. Real rough.","Mm. No dessert for you.",
+        "Sweetheart, try using your hands.","Oh no no no, baby.",
+        "Well, aren't you precious. And wrong.","That's alright dear... no it's not."
+      ]
+    }
+  };
+
+  const ACTIONS = {
+    TAP:{ label:"TAP!", color:"var(--tap)", cssVar:"--tap" },
+    TWIST:{ label:"TWIST!", color:"var(--twist)", cssVar:"--twist" },
+    PULL:{ label:"PULL!", color:"var(--pull)", cssVar:"--pull" }
+  };
+  const ACTION_KEYS = Object.keys(ACTIONS);
+
+  // ---------- STATE ----------
+  let character = null;
+  let score = 0;
+  let best = parseInt(localStorage.getItem('ttp-highscore') || '0', 10);
+  let running = false;
+  let spawnTimer = null;
+  let targetTimer = null;
+  let activeTarget = false;
+  let spawnInterval = 1500;
+  let nextSpeedRamp = 0;
+
+  // ---------- AUDIO ----------
+  let audioCtx = null;
+  function ctx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+  function tone(freq, dur, type, vol, delay){
+    delay = delay || 0;
+    const c = ctx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.value = vol != null ? vol : 0.15;
+    osc.connect(gain); gain.connect(c.destination);
+    const t0 = c.currentTime + delay;
+    gain.gain.setValueAtTime(gain.gain.value, t0);
+    gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    osc.start(t0); osc.stop(t0 + dur + 0.02);
+  }
+  function playTapCue(){ tone(880, 0.09, 'triangle', 0.18); }
+  function playFail(){
+    tone(220, 0.3, 'sawtooth', 0.2);
+    tone(140, 0.4, 'sawtooth', 0.18, 0.15);
+  }
+  function playSpeedUp(){
+    tone(540, 0.08, 'square', 0.12);
+    tone(720, 0.08, 'square', 0.12, 0.04);
+  }
+
+  // ---------- SCREENS ----------
+  const screens = {
+    select: document.getElementById('screen-select'),
+    howto: document.getElementById('screen-howto'),
+    game: document.getElementById('screen-game'),
+    over: document.getElementById('screen-over')
+  };
+  function show(name){
+    Object.values(screens).forEach(s=>s.classList.add('hidden'));
+    screens[name].classList.remove('hidden');
+  }
+
+  // ---------- CHARACTER SELECT ----------
+  const cards = document.querySelectorAll('.card');
+  const startBtn = document.getElementById('start-btn');
+  cards.forEach(card=>{
+    card.addEventListener('click', ()=>{
+      cards.forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      character = card.dataset.char;
+      document.documentElement.style.setProperty('--accent', card.dataset.color);
+      startBtn.classList.add('ready');
+    });
+  });
+  startBtn.addEventListener('click', ()=>{
+    if(!character) return;
+    ctx();
+    show('howto');
+  });
+
+  document.getElementById('begin-btn').addEventListener('click', ()=>{
+    ctx();
+    startGame();
+  });
+
+  // ---------- GAME LOOP ----------
+  const scoreVal = document.getElementById('score-val');
+  const bestVal = document.getElementById('best-val');
+  const promptWord = document.getElementById('prompt-word');
+  const promptSub = document.getElementById('prompt-sub');
+  const footerHint = document.getElementById('footer-hint');
+  const stage = document.getElementById('gesture-zone');
+  const targetDot = document.getElementById('target-dot');
+
+  function updateHud(){
+    scoreVal.textContent = score;
+    bestVal.textContent = best;
+  }
+
+  function randomBetween(min, max){
+    return Math.random() * (max - min) + min;
+  }
+
+  function randomDotColor(){
+    const colors = ['#FF3D7F', '#FFD23F', '#3FE8E0', '#B58CFF', '#FF9F43', '#7BF7A8'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function hideTarget(){
+    activeTarget = false;
+    targetDot.classList.add('hidden');
+    clearTimeout(targetTimer);
+    targetTimer = null;
+  }
+
+  function placeTarget(){
+    const stageRect = stage.getBoundingClientRect();
+    const size = 54;
+    const x = randomBetween(size * 0.7, Math.max(size * 0.7, stageRect.width - size * 0.7));
+    const y = randomBetween(size * 0.7, Math.max(size * 0.7, stageRect.height - size * 0.7));
+    const color = randomDotColor();
+    targetDot.style.left = x + 'px';
+    targetDot.style.top = y + 'px';
+    targetDot.style.background = color;
+    targetDot.style.color = color;
+    targetDot.style.boxShadow = '0 0 24px ' + color;
+    targetDot.classList.remove('hidden');
+    activeTarget = true;
+  }
+
+  function queueNextSpawn(){
+    clearTimeout(spawnTimer);
+    spawnTimer = setTimeout(spawnDot, spawnInterval);
+  }
+
+  function spawnDot(){
+    if(!running) return;
+    hideTarget();
+    placeTarget();
+    const lifeMs = Math.max(500, Math.min(1200, spawnInterval * 0.7));
+    clearTimeout(targetTimer);
+    targetTimer = setTimeout(() => {
+      if(!running || !activeTarget) return;
+      hideTarget();
+      endGame();
+    }, lifeMs);
+  }
+
+  function startGame(){
+    score = 0;
+    spawnInterval = 1500;
+    nextSpeedRamp = 4;
+    running = true;
+    updateHud();
+    show('game');
+    promptWord.textContent = 'GET READY';
+    promptWord.style.color = 'var(--text)';
+    promptSub.textContent = '';
+    hideTarget();
+    footerHint.textContent = 'tap the moving dot before it vanishes';
+    setTimeout(() => {
+      if(!running) return;
+      promptWord.textContent = '';
+      queueNextSpawn();
+    }, 500);
+  }
+
+  function rampDifficulty(){
+    if(score >= nextSpeedRamp){
+      spawnInterval = Math.max(450, spawnInterval - randomBetween(90, 150));
+      nextSpeedRamp = score + randomBetween(4, 8);
+      playSpeedUp();
+    }
+  }
+
+  function onDotHit(){
+    if(!running || !activeTarget) return;
+    hideTarget();
+    score += 1;
+    if(score > best){
+      best = score;
+      localStorage.setItem('ttp-highscore', String(best));
+    }
+    rampDifficulty();
+    updateHud();
+    playTapCue();
+    queueNextSpawn();
+  }
+
+  function endGame(){
+    running = false;
+    clearTimeout(spawnTimer);
+    clearTimeout(targetTimer);
+    hideTarget();
+    playFail();
+    if(score > best){
+      best = score;
+      localStorage.setItem('ttp-highscore', String(best));
+    }
+    const ch = CHARACTERS[character];
+    document.getElementById('over-title').textContent = ch.overTitle;
+    document.getElementById('over-line').textContent = '"' + ch.fails[Math.floor(Math.random()*ch.fails.length)] + '"';
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('final-best').textContent = best;
+    show('over');
+  }
+
+  targetDot.addEventListener('pointerdown', (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    onDotHit();
+  });
+
+  stage.addEventListener('pointerdown', (event) => {
+    if(!running || activeTarget) return;
+    endGame();
+  });
+
+  document.getElementById('retry-btn').addEventListener('click', ()=>{
+    show('game');
+    startGame();
+  });
+
+  updateHud();
+})();
+</script>
 </body>
 </html>
