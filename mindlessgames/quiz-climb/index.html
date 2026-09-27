@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Climb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #14071f;
+    --panel: #1f0f30;
+    --panel-light: #2a1640;
+    --gold: #f0b429;
+    --gold-dim: #7a5a1a;
+    --spotlight: #fff3d6;
+    --teal: #00d9c0;
+    --pink: #ff5470;
+    --amber: #ffb238;
+    --text: #f4eefc;
+    --text-dim: #b9a8d6;
+    --danger: #ff5470;
+    --ok: #00d9c0;
+    /* Stage intensity — overridden per tier via .tier-* classes on #app */
+    --stage-accent: #f0b429;
+    --stage-glow: rgba(240, 180, 41, 0.35);
+    --stage-glow-soft: rgba(240, 180, 41, 0.12);
+  }
+
+  /* Tier 1 · Easy — calm, cool */
+  #app.tier-0 { --void: #14071f; --stage-accent: #f0b429; --stage-glow: rgba(240,180,41,0.25); --stage-glow-soft: rgba(0,217,192,0.10); }
+  /* Tier 2 · Medium — warmer */
+  #app.tier-1 { --void: #23100a; --stage-accent: #ffb238; --stage-glow: rgba(255,178,56,0.45); --stage-glow-soft: rgba(255,178,56,0.30); }
+  /* Tier 3 · Hard — hot */
+  #app.tier-2 { --void: #2c0d08; --stage-accent: #ff7a3d; --stage-glow: rgba(255,122,61,0.55); --stage-glow-soft: rgba(255,122,61,0.42); }
+  /* Tier 4 · Hardest — intense red */
+  #app.tier-3 { --void: #350509; --stage-accent: #ff5470; --stage-glow: rgba(255,84,112,0.65); --stage-glow-soft: rgba(255,84,112,0.52); }
+  /* Bonus — blazing white-gold */
+  #app.tier-bonus { --void: #1f1503; --stage-accent: #fff3d6; --stage-glow: rgba(255,243,214,0.85); --stage-glow-soft: rgba(255,243,214,0.60); }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  .display {
+    font-family: 'Anton', 'Space Grotesk', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  #app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% -10%, var(--stage-glow-soft), transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 110%, rgba(0,217,192,0.08), transparent 60%),
+      var(--void);
+    transition: background 0.6s ease;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: 640px;
+    padding: 24px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .screen.active { display: flex; }
+
+  /* ---------- Spotlight sweep ---------- */
+  .spotlight {
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    width: 120vw;
+    height: 160vh;
+    background: conic-gradient(from 0deg, transparent 0deg, var(--stage-glow-soft) 8deg, transparent 16deg);
+    transform-origin: 50% 20%;
+    animation: sweep 14s linear infinite;
+    pointer-events: none;
+    transition: background 0.6s ease;
+  }
+  @keyframes sweep {
+    0% { transform: translateX(-50%) rotate(-25deg); }
+    50% { transform: translateX(-50%) rotate(25deg); }
+    100% { transform: translateX(-50%) rotate(-25deg); }
+  }
+
+  /* ---------- Title screen ---------- */
+  .logo {
+    font-size: clamp(2.6rem, 9vw, 4.2rem);
+    color: var(--gold);
+    text-shadow: 0 0 24px rgba(240,180,41,0.5);
+    margin: 0 0 4px;
+  }
+  .tagline {
+    color: var(--text-dim);
+    margin: 0 0 18px;
+    font-size: 0.95rem;
+  }
+
+  .toggle-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .toggle-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--panel);
+    color: var(--text-dim);
+    border: 1px solid var(--panel-light);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, opacity 0.15s;
+  }
+  .toggle-btn[data-on="true"] { color: var(--gold); border-color: var(--gold-dim); }
+  .toggle-btn[data-on="false"] { opacity: 0.5; }
+
+  .host-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    width: 100%;
+    margin-bottom: 28px;
+  }
+  .host-card {
+    background: var(--panel);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 16px 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .host-card:hover { transform: translateY(-3px); }
+  .host-card.selected { border-color: var(--gold); background: var(--panel-light); }
+  .host-emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
+  .host-name { font-size: 0.8rem; font-weight: 700; }
+  .host-desc { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
+
+  button.primary {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    background: var(--gold);
+    color: #1a1005;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 40px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    box-shadow: 0 0 0 rgba(240,180,41,0);
+  }
+  button.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,180,41,0.35); }
+  button.primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  button.primary:active { transform: translateY(0); }
+
+  button.secondary {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--panel-light);
+    border-radius: 999px;
+    padding: 10px 28px;
+    margin-top: 12px;
+    cursor: pointer;
+  }
+  button.secondary:hover { color: var(--text); border-color: var(--gold-dim); }
+
+  /* ---------- Marquee ladder ---------- */
+  .ladder {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 22px;
+    width: 100%;
+    justify-content: center;
+  }
+  .rung {
+    flex: 1;
+    max-width: 44px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--panel-light);
+    position: relative;
+    overflow: hidden;
+  }
+  .rung::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+  .rung.filled::after { transform: scaleX(1); }
+  .rung.bonus { background: var(--panel-light); border: 1px dashed var(--gold-dim); }
+
+  /* ---------- Game screen ---------- */
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .hud .score { color: var(--gold); font-weight: 700; }
+
+  .timer-track {
+    width: 100%;
+    height: 6px;
+    background: var(--panel-light);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .timer-fill {
+    height: 100%;
+    background: var(--stage-accent);
+    width: 100%;
+    transform-origin: left;
+    transition: background 0.6s ease;
+  }
+  .timer-fill.warn { background: var(--amber); }
+  .timer-fill.danger-fill { background: var(--danger); }
+
+  .tier-tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--stage-accent);
+    margin-bottom: 10px;
+    transition: color 0.6s ease;
+  }
+
+  .question-card {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 28px 22px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3), 0 0 0 1px var(--stage-glow-soft) inset, 0 0 30px var(--stage-glow-soft);
+    transition: box-shadow 0.6s ease;
+  }
+  .question-text {
+    font-size: 1.15rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+  .category-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+  .answer-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--panel);
+    color: var(--text);
+    border: 2px solid var(--panel-light);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s, background 0.15s;
+  }
+  .answer-btn:hover:not(:disabled) { border-color: var(--gold-dim); transform: translateY(-2px); }
+  .answer-btn:disabled { cursor: default; }
+  .answer-btn.correct { background: rgba(0,217,192,0.15); border-color: var(--ok); }
+  .answer-btn.incorrect { background: rgba(255,84,112,0.15); border-color: var(--danger); }
+
+  .host-line {
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    min-height: 1.4em;
+    font-style: italic;
+  }
+
+  /* ---------- Bonus / end screens ---------- */
+  .podium-glow {
+    width: 100%;
+    height: 100px;
+    background: radial-gradient(ellipse at center, rgba(240,180,41,0.35), transparent 70%);
+    margin-bottom: -30px;
+  }
+  .big-number {
+    font-size: clamp(3rem, 14vw, 5rem);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(240,180,41,0.6);
+    margin: 6px 0 2px;
+  }
+  .sub-label {
+    color: var(--text-dim);
+    margin-bottom: 26px;
+    font-size: 0.85rem;
+  }
+
+  #toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--panel-light);
+    border: 1px solid var(--gold-dim);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 50;
+  }
+  #toast.show { opacity: 1; }
+
+  .stage-strip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--stage-accent);
+    box-shadow: 0 0 16px 2px var(--stage-glow);
+    transition: background 0.6s ease, box-shadow 0.6s ease;
+    z-index: 40;
+  }
+
+  #level-up {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--stage-glow);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 60;
+    transition: opacity 0.15s ease;
+  }
+  #level-up.show {
+    opacity: 1;
+    animation: levelup-fade 900ms ease forwards;
+  }
+  #level-up span {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2.2rem, 12vw, 4rem);
+    color: var(--stage-accent);
+    text-shadow: 0 0 30px var(--stage-glow);
+    transform: scale(0.7);
+    animation: levelup-pop 900ms cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  @keyframes levelup-fade {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes levelup-pop {
+    0% { transform: scale(0.6); opacity: 0; }
+    25% { transform: scale(1.08); opacity: 1; }
+    40% { transform: scale(1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spotlight { animation: none; }
+    #level-up, #level-up span { animation: none; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="stage-strip"></div>
+  <div class="spotlight"></div>
+  <div id="toast"></div>
+  <div id="level-up"><span id="level-up-text"></span></div>
+
+  <!-- TITLE SCREEN -->
+  <div class="screen active" id="screen-title">
+    <h1 class="logo display">QUIZ CLIMB</h1>
+    <p class="tagline">Ten easy questions. Five to sweat over. One to remember. Pick your host.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="btn-sound" data-on="true" type="button">🔊 Sound</button>
+      <button class="toggle-btn" id="btn-voice" data-on="true" type="button">🗣️ Voice</button>
+    </div>
+    <div class="host-grid">
+      <div class="host-card" data-host="barker">
+        <span class="host-emoji">🎪</span>
+        <div class="host-name">The Barker</div>
+        <div class="host-desc">Loud. Delighted. Merciless.</div>
+      </div>
+      <div class="host-card" data-host="robot">
+        <span class="host-emoji">🤖</span>
+        <div class="host-name">Deadpan Unit</div>
+        <div class="host-desc">Zero inflection. Full judgment.</div>
+      </div>
+      <div class="host-card" data-host="grandma">
+        <span class="host-emoji">👵</span>
+        <div class="host-name">Grandma</div>
+        <div class="host-desc">Sweet. Then not.</div>
+      </div>
+    </div>
+    <button class="primary" id="btn-start" disabled>Start Climbing</button>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="screen" id="screen-game">
+    <div class="ladder" id="ladder"></div>
+    <div class="hud">
+      <span id="hud-tier">Tier 1 · Easy <span id="hud-progress"></span></span>
+      <span class="score" id="hud-score">0 pts</span>
+    </div>
+    <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
+    <div class="question-card">
+      <div class="category-label" id="q-category">Category</div>
+      <div class="question-text" id="q-text">Loading question…</div>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div class="host-line" id="host-line">&nbsp;</div>
+  </div>
+
+  <!-- BONUS SCREEN -->
+  <div class="screen" id="screen-bonus-intro">
+    <div class="podium-glow"></div>
+    <h2 class="logo display" style="font-size:2rem;">CLEAN RUN.</h2>
+    <p class="tagline">One question stands between you and the top of the ladder.</p>
+    <button class="primary" id="btn-bonus-start">Face the Bonus Question</button>
+  </div>
+
+  <!-- END SCREEN -->
+  <div class="screen" id="screen-end">
+    <div class="tier-tag" id="end-tag">RUN COMPLETE</div>
+    <div class="big-number display" id="end-score">0</div>
+    <div class="sub-label">points · best streak <span id="end-streak">0</span></div>
+    <div class="host-line" id="end-line">&nbsp;</div>
+    <button class="primary" id="btn-again">Climb Again</button>
+    <button class="secondary" id="btn-title">Back to Title</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------------- Config ----------------
+  const TIERS = [
+    { label: "Tier 1 · Easy",   amount: 10, difficulty: "easy",   points: 10 },
+    { label: "Tier 2 · Medium", amount: 5,  difficulty: "medium", points: 20 },
+    { label: "Tier 3 · Hard",   amount: 3,  difficulty: "hard",   points: 35 },
+    { label: "Tier 4 · Hardest",amount: 1,  difficulty: "hard",   points: 50, toughCategory: true },
+  ];
+  const BONUS = { label: "Bonus", amount: 1, difficulty: "hard", points: 100, toughCategory: true };
+  const TOUGH_CATEGORIES = [17, 18, 19, 22, 23, 27, 30]; // Science/Nature, Computers, Math, Geography, History, Animals, Gadgets
+  const QUESTION_SECONDS = 30;
+  const API_BASE = "https://opentdb.com";
+
+  const HOST_LINES = {
+    barker: {
+      correct: ["YES! Step right up, you got it!", "Ladies and gentlemen — a WINNER!", "The crowd goes wild! Correct!"],
+      wrong:   ["Ohhh, so close, folks!", "Not tonight, champ — but the show goes on!", "A valiant effort! Next!"],
+      timeout: ["Time's UP! The bell has spoken!"],
+      intro:   ["Step right up and CLIMB!"],
+      win:     ["WE HAVE A CHAMPION!"],
+      lose:    ["A good run! Come back and climb again!"]
+    },
+    robot: {
+      correct: ["Correct. Proceeding.", "Answer verified. Continuing.", "Accuracy confirmed."],
+      wrong:   ["Incorrect. Logging and continuing.", "Answer rejected. No penalty applied.", "Error detected. Moving forward."],
+      timeout: ["Time threshold exceeded. Continuing."],
+      intro:   ["Beginning trivia sequence."],
+      win:     ["Maximum performance achieved."],
+      lose:    ["Run terminated. Data saved."]
+    },
+    grandma: {
+      correct: ["Oh, aren't you clever.", "Well look at you go.", "That's my smart cookie."],
+      wrong:   ["Oh honey. No. But bless your heart.", "Mm. We'll pretend that didn't happen.", "That's alright dear, sit back down."],
+      timeout: ["Too slow, sweetheart. Too slow."],
+      intro:   ["Come on then, let's see what you've got."],
+      win:     ["Well I'll be. You actually did it."],
+      lose:    ["Good try, dear. Have a cookie."]
+    }
+  };
+
+  // Small local fallback set in case the API is unavailable or rate-limited.
+  const FALLBACK_QUESTIONS = [
+    { category: "General Knowledge", difficulty: "easy", question: "What is the capital of France?", correct_answer: "Paris", incorrect_answers: ["Lyon", "Marseille", "Nice"] },
+    { category: "General Knowledge", difficulty: "easy", question: "How many continents are there?", correct_answer: "7", incorrect_answers: ["5", "6", "8"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What color do you get by mixing blue and yellow?", correct_answer: "Green", incorrect_answers: ["Purple", "Orange", "Brown"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What is the largest ocean on Earth?", correct_answer: "Pacific Ocean", incorrect_answers: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"] },
+    { category: "General Knowledge", difficulty: "easy", question: "How many legs does a spider have?", correct_answer: "8", incorrect_answers: ["6", "10", "12"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What planet is known as the Red Planet?", correct_answer: "Mars", incorrect_answers: ["Venus", "Jupiter", "Saturn"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What is the freezing point of water in Celsius?", correct_answer: "0", incorrect_answers: ["10", "-10", "32"] },
+    { category: "General Knowledge", difficulty: "easy", question: "Which animal is known as man's best friend?", correct_answer: "Dog", incorrect_answers: ["Cat", "Horse", "Rabbit"] },
+    { category: "General Knowledge", difficulty: "easy", question: "How many days are in a leap year?", correct_answer: "366", incorrect_answers: ["365", "364", "367"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What gas do plants absorb from the air?", correct_answer: "Carbon Dioxide", incorrect_answers: ["Oxygen", "Nitrogen", "Hydrogen"] },
+    { category: "General Knowledge", difficulty: "medium", question: "Who wrote 'Romeo and Juliet'?", correct_answer: "William Shakespeare", incorrect_answers: ["Charles Dickens", "Jane Austen", "Mark Twain"] },
+    { category: "General Knowledge", difficulty: "medium", question: "What is the smallest prime number?", correct_answer: "2", incorrect_answers: ["1", "0", "3"] },
+    { category: "General Knowledge", difficulty: "medium", question: "Which country invented paper?", correct_answer: "China", incorrect_answers: ["Egypt", "Greece", "India"] },
+    { category: "General Knowledge", difficulty: "medium", question: "What is the tallest mountain in the world?", correct_answer: "Mount Everest", incorrect_answers: ["K2", "Kilimanjaro", "Denali"] },
+    { category: "General Knowledge", difficulty: "medium", question: "How many bones are in the adult human body?", correct_answer: "206", incorrect_answers: ["186", "216", "196"] },
+    { category: "General Knowledge", difficulty: "hard", question: "What is the chemical symbol for tungsten?", correct_answer: "W", incorrect_answers: ["Tu", "Tg", "Wn"] },
+    { category: "General Knowledge", difficulty: "hard", question: "In what year did the Berlin Wall fall?", correct_answer: "1989", incorrect_answers: ["1991", "1987", "1985"] },
+    { category: "General Knowledge", difficulty: "hard", question: "Who painted 'The Persistence of Memory'?", correct_answer: "Salvador Dalí", incorrect_answers: ["Pablo Picasso", "Claude Monet", "René Magritte"] },
+    { category: "General Knowledge", difficulty: "hard", question: "What is the smallest country in the world by area?", correct_answer: "Vatican City", incorrect_answers: ["Monaco", "San Marino", "Liechtenstein"] },
+    { category: "General Knowledge", difficulty: "hard", question: "Which element has the atomic number 1?", correct_answer: "Hydrogen", incorrect_answers: ["Helium", "Oxygen", "Lithium"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What is the capital of Japan?", correct_answer: "Tokyo", incorrect_answers: ["Osaka", "Kyoto", "Seoul"] },
+    { category: "General Knowledge", difficulty: "easy", question: "How many colors are in a rainbow?", correct_answer: "7", incorrect_answers: ["5", "6", "8"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What do bees produce?", correct_answer: "Honey", incorrect_answers: ["Milk", "Silk", "Wax only"] },
+    { category: "General Knowledge", difficulty: "easy", question: "Which sense do we use to hear?", correct_answer: "Ears", incorrect_answers: ["Eyes", "Nose", "Skin"] },
+    { category: "General Knowledge", difficulty: "easy", question: "What is the tallest animal in the world?", correct_answer: "Giraffe", incorrect_answers: ["Elephant", "Camel", "Horse"] },
+    { category: "General Knowledge", difficulty: "medium", question: "What is the currency of Japan?", correct_answer: "Yen", incorrect_answers: ["Won", "Yuan", "Ringgit"] },
+    { category: "General Knowledge", difficulty: "medium", question: "Which planet has the most moons?", correct_answer: "Saturn", incorrect_answers: ["Jupiter", "Neptune", "Uranus"] },
+    { category: "General Knowledge", difficulty: "medium", question: "Who developed the theory of relativity?", correct_answer: "Albert Einstein", incorrect_answers: ["Isaac Newton", "Niels Bohr", "Galileo Galilei"] },
+    { category: "General Knowledge", difficulty: "medium", question: "What is the longest river in the world?", correct_answer: "Nile", incorrect_answers: ["Amazon", "Yangtze", "Mississippi"] },
+    { category: "General Knowledge", difficulty: "medium", question: "How many strings does a standard violin have?", correct_answer: "4", incorrect_answers: ["5", "6", "3"] },
+    { category: "General Knowledge", difficulty: "hard", question: "What is the hardest natural substance on Earth?", correct_answer: "Diamond", incorrect_answers: ["Quartz", "Titanium", "Graphite"] },
+    { category: "General Knowledge", difficulty: "hard", question: "Which country gifted the Statue of Liberty to the USA?", correct_answer: "France", incorrect_answers: ["United Kingdom", "Spain", "Italy"] },
+    { category: "General Knowledge", difficulty: "hard", question: "What is the study of earthquakes called?", correct_answer: "Seismology", incorrect_answers: ["Geology", "Meteorology", "Volcanology"] },
+    { category: "General Knowledge", difficulty: "hard", question: "Which ancient wonder still stands today?", correct_answer: "Great Pyramid of Giza", incorrect_answers: ["Hanging Gardens of Babylon", "Colossus of Rhodes", "Lighthouse of Alexandria"] }
+  ];
+
+  // ---------------- State ----------------
+  let selectedHost = null;
+  let sessionToken = null;
+  let usingFallback = false;
+  let fallbackPool = [];
+  let currentTierIndex = 0;
+  let currentQuestionInTier = 0;
+  let tierQuestions = [];   // decoded questions for the active tier
+  let score = 0;
+  let streak = 0;
+  let bestStreak = 0;
+  let wrongCount = 0;
+  let timerHandle = null;
+  let timeLeft = QUESTION_SECONDS;
+  let answered = false;
+  let soundOn = true;
+  let voiceOn = true;
+  let audioCtx = null;
+
+  // ---------------- Audio: procedural chimes ----------------
+  function ensureAudioCtx() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTone(ctx, freq, startTime, duration, type, peakGain) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(peakGain || 0.15, startTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.02);
+  }
+
+  function playChime(kind) {
+    if (!soundOn) return;
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    switch (kind) {
+      case "correct":
+        playTone(ctx, 660, now, 0.12, "sine", 0.14);
+        playTone(ctx, 880, now + 0.11, 0.18, "sine", 0.16);
+        break;
+      case "wrong":
+        playTone(ctx, 170, now, 0.28, "sawtooth", 0.10);
+        break;
+      case "timeout":
+        playTone(ctx, 220, now, 0.14, "square", 0.08);
+        playTone(ctx, 140, now + 0.13, 0.26, "square", 0.09);
+        break;
+      case "levelup":
+        [523, 659, 784, 1047].forEach((f, i) => playTone(ctx, f, now + i * 0.09, 0.16, "triangle", 0.15));
+        break;
+      case "win":
+        [523, 659, 784, 1047, 1319].forEach((f, i) => playTone(ctx, f, now + i * 0.1, 0.2, "triangle", 0.17));
+        break;
+      case "lose":
+        playTone(ctx, 300, now, 0.2, "sine", 0.11);
+        playTone(ctx, 220, now + 0.18, 0.32, "sine", 0.09);
+        break;
+    }
+  }
+
+  // ---------------- Voice: host-matched narration ----------------
+  const VOICE_PERSONAS = {
+    barker:  { rate: 1.25, pitch: 1.7, prefer: ["daniel", "alex", "aaron", "google uk english male", "male"], fallbackIndex: 0 },
+    robot:   { rate: 0.85, pitch: 0.02, prefer: ["fred", "google us english", "en-us"], fallbackIndex: 1 },
+    grandma: { rate: 0.78, pitch: 1.85, prefer: ["karen", "moira", "victoria", "google uk english female", "female"], fallbackIndex: 2 },
+  };
+  let cachedVoices = [];
+  function loadVoices() {
+    if (window.speechSynthesis) cachedVoices = window.speechSynthesis.getVoices();
+  }
+  if (window.speechSynthesis) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  function pickVoice(persona) {
+    if (!cachedVoices.length) return null;
+    for (const key of persona.prefer) {
+      const match = cachedVoices.find(v =>
+        v.name.toLowerCase().includes(key) || v.lang.toLowerCase().includes(key)
+      );
+      if (match) return match;
+    }
+    // No named match on this device — still give each host a different
+    // available voice rather than letting all three collapse onto voice[0].
+    return cachedVoices[persona.fallbackIndex % cachedVoices.length];
+  }
+  function speak(text, host) {
+    if (!voiceOn || !host || !text) return;
+    if (!window.speechSynthesis) {
+      voiceUnavailableNotice();
+      return;
+    }
+    const persona = VOICE_PERSONAS[host];
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = persona.rate;
+    u.pitch = persona.pitch;
+    u.volume = 0.9;
+    const v = pickVoice(persona);
+    if (v) u.voice = v;
+    u.onerror = () => voiceUnavailableNotice();
+    try {
+      window.speechSynthesis.speak(u);
+    } catch (e) {
+      voiceUnavailableNotice();
+    }
+  }
+
+  let voiceNoticeShown = false;
+  function voiceUnavailableNotice() {
+    if (voiceNoticeShown) return;
+    voiceNoticeShown = true;
+    toast("Voice narration isn't supported in this preview — try it on the hosted page");
+  }
+
+  // ---------------- Sound/voice toggles ----------------
+  const btnSound = document.getElementById("btn-sound");
+  const btnVoice = document.getElementById("btn-voice");
+  btnSound.addEventListener("click", () => {
+    soundOn = !soundOn;
+    btnSound.dataset.on = String(soundOn);
+    btnSound.textContent = soundOn ? "🔊 Sound" : "🔇 Sound";
+    ensureAudioCtx();
+  });
+  btnVoice.addEventListener("click", () => {
+    voiceOn = !voiceOn;
+    btnVoice.dataset.on = String(voiceOn);
+    btnVoice.textContent = voiceOn ? "🗣️ Voice" : "🚫 Voice";
+    if (!voiceOn && window.speechSynthesis) window.speechSynthesis.cancel();
+  });
+  if (!window.speechSynthesis) {
+    voiceOn = false;
+    btnVoice.dataset.on = "false";
+    btnVoice.textContent = "🚫 Voice (unsupported here)";
+  }
+
+  // ---------------- DOM refs ----------------
+  const screens = {
+    title: document.getElementById("screen-title"),
+    game: document.getElementById("screen-game"),
+    bonusIntro: document.getElementById("screen-bonus-intro"),
+    end: document.getElementById("screen-end"),
+  };
+
+  function showScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+
+  function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2600);
+  }
+
+  // ---------------- Host select ----------------
+  document.querySelectorAll(".host-card").forEach(card => {
+    card.addEventListener("click", () => {
+      ensureAudioCtx();
+      document.querySelectorAll(".host-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      selectedHost = card.dataset.host;
+      document.getElementById("btn-start").disabled = false;
+    });
+  });
+
+  document.getElementById("btn-start").addEventListener("click", startRun);
+  document.getElementById("btn-bonus-start").addEventListener("click", startBonus);
+  document.getElementById("btn-again").addEventListener("click", () => startRun());
+  document.getElementById("btn-title").addEventListener("click", () => showScreen("title"));
+
+  // ---------------- Ladder UI ----------------
+  function buildLadder() {
+    const ladder = document.getElementById("ladder");
+    ladder.innerHTML = "";
+    TIERS.forEach((t, i) => {
+      const r = document.createElement("div");
+      r.className = "rung";
+      r.dataset.index = i;
+      ladder.appendChild(r);
+    });
+    const bonusRung = document.createElement("div");
+    bonusRung.className = "rung bonus";
+    bonusRung.dataset.index = "bonus";
+    ladder.appendChild(bonusRung);
+  }
+
+  function fillRung(index) {
+    const el = document.querySelector(`.rung[data-index="${index}"]`);
+    if (el) el.classList.add("filled");
+  }
+
+  // ---------------- OTDB helpers ----------------
+  function decodeB64(str) {
+    try { return decodeURIComponent(escape(window.atob(str))); }
+    catch (e) { return str; }
+  }
+
+  async function requestSessionToken() {
+    try {
+      const res = await fetch(`${API_BASE}/api_token.php?command=request`);
+      const data = await res.json();
+      if (data.response_code === 0) return data.token;
+    } catch (e) { /* fall through */ }
+    return null;
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  async function fetchTierQuestions(tier) {
+    if (usingFallback) return pullFromFallback(tier);
+
+    const params = new URLSearchParams({
+      amount: tier.amount,
+      difficulty: tier.difficulty,
+      encode: "base64",
+    });
+    if (sessionToken) params.set("token", sessionToken);
+    if (tier.toughCategory) {
+      params.set("category", TOUGH_CATEGORIES[Math.floor(Math.random() * TOUGH_CATEGORIES.length)]);
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/api.php?${params.toString()}`);
+      const data = await res.json();
+
+      if (data.response_code === 3 || data.response_code === 4) {
+        // token expired or exhausted — reset and retry once without it
+        sessionToken = await requestSessionToken();
+        return fetchTierQuestions(tier);
+      }
+      if (data.response_code !== 0 || !data.results || !data.results.length) {
+        throw new Error("OTDB returned no results");
+      }
+
+      return data.results.map(q => ({
+        category: decodeB64(q.category),
+        difficulty: decodeB64(q.difficulty),
+        question: decodeB64(q.question),
+        correct_answer: decodeB64(q.correct_answer),
+        incorrect_answers: q.incorrect_answers.map(decodeB64),
+      }));
+    } catch (err) {
+      console.warn("OTDB fetch failed, switching to local fallback:", err);
+      usingFallback = true;
+      toast("Question service unavailable — using offline set");
+      return pullFromFallback(tier);
+    }
+  }
+
+  function pullFromFallback(tier) {
+    if (!fallbackPool.length) fallbackPool = shuffle(FALLBACK_QUESTIONS);
+    const matching = fallbackPool.filter(q => q.difficulty === tier.difficulty);
+    const pool = matching.length >= tier.amount ? matching : fallbackPool;
+    const picked = shuffle(pool).slice(0, tier.amount);
+    fallbackPool = fallbackPool.filter(q => !picked.includes(q));
+    return picked;
+  }
+
+  // ---------------- Run flow ----------------
+  async function startRun() {
+    score = 0; streak = 0; bestStreak = 0; wrongCount = 0;
+    currentTierIndex = 0;
+    fallbackPool = []; // reset so each run gets a fresh offline pool if the API is unreachable
+    setStageTheme("tier-0");
+    buildLadder();
+    updateHud();
+    showScreen("game");
+    sayHostLine("intro");
+
+    if (!usingFallback && !sessionToken) {
+      sessionToken = await requestSessionToken();
+    }
+
+    await loadTier(0);
+  }
+
+  const appEl = document.getElementById("app");
+
+  function setStageTheme(name, flashLabel) {
+    appEl.className = appEl.className.replace(/\btier-\S+/g, "").trim();
+    appEl.classList.add(name);
+    if (flashLabel) triggerLevelUp(flashLabel);
+  }
+
+  function triggerLevelUp(label) {
+    playChime("levelup");
+    const el = document.getElementById("level-up");
+    const textEl = document.getElementById("level-up-text");
+    textEl.textContent = label;
+    el.classList.remove("show");
+    void el.offsetWidth; // restart animation
+    el.classList.add("show");
+    setTimeout(() => el.classList.remove("show"), 950);
+  }
+
+  async function loadTier(index) {
+    currentTierIndex = index;
+    currentQuestionInTier = 0;
+    setStageTheme(`tier-${index}`, index > 0 ? `LEVEL ${index + 1}` : null);
+    document.getElementById("q-text").textContent = "Loading question…";
+    document.getElementById("answers").innerHTML = "";
+    const tier = TIERS[index];
+    tierQuestions = await fetchTierQuestions(tier);
+    renderQuestion();
+  }
+
+  function updateHud() {
+    document.getElementById("hud-score").textContent = `${score} pts`;
+    document.getElementById("hud-tier").textContent = TIERS[currentTierIndex]?.label || "";
+  }
+
+  function renderQuestion() {
+    answered = false;
+    const tier = TIERS[currentTierIndex];
+    const q = tierQuestions[currentQuestionInTier];
+    updateHud();
+
+    document.getElementById("q-category").textContent = `${q.category} · ${q.difficulty}`;
+    document.getElementById("q-text").textContent = q.question;
+    document.getElementById("host-line").textContent = "\u00A0";
+
+    const options = shuffle([q.correct_answer, ...q.incorrect_answers]);
+    const answersEl = document.getElementById("answers");
+    answersEl.innerHTML = "";
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "answer-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", () => handleAnswer(btn, opt, q.correct_answer, tier.points));
+      answersEl.appendChild(btn);
+    });
+
+    startTimer(tier.points);
+  }
+
+  function startTimer(points) {
+    clearInterval(timerHandle);
+    timeLeft = QUESTION_SECONDS;
+    const fill = document.getElementById("timer-fill");
+    fill.style.transition = "none";
+    fill.style.width = "100%";
+    fill.classList.remove("warn", "danger-fill");
+    // force reflow so the transition re-applies cleanly on next tick
+    void fill.offsetWidth;
+    fill.style.transition = `width ${QUESTION_SECONDS}s linear`;
+    requestAnimationFrame(() => { fill.style.width = "0%"; });
+
+    timerHandle = setInterval(() => {
+      timeLeft -= 1;
+      if (timeLeft <= 10 && timeLeft > 5) fill.classList.add("warn");
+      if (timeLeft <= 5) { fill.classList.remove("warn"); fill.classList.add("danger-fill"); }
+      if (timeLeft <= 0) {
+        clearInterval(timerHandle);
+        if (!answered) handleTimeout(points);
+      }
+    }, 1000);
+  }
+
+  function handleTimeout(points) {
+    answered = true;
+    document.querySelectorAll(".answer-btn").forEach(b => b.disabled = true);
+    const q = tierQuestions[currentQuestionInTier];
+    document.querySelectorAll(".answer-btn").forEach(b => {
+      if (b.textContent === q.correct_answer) b.classList.add("correct");
+    });
+    registerResult(false, points);
+    playChime("timeout");
+    sayHostLine("timeout");
+    setTimeout(nextQuestion, 1800);
+  }
+
+  function handleAnswer(btn, chosen, correctAnswer, points) {
+    if (answered) return;
+    answered = true;
+    clearInterval(timerHandle);
+    document.querySelectorAll(".answer-btn").forEach(b => b.disabled = true);
+
+    const isCorrect = chosen === correctAnswer;
+    if (isCorrect) {
+      btn.classList.add("correct");
+    } else {
+      btn.classList.add("incorrect");
+      document.querySelectorAll(".answer-btn").forEach(b => {
+        if (b.textContent === correctAnswer) b.classList.add("correct");
+      });
+    }
+    registerResult(isCorrect, points);
+    playChime(isCorrect ? "correct" : "wrong");
+    sayHostLine(isCorrect ? "correct" : "wrong");
+    setTimeout(nextQuestion, 1800);
+  }
+
+  function registerResult(isCorrect, points) {
+    if (isCorrect) {
+      score += points;
+      streak += 1;
+      bestStreak = Math.max(bestStreak, streak);
+    } else {
+      streak = 0;
+      wrongCount += 1;
+    }
+    updateHud();
+  }
+
+  function nextQuestion() {
+    currentQuestionInTier += 1;
+    if (currentQuestionInTier < tierQuestions.length) {
+      renderQuestion();
+      return;
+    }
+    // tier complete
+    fillRung(currentTierIndex);
+    const nextTier = currentTierIndex + 1;
+    if (nextTier < TIERS.length) {
+      loadTier(nextTier);
+    } else {
+      finishMainLadder();
+    }
+  }
+
+  async function finishMainLadder() {
+    if (wrongCount === 0) {
+      showScreen("bonusIntro");
+    } else {
+      endRun(false);
+    }
+  }
+
+  async function startBonus() {
+    showScreen("game");
+    setStageTheme("tier-bonus", "BONUS ROUND");
+    document.getElementById("hud-tier").textContent = BONUS.label;
+    tierQuestions = await fetchTierQuestions(BONUS);
+    currentQuestionInTier = 0;
+    currentTierIndex = TIERS.length; // marks bonus for scoring/points lookup
+    renderBonusQuestion();
+  }
+
+  function renderBonusQuestion() {
+    answered = false;
+    const q = tierQuestions[0];
+    document.getElementById("q-category").textContent = `${q.category} · bonus`;
+    document.getElementById("q-text").textContent = q.question;
+    document.getElementById("host-line").textContent = "\u00A0";
+
+    const options = shuffle([q.correct_answer, ...q.incorrect_answers]);
+    const answersEl = document.getElementById("answers");
+    answersEl.innerHTML = "";
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "answer-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", () => handleBonusAnswer(btn, opt, q.correct_answer));
+      answersEl.appendChild(btn);
+    });
+    startTimer(BONUS.points);
+  }
+
+  function handleBonusAnswer(btn, chosen, correctAnswer) {
+    if (answered) return;
+    answered = true;
+    clearInterval(timerHandle);
+    document.querySelectorAll(".answer-btn").forEach(b => b.disabled = true);
+    const isCorrect = chosen === correctAnswer;
+    if (isCorrect) {
+      btn.classList.add("correct");
+      score += BONUS.points;
+      fillRung("bonus");
+    } else {
+      btn.classList.add("incorrect");
+      document.querySelectorAll(".answer-btn").forEach(b => {
+        if (b.textContent === correctAnswer) b.classList.add("correct");
+      });
+    }
+    sayHostLine(isCorrect ? "correct" : "wrong");
+    playChime(isCorrect ? "correct" : "wrong");
+    setTimeout(() => endRun(isCorrect), 1800);
+  }
+
+  function endRun(won) {
+    playChime(won ? "win" : "lose");
+    document.getElementById("end-tag").textContent = won ? "TOP OF THE LADDER" : "RUN COMPLETE";
+    document.getElementById("end-score").textContent = score;
+    document.getElementById("end-streak").textContent = bestStreak;
+    document.getElementById("end-line").textContent = "\u00A0";
+    showScreen("end");
+    sayHostLine(won ? "win" : "lose", "end-line");
+  }
+
+  function sayHostLine(kind, targetId) {
+    if (!selectedHost) return;
+    const lines = HOST_LINES[selectedHost][kind];
+    if (!lines) return;
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    const target = document.getElementById(targetId || "host-line");
+    target.textContent = line;
+    speak(line, selectedHost);
+  }
+})();
+</script>
+</body>
+</html>
