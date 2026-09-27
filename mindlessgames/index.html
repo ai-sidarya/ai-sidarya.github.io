@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindlessGames</title>
+<meta name="description" content="A cabinet of small, silly browser games. No downloads, no sign-up — just play.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #14071f;
+    --panel: #1f0f30;
+    --panel-light: #2a1640;
+    --gold: #f0b429;
+    --gold-dim: #7a5a1a;
+    --teal: #00d9c0;
+    --pink: #ff5470;
+    --amber: #ffb238;
+    --text: #f4eefc;
+    --text-dim: #b9a8d6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+  }
+  .display { font-family: 'Anton', 'Space Grotesk', sans-serif; letter-spacing: 0.02em; }
+
+  body {
+    background:
+      radial-gradient(ellipse 70% 40% at 50% -5%, rgba(240,180,41,0.10), transparent 60%),
+      radial-gradient(ellipse 80% 50% at 50% 105%, rgba(0,217,192,0.06), transparent 60%),
+      var(--void);
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  /* ---------- Marquee light strip ---------- */
+  .light-strip {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 0 0;
+  }
+  .light-strip span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    animation: chase 2.4s ease-in-out infinite;
+  }
+  .light-strip span:nth-child(odd) { animation-delay: 0.15s; }
+  .light-strip span:nth-child(3n) { animation-delay: 0.3s; }
+  .light-strip span:nth-child(4n) { animation-delay: 0.45s; }
+  @keyframes chase {
+    0%, 100% { background: var(--gold-dim); box-shadow: none; }
+    50% { background: var(--gold); box-shadow: 0 0 10px 2px rgba(240,180,41,0.6); }
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    text-align: center;
+    padding: 2.5rem 0 3rem;
+  }
+  .logo {
+    font-size: clamp(2.4rem, 9vw, 4rem);
+    color: var(--gold);
+    text-shadow: 0 0 26px rgba(240,180,41,0.5);
+    margin: 0;
+  }
+  .tagline {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-top: 8px;
+  }
+
+  /* ---------- Cabinet grid ---------- */
+  .cabinets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  .cabinet {
+    position: relative;
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 26px 22px 22px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--panel-light);
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    overflow: hidden;
+  }
+  .cabinet::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent, var(--gold));
+  }
+  .cabinet:hover, .cabinet:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--accent, var(--gold));
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 24px -8px var(--accent, var(--gold));
+  }
+
+  .cabinet-name {
+    font-size: 1.5rem;
+    color: var(--accent, var(--gold));
+    margin-bottom: 6px;
+  }
+  .cabinet-tagline {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    flex-grow: 1;
+    margin-bottom: 18px;
+  }
+  .cabinet-play {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent, var(--gold));
+  }
+
+  /* ---------- Coming-soon tile ---------- */
+  .cabinet.next {
+    border-style: dashed;
+    border-color: var(--panel-light);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-dim);
+    cursor: default;
+  }
+  .cabinet.next::before { display: none; }
+  .cabinet.next .cabinet-name { color: var(--text-dim); font-size: 1.1rem; }
+  .cabinet.next:hover, .cabinet.next:focus-visible {
+    transform: none; box-shadow: none; border-color: var(--panel-light);
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+  footer a { color: var(--text-dim); }
+  footer a:hover, footer a:focus-visible { color: var(--gold); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .light-strip span { animation: none; background: var(--gold-dim); }
+  }
+</style>
+</head>
+<body>
+
+<div class="light-strip" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<main>
+  <header>
+    <h1 class="logo display">MINDLESSGAMES</h1>
+    <p class="tagline">A cabinet of small, silly games. No downloads, no sign-up — just play.</p>
+  </header>
+
+  <div class="cabinets" id="cabinets"></div>
+
+  <footer>
+    <a href="https://ai-sidarya.github.io/">← ai-sidarya.github.io</a>
+  </footer>
+</main>
+
+<div class="light-strip" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // Add a new game: append one object here. That's the whole process —
+  // no other file on this page needs to change.
+  //   slug     -> the game's folder name in this repo (case-sensitive,
+  //               must match exactly — becomes the link "./slug/")
+  //   name     -> display name on the cabinet
+  //   tagline  -> one line, keep it short
+  //   accent   -> a hex color used for this cabinet's glow/border
+  // ---------------------------------------------------------------
+  const GAMES = [
+    {
+      slug: "zap-tap",
+      name: "Zap Tap",
+      tagline: "Tap, twist, and hold your nerve as the pace ramps up.",
+      accent: "#00d9c0",
+    },
+    {
+      slug: "quiz-climb",
+      name: "Quiz Climb",
+      tagline: "Climb a 19-question trivia ladder — one clean streak unlocks the bonus round.",
+      accent: "#f0b429",
+    },
+  ];
+
+  const container = document.getElementById("cabinets");
+
+  GAMES.forEach(game => {
+    const a = document.createElement("a");
+    a.className = "cabinet";
+    a.href = `./${game.slug}/`;
+    a.style.setProperty("--accent", game.accent);
+    a.innerHTML = `
+      <div class="cabinet-name display">${game.name}</div>
+      <div class="cabinet-tagline">${game.tagline}</div>
+      <div class="cabinet-play">PLAY &rarr;</div>
+    `;
+    container.appendChild(a);
+  });
+
+  // Static teaser tile — always shows last, signals the collection is growing.
+  const next = document.createElement("div");
+  next.className = "cabinet next";
+  next.innerHTML = `<div class="cabinet-name display">+ MORE</div>`;
+  container.appendChild(next);
+</script>
+
+</body>
+</html>
