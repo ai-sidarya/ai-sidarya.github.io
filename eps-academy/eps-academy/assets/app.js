@@ -23,8 +23,7 @@ var C=[
 ["21-interview-playbook","21 Interview playbook","whiteboard unknown answers closing","core"],
 ["22-case-studies-part1","22 Integrated case studies — Part 1","escalation release gate","core"],
 ["22-case-studies-part2","22 Integrated case studies — Part 2","escalation release gate","core"],
-["22-case-studies-part3","22 Integrated case studies — Part 3","escalation release gate","core"]
-["22-case-studies-part3","22 Integrated case studies — Part 4","escalation release gate","core"]];
+["22-case-studies-part3","22 Integrated case studies — Part 3","escalation release gate","core"]];
 var inCh=location.pathname.indexOf('/chapters/')>-1,root=inCh?'../':'',cur=location.pathname.split('/').pop().replace('.html','');
 var D=document,h=D.documentElement,t=localStorage.getItem('theme');if(t)h.dataset.theme=t;if(localStorage.getItem('easy')=='1')h.dataset.easy='1';
 var a=D.createElement('aside');a.setAttribute('aria-label','Chapters');
