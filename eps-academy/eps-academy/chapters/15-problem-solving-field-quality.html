@@ -1,0 +1,126 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Problem Solving, 8D and Field Quality</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 15</div>
+<h1>Chapter 15: Problem Solving, 8D and Field Quality</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read 8D evidence, you cannot judge EPS field risk or recall decisions.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>8D is a structured problem‑solving method. It forces teams to define, contain, analyze, fix, and prevent issues. Field quality is how products behave in real use, including warranty and returns.</p>
+<p>Root cause is the underlying reason the defect exists. Contributing causes are factors that make it more likely or more severe. Escape point is where the defect should have been caught but passed through.</p>
+<p>5 Whys is a simple root‑cause tool. Fault trees are structured diagrams of failure paths. Both have limits when systems are complex. EPS steering behavior needs more than one tool.</p>
+<p>Containment protects customers while you investigate. Warranty and field returns provide data and cost signals. Recall decisions weigh safety risk, regulatory expectations, and evidence strength.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>8D typically includes eight disciplines: team, problem description, containment, root cause, escape point, corrective actions, preventive actions, and closure [VERIFY]. Names vary slightly by organization.</p>
+<p>Field data comes from warranty claims, dealer reports, telematics, and returned parts. Safety case links hazards, safety goals, and evidence. Field data can confirm or challenge assumptions.</p>
+<p>Root cause analysis uses tools like 5 Whys, fault trees, and fishbone diagrams. 5 Whys asks “why” repeatedly until a deeper cause appears. Fault trees map combinations of events leading to failure.</p>
+<div class="flow"><span>Detect field issue</span><i>&rarr;</i><span>Contain customers</span><i>&rarr;</i><span>Analyze root and escape</span><i>&rarr;</i><span>Implement corrective actions</span><i>&rarr;</i><span>Update safety case</span><i>&rarr;</i><span>Decide recall or monitoring</span></div>
+<p>Containment can be software changes, usage limits, dealer instructions, or monitoring. Corrective actions fix the specific defect. Preventive actions change processes to avoid similar issues.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>Role</th><th>EPS example</th></tr>
+</thead>
+<tbody>
+<tr><td>Root cause</td><td>Explains why defect exists.</td><td>Incorrect torque limit in calibration.</td></tr>
+<tr><td>Contributing cause</td><td>Amplifies or triggers defect.</td><td>Rare combined maneuver not tested.</td></tr>
+<tr><td>Escape point</td><td>Where defect passed undetected.</td><td>HIL test suite missing scenario.</td></tr>
+<tr><td>Containment</td><td>Protects customers now.</td><td>Software update limiting assist in certain conditions.</td></tr>
+<tr><td>Field data</td><td>Evidence from real use.</td><td>Warranty claims describing steering jerks.</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Imagine EPS torque‑control software causing rare steering jerks. Drivers report sudden assist changes during tight parking maneuvers. Warranty claims rise in specific markets.</p>
+<p>8D team includes software, calibration, safety, manufacturing, and field quality. Problem description captures conditions: speed, steering angle, temperature, vehicle load, and driver behavior. Data includes logs, dealer reports, and returned ECUs.</p>
+<p>Containment limits risk. Software update reduces maximum assist in identified conditions. Dealers receive instructions to apply updates and inform customers. Monitoring tracks new claims after containment.</p>
+<p>Root cause analysis finds a calibration table with incorrect interpolation near extreme angles. Contributing causes include missing combined maneuver tests and limited field validation. Escape point is HIL test design that focused on lane‑keeping, not parking extremes.</p>
+<p>Corrective actions fix calibration and add tests. Preventive actions update test design guidelines and calibration review checklists. Safety case is updated to reflect new evidence and mitigations.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a program where 8D is treated as paperwork. Teams fill templates quickly. Problem descriptions are vague. Data is limited to a few claims.</p>
+<p>Root cause is declared as “software bug” without detail. Contributing causes and escape points are skipped. Corrective action is a quick patch. Preventive actions are generic training.</p>
+<p>Field data continues to show steering jerks. Different conditions appear. Safety case still assumes rare events only. Regulators and OEMs question credibility.</p>
+<p>Another failure involves overusing 5 Whys. Teams stop at superficial causes like “insufficient testing.” They do not analyze why testing was insufficient, how processes failed, or how safety goals were affected.</p>
+<p>Fault trees can fail when built to justify a preferred answer. Teams ignore branches that challenge assumptions. Escape points remain hidden. Future defects follow similar paths.</p>
+<p>Containment can fail too. Software updates are slow or incomplete. Dealers misunderstand instructions. Customers continue experiencing issues. Warranty costs rise. Recall pressure increases.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide whether 8D is real analysis or document theater. You choose how deeply teams investigate root, contributing, and escape causes. You decide how containment balances speed and thoroughness.</p>
+<p>Customer implications include trust and satisfaction. OEMs and drivers care about steering behavior and communication. Weak problem solving damages relationships. Strong analysis can turn issues into credibility gains.</p>
+<p>Safety implications are direct. Field issues may reveal gaps in safety case assumptions. You decide whether to update safety goals, hazard analysis, and test strategies. Ignoring field data risks future incidents.</p>
+<p>Cybersecurity interacts with field quality. Some issues may involve malicious inputs or misused diagnostics. You decide whether to treat them as defects, attacks, or both. Problem solving must consider security as well as safety.</p>
+<p>Schedule implications involve containment and corrective actions. Quick patches may reduce risk but create technical debt. Deep fixes may delay releases. You decide whether to prioritize immediate risk reduction or structural repair.</p>
+<p>Recall decisions weigh evidence, risk, and cost. You decide whether to recommend recall, targeted campaigns, or monitoring. Safety case and field data must support your stance.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions cut through vague answers and incomplete analysis.</p>
+<ul>
+<li>“Show me the 8D for this EPS issue. How clear is the problem description?”</li>
+<li>“What is the root cause, and how do we know? Which data supports it?”</li>
+<li>“What are the contributing causes? Which conditions make the defect more likely or more severe?”</li>
+<li>“Where was the escape point? Which test, review, or process should have caught this?”</li>
+<li>“How does containment protect customers today? How do we know it works?”</li>
+<li>“How do warranty and field returns feed into our safety case?”</li>
+<li>“What are the limits of 5 Whys and fault trees in this case?”</li>
+<li>“What recall decision inputs do we have, and what is missing?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We followed 8D and fixed the bug. Root cause was a software issue. Containment was a patch. Warranty claims are dropping. Safety case is unchanged.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“Our 8D identified a specific calibration interpolation error as root cause, with missing combined maneuver tests as contributing causes. Escape point was HIL test design that ignored parking extremes. Containment limited assist in affected conditions and was monitored through warranty data. Corrective actions fixed calibration and expanded tests. Preventive actions updated test guidelines and safety case assumptions. Recall decision considered residual risk, claim trends, and regulatory expectations.”</p>
+</div>
+</div>
+<p>The weak answer hides behind generic labels. It ignores contributing causes, escape points, and safety case impact. It treats dropping claims as proof.</p>
+<p>The strong answer shows detailed analysis and structural changes. It connects 8D steps to field data, safety case, and recall decisions.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you understand 8D beyond templates. They want to see if you can explain root cause, contributing cause, and escape point clearly. They check whether you treat containment as a real protection, not a checkbox.</p>
+<p>They also test your ability to link field data to safety case. Do you talk about updating assumptions and tests? Do you recognize when field issues challenge hazard analysis?</p>
+<p>They test whether you can challenge 5 Whys and fault trees. Do you know their limits? Do you insist on multiple tools and evidence?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat 8D as a form. They rush through steps. Problem descriptions are vague. Root causes are generic. Escape points are ignored.</p>
+<p>Beginners also overuse 5 Whys. They stop at “insufficient testing” or “human error.” They do not analyze process, environment, or safety case links.</p>
+<p>Executives may focus on claim counts only. They celebrate dropping warranty numbers. They do not ask whether root causes are understood or safety case updated.</p>
+<p>Executives may treat recalls as purely financial decisions. They underestimate safety and regulatory expectations. They ignore long‑term trust impacts.</p>
+<p>Another mistake is separating field quality from engineering. Leaders push field issues to quality teams. Engineering learns little. Defects repeat.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can explain root cause, contributing cause, and escape point using an EPS example.</label>
+<label class="chk"><input type="checkbox"> I can read an 8D and spot shallow analysis.</label>
+<label class="chk"><input type="checkbox"> I can describe limits of 5 Whys and fault trees in complex EPS issues.</label>
+<label class="chk"><input type="checkbox"> I can explain how containment protects customers and how we verify it.</label>
+<label class="chk"><input type="checkbox"> I can describe how field data links back to the safety case and recall decisions.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Scenario:</b> Six months after SOP, an EPS program sees rising warranty claims for intermittent steering jerks during low‑speed maneuvers. No accidents are reported, but drivers complain. OEM asks for a clear 8D, safety case impact assessment, and recall recommendation.</p>
+<p><b>Task:</b> As lead software manager, outline your problem‑solving approach across 8D steps, root versus contributing versus escape causes, containment, field data, safety case, and recall inputs.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>D1 – Team:</b> Assemble cross‑functional team: software, calibration, safety, field quality, manufacturing, and OEM representative. Ensure authority to change software, tests, and processes.</li>
+<li><b>D2 – Problem description:</b> Define conditions precisely: speed range, steering angle, temperature, vehicle load, maneuvers, and driver reports. Use warranty data, dealer logs, and telematics where available. Avoid vague phrases like “sometimes jerks.”</li>
+<li><b>D3 – Containment:</b> Design immediate containment. Options include software update limiting assist in identified conditions, dealer instructions, or monitoring. Choose actions that reduce risk without destabilizing other behavior. Document how containment effectiveness will be measured through claim trends and test results.</li>
+<li><b>D4 – Root cause analysis:</b> Use multiple tools: 5 Whys, fault trees, and data analysis. Aim for specific root causes, such as calibration interpolation errors, timing interactions, or sensor filtering issues. Distinguish root cause from symptoms. Validate hypotheses with targeted tests and returned parts.</li>
+<li><b>D5 – Contributing causes and escape point:</b> Identify contributing causes: missing combined maneuver tests, limited environmental coverage, or incomplete calibration reviews. Identify escape points: HIL test suites that ignored parking scenarios, reviews that focused on lane‑keeping only, or safety case assumptions about typical maneuvers. Document how each escape point allowed the defect through.</li>
+<li><b>D6 – Corrective actions:</b> Define specific fixes: calibration changes, software updates, test additions, and diagnostic improvements. Ensure actions address root and contributing causes. Plan validation across MIL, SIL, HIL, and vehicle tests. Link corrective actions to safety goals and performance requirements.</li>
+<li><b>D7 – Preventive actions:</b> Update processes: test design guidelines, calibration review checklists, safety case assumptions, and field data integration. Ensure future programs consider similar combined maneuvers. Train teams on reading field data and linking it to safety case.</li>
+<li><b>D8 – Closure and learning:</b> Confirm containment effectiveness and corrective action success through claim trends and tests. Update safety case with new evidence and assumptions. Share lessons across programs. Ensure documentation reflects real analysis, not just template completion.</li>
+<li><b>Safety case and recall inputs:</b> Assess whether steering jerks violate safety goals or create new hazards. Consider severity, exposure, and controllability. Evaluate claim trends, test results, and containment effectiveness. If residual risk remains significant or uncertain, recommend recall or targeted campaigns. If risk is low and well controlled, propose monitoring with clear thresholds for escalation.</li>
+<li><b>Root cause versus escape point clarity:</b> Emphasize that fixing root cause alone is insufficient. Escape points must be addressed to prevent similar defects. Show how updated tests and processes close gaps.</li>
+<li><b>Communication:</b> Prepare clear explanations for OEM and internal leadership. Avoid jargon. Use concrete data and decisions. Explain why recall is or is not recommended, based on safety case and field evidence.</li>
+</ul>
+<p>This exercise shows whether you can turn 8D into real leadership. It reveals your ability to connect field data, safety case, and recall decisions, and to distinguish root causes from escape points and contributing factors.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical 8D step definitions and usage in automotive field quality processes [VERIFY].</li>
+<li>Representative practices for using 5 Whys and fault trees in EPS problem solving [VERIFY].</li>
+<li>Common approaches to defining containment actions for steering‑related field issues [VERIFY].</li>
+<li>Typical sources and handling of warranty and field return data in automotive programs [VERIFY].</li>
+<li>Standard patterns for linking field data back into safety case updates and recall decisions [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

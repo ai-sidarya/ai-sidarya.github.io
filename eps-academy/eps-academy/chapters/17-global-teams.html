@@ -1,0 +1,127 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Global Team Leadership</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 17</div>
+<h1>Chapter 17: Global Team Leadership</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot lead global teams, you cannot integrate EPS safely across regions and time zones.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Global team leadership is about structure, decision rights, and trust across locations. EPS programs rarely sit in one building. Software, calibration, safety, and OEM interfaces span regions.</p>
+<p>Team topologies describe how teams are arranged and interact. Decision rights define who decides what. RACI (Responsible, Accountable, Consulted, Informed) is a role tool. It has limits when reality is messy.</p>
+<p>Interface ownership decides who owns boundaries between teams and systems. Time zones shape communication and handoffs. Psychological safety means people can speak up without fear. Conflict across regions is inevitable; blameless reviews turn conflict into learning.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Team topologies can be feature teams, component teams, platform teams, or enabling teams. Feature teams own end‑to‑end behavior. Component teams own specific modules. Platform teams provide shared services. Enabling teams support others.</p>
+<p>Decision rights must be explicit. Who owns torque‑control algorithms? Who owns calibration? Who owns safety case? Who can approve changes? RACI helps, but labels alone do not resolve conflicts.</p>
+<p>Interface ownership is critical. Each interface—software, hardware, process—needs a clear owner. Owners manage changes, integration, and conflict. Without ownership, gaps appear.</p>
+<div class="flow"><span>Define team topology</span><i>&rarr;</i><span>Assign decision rights</span><i>&rarr;</i><span>Set interface owners</span><i>&rarr;</i><span>Align time zones and rituals</span><i>&rarr;</i><span>Run blameless reviews</span></div>
+<p>Time zones require deliberate design. You cannot rely on ad‑hoc late‑night calls. Psychological safety needs consistent behavior: no blame, clear expectations, and visible support.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>Role</th><th>EPS example</th></tr>
+</thead>
+<tbody>
+<tr><td>Feature team</td><td>Owns end‑to‑end behavior.</td><td>Steering feel team across regions.</td></tr>
+<tr><td>Component team</td><td>Owns specific module.</td><td>Torque‑control software team.</td></tr>
+<tr><td>Platform team</td><td>Provides shared services.</td><td>Diagnostics and tooling team.</td></tr>
+<tr><td>Decision rights</td><td>Defines authority.</td><td>Who approves assist‑curve changes.</td></tr>
+<tr><td>Interface owner</td><td>Manages boundaries.</td><td>Owner of EPS–OEM CAN interface.</td></tr>
+<tr><td>Blameless review</td><td>Analyzes issues without blame.</td><td>Post‑integration review after steering defect.</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Imagine an EPS program with three main regions. Region A owns torque‑control software. Region B owns calibration and vehicle integration. Region C owns diagnostics and tooling.</p>
+<p>Team topology: component team in Region A for control software, feature team across A and B for steering feel, platform team in Region C for diagnostics. Decision rights: Region A decides control algorithms; Region B decides calibration; Region C decides diagnostic formats.</p>
+<p>Interface ownership: EPS–OEM CAN interface owned jointly by a named lead in Region A and a counterpart in OEM. Internal interface between control software and calibration owned by a cross‑region steering feel lead.</p>
+<p>Time zones: Region A and B overlap partially. Region C overlaps with both. Daily standups rotate times. Weekly integration review includes all regions. Asynchronous updates use clear written summaries.</p>
+<p>Psychological safety: leaders in each region commit to blameless reviews. Issues are framed as system problems, not personal failures. People are encouraged to raise concerns early.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a cross‑region integration conflict. Region A changes torque‑control timing to improve responsiveness. Region B adjusts calibration based on previous timing. Region C updates diagnostics without full context.</p>
+<p>Integration tests show steering oscillations in certain maneuvers. Each region blames others. Region A says calibration is wrong. Region B says software changed without notice. Region C says diagnostics are fine.</p>
+<p>Team topology is unclear. Decision rights are vague. Interface ownership is missing. Time zones mean issues bounce overnight without resolution. Psychological safety erodes. People stop raising concerns.</p>
+<p>RACI chart exists but is outdated. It lists “Responsible: Steering team” and “Accountable: Program manager.” It does not reflect cross‑region reality. Conflict escalates to executives.</p>
+<p>Blameless reviews are replaced by blame sessions. Leaders ask “Who broke this?” instead of “How did our system allow this?” Regions defend themselves. Root causes remain hidden.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide team topology. You choose whether to organize by feature, component, or platform. You decide decision rights and interface ownership. You design how regions interact.</p>
+<p>Customer implications include integration quality and responsiveness. OEMs see the result of global coordination in steering behavior and issue handling. Poor leadership shows up as repeated integration defects and slow responses.</p>
+<p>Safety implications involve cross‑region hazard analysis, test design, and calibration. If teams fight instead of collaborating, safety case suffers. Hazards may be missed or misinterpreted.</p>
+<p>Cybersecurity implications involve shared responsibilities across regions. Debug‑port control, secure diagnostics, and update security may span teams. You decide who owns which parts and how they coordinate.</p>
+<p>Schedule implications include handoff delays and rework. Poor time‑zone design leads to slow decisions. Conflicts cause repeated integration cycles. You decide whether to invest in overlap, clear rituals, and strong interface ownership.</p>
+<p>Blameless reviews affect all dimensions. They turn incidents into learning. Without them, teams hide issues. Safety, security, and schedule all suffer.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions expose structural gaps and cultural risks.</p>
+<ul>
+<li>“What is our current team topology for EPS? Feature, component, platform, enabling?”</li>
+<li>“Who has decision rights for torque‑control algorithms, calibration, diagnostics, and safety case?”</li>
+<li>“Who owns each critical interface: EPS–OEM CAN, control–calibration, diagnostics–backend?”</li>
+<li>“How do time zones affect our integration cycles? Where do we lose days?”</li>
+<li>“What behaviors show psychological safety in our cross‑region meetings?”</li>
+<li>“How do we run blameless reviews after integration issues?”</li>
+<li>“Where has RACI failed to reflect reality, and how did we fix it?”</li>
+<li>“Show me a recent cross‑region conflict and how we resolved it.”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We have teams in multiple regions. Everyone is responsible for quality. RACI covers roles. Time zones are challenging, but people manage. When conflicts happen, we escalate. Reviews focus on who made mistakes.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“We use a clear team topology: component team for torque control, feature team for steering feel, platform team for diagnostics. Decision rights are explicit for algorithms, calibration, diagnostics, and safety case. Interface owners are named for EPS–OEM CAN and internal boundaries. Time‑zone rituals include rotating standups and weekly integration reviews with written summaries. We run blameless reviews that focus on system factors, not individuals. RACI is updated when reality changes. Cross‑region conflicts are resolved through structured analysis, not blame.”</p>
+</div>
+</div>
+<p>The weak answer hides behind generic statements. It treats global complexity as “challenging” without structure. It uses escalation and blame as primary tools.</p>
+<p>The strong answer shows deliberate design. It connects topology, decision rights, interface ownership, time zones, and culture. It treats conflict as a system issue.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you can lead across regions, not just manage local teams. They want to see if you understand team topologies and decision rights. They check whether you can design interface ownership and time‑zone rituals.</p>
+<p>They also test your ability to create psychological safety. Do you talk about blameless reviews and speaking up? Do you recognize how blame culture hides defects?</p>
+<p>They test whether you can handle cross‑region conflict. Do you describe structured resolution, not just escalation? Do you connect conflict to safety and integration quality?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat global teams as local teams with more calls. They ignore time‑zone impact. They assume people will “figure it out.” They do not define decision rights or interface ownership.</p>
+<p>Beginners also overuse RACI. They create detailed charts that nobody reads. They assume labels solve conflicts. They do not adjust RACI when reality changes.</p>
+<p>Executives may design team topologies based on org charts, not work. They split teams by location instead of feature or component. Integration becomes harder.</p>
+<p>Executives may tolerate blame culture. They reward “heroes” who fix issues late, not teams who prevent issues early. People hide problems. Cross‑region trust erodes.</p>
+<p>Another mistake is ignoring psychological safety. Leaders focus on metrics and deadlines. They do not notice when people stop speaking up. Silent teams are not safe teams.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can describe our EPS team topology and why it was chosen.</label>
+<label class="chk"><input type="checkbox"> I can name decision rights and interface owners for key EPS functions.</label>
+<label class="chk"><input type="checkbox"> I can explain how time zones affect our integration and how we mitigate that.</label>
+<label class="chk"><input type="checkbox"> I can describe how we run blameless reviews after cross‑region issues.</label>
+<label class="chk"><input type="checkbox"> I can identify signs of psychological safety or its absence in our teams.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Cross‑region integration conflict case:</b></p>
+<p><b>Scenario:</b> EPS torque‑control software is developed in Region A. Calibration and vehicle integration are in Region B. Diagnostics and tooling are in Region C. A new release shows intermittent steering oscillations during lane‑keeping. OEM reports the issue and demands quick resolution. Regions disagree on root cause and responsibility.</p>
+<p><b>Observed behavior:</b> Region A claims calibration changed without notice. Region B claims software timing changed. Region C claims diagnostics show correct data. Meetings are tense. Emails are defensive. Time‑zone gaps cause delays. OEM escalates.</p>
+<p><b>Task:</b> As global lead, outline how you resolve this conflict using team topology, decision rights, interface ownership, time‑zone design, psychological safety, and blameless reviews.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>Clarify topology and decision rights:</b> Start by restating team topology: component team in Region A for control software, feature team across A and B for steering feel, platform team in Region C for diagnostics. Confirm decision rights: Region A owns control algorithms and timing; Region B owns calibration; Region C owns diagnostic formats. Share this with all regions and OEM.</li>
+<li><b>Assign interface owners:</b> Name interface owners for control–calibration boundary and diagnostics–EPS boundary. For example, a steering feel lead across A and B, and a diagnostics lead across C and A. These owners coordinate technical analysis.</li>
+<li><b>Design immediate time‑zone ritual:</b> Set up a daily cross‑region integration huddle at a time that overlaps all regions, even if slightly inconvenient. Use a strict agenda: status, data, hypotheses, next steps. Require written summaries after each huddle for asynchronous follow‑up.</li>
+<li><b>Run a blameless integration review:</b> Organize a structured review focused on system behavior, not individuals. Start with data: logs, traces, test conditions. Ask “How did our system allow this?” instead of “Who broke this?” Encourage each region to share uncertainties and constraints.</li>
+<li><b>Separate technical analysis from blame:</b> Explicitly state that the goal is understanding, not assigning fault. As leader, model curiosity and humility. Ask clarifying questions. Avoid loaded language like “failure” or “mistake” when discussing regions.</li>
+<li><b>Use joint root‑cause analysis:</b> Have Region A and B jointly analyze timing and calibration interactions. Region C provides diagnostic data and tooling support. Use tools like fault trees and sequence diagrams to map interactions. Document findings in shared artifacts.</li>
+<li><b>Identify system factors:</b> Look for structural causes: missing cross‑region integration tests, unclear interface specifications, or outdated RACI. Treat these as root causes, not just local errors. Propose changes to tests, specs, and roles.</li>
+<li><b>Update RACI and interface agreements:</b> If RACI or interface agreements are outdated, update them to reflect reality. Make decision rights and interface ownership explicit. Share updates with all regions and OEM.</li>
+<li><b>Address psychological safety:</b> After initial resolution, hold a retrospective focused on culture. Ask what made it hard to speak up or admit uncertainty. Commit to behaviors that support safety: early escalation, open questions, and respect across regions.</li>
+<li><b>Communicate with OEM:</b> Provide OEM with a clear, non‑defensive summary: issue description, joint analysis, root causes, corrective actions, and preventive actions. Emphasize cross‑region collaboration and structural improvements, not just a quick fix.</li>
+<li><b>Long‑term changes:</b> Introduce regular cross‑region integration reviews, shared dashboards, and joint ownership of key interfaces. Consider adjusting team topology if repeated conflicts show structural misalignment.</li>
+</ul>
+<p>This exercise shows whether you can turn a messy cross‑region conflict into structured learning. It reveals your ability to use topology, decision rights, interface ownership, time‑zone design, psychological safety, and blameless reviews as leadership tools, not buzzwords.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical team topology patterns used in global automotive software programs [VERIFY].</li>
+<li>Representative practices for assigning decision rights and interface ownership across regions [VERIFY].</li>
+<li>Common approaches to managing time‑zone challenges in cross‑region EPS development [VERIFY].</li>
+<li>Standard techniques for running blameless reviews and building psychological safety in engineering teams [VERIFY].</li>
+<li>Realistic examples of cross‑region integration conflicts and their resolution in automotive programs [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

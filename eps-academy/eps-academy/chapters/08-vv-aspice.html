@@ -1,0 +1,137 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Verification, Validation and ASPICE for EPS Leaders</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 08</div>
+<h1>Chapter 08: Verification, Validation and ASPICE</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read the evidence chain, you cannot judge EPS release readiness, no matter how green the pipeline looks.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Verification asks “did we build it right.” Validation asks “did we build the right thing.” Both must converge before release.</p>
+<p>The V-model is a way of pairing development steps with test levels. Left side defines requirements and design. Right side defines tests that prove each level works.</p>
+<p>Automotive SPICE (ASPICE) is a process assessment model for development and support activities. It rates how consistently teams follow defined practices [VERIFY]. It does not guarantee safety or quality by itself.</p>
+<p>EPS torque-control sits in the middle of this. You must understand how requirements, models, code, and tests connect. Evidence must show coverage, fault handling, and realistic behavior, not just documents.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Traceability links requirements, design, implementation, and tests. Each safety-relevant requirement should trace to test cases and results. Each defect should trace back to the requirement or design it violated.</p>
+<p>MIL, SIL, PIL, and HIL are test environments. MIL (Model-in-the-Loop) runs control models without code. SIL (Software-in-the-Loop) runs compiled software on a simulated platform. PIL (Processor-in-the-Loop) runs software on the target processor with simulated environment. HIL (Hardware-in-the-Loop) runs the full ECU against simulated vehicle dynamics.</p>
+<p>Fault injection deliberately introduces faults to see how the system reacts. Coverage types measure how much of the design or code has been exercised. Examples include requirements coverage, branch coverage, and MC/DC coverage [VERIFY].</p>
+<div class="flow"><span>Requirements</span><i>&rarr;</i><span>Design</span><i>&rarr;</i><span>Implementation</span><i>&rarr;</i><span>MIL/SIL/PIL/HIL tests</span><i>&rarr;</i><span>Evidence and coverage</span><i>&rarr;</i><span>Release decision</span></div>
+<p>Test effectiveness is how well tests detect defects that matter. Flaky tests are tests that sometimes pass, sometimes fail, without real changes. Fidelity limits are differences between test environments and real vehicles.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>Role</th><th>EPS example</th></tr>
+</thead>
+<tbody>
+<tr><td>Traceability</td><td>Connects requirements to tests.</td><td>Torque assist requirement traced to HIL lane-change tests.</td></tr>
+<tr><td>MIL</td><td>Early algorithm validation.</td><td>Simulated torque curves under different speeds.</td></tr>
+<tr><td>SIL</td><td>Software behavior in simulation.</td><td>Torque-control code tested against sensor noise models.</td></tr>
+<tr><td>PIL</td><td>Processor timing and behavior.</td><td>WCET and latency measured on target microcontroller.</td></tr>
+<tr><td>HIL</td><td>System-level behavior.</td><td>Steering feel tested with full ECU and simulated vehicle.</td></tr>
+</tbody>
+</table>
+<p>ASPICE evaluates whether these activities follow defined processes. It looks at planning, traceability, reviews, and test execution. It does not replace ISO 26262, which focuses on functional safety concepts [VERIFY]. Agile adds iterative development and continuous integration. You must align ASPICE, safety, and Agile without turning evidence into theater.</p>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Imagine an EPS program with a torque-control feature for lane-keeping assist. Requirements define assist levels, response times, and fallback behavior. Safety requirements define maximum unintended torque and fault reactions.</p>
+<p>MIL tests run the control model against lane-change scenarios. They check that assist torque follows design curves and respects limits. SIL tests run the compiled torque-control software against the same scenarios, including sensor noise and communication delays.</p>
+<p>PIL tests run the software on the target microcontroller. They measure worst-case execution time and CPU load during aggressive steering. HIL tests run the full ECU against a steering rig and vehicle dynamics model. They measure steering feel, fault reactions, and communication behavior.</p>
+<p>Traceability links each requirement to MIL, SIL, PIL, and HIL tests. Fault injection introduces sensor failures, communication dropouts, and internal errors. Coverage metrics show how much of the torque-control logic and safety mechanisms have been exercised.</p>
+<p>ASPICE assessments review whether requirements, design, implementation, and tests follow defined processes. They check traceability, reviews, and test management. ISO 26262 safety case collects evidence that safety goals are met. Agile practices drive frequent builds and tests.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a program where the V-model exists only on slides. Requirements are vague. Traceability is partial. Tests focus on happy paths.</p>
+<p>MIL and SIL tests show smooth torque curves. HIL tests show acceptable steering feel in standard maneuvers. Coverage metrics look high. ASPICE assessments rate processes as “managed” [VERIFY].</p>
+<p>However, fault injection is weak. Rare sensor glitches and communication bursts are not tested. Flaky tests exist but are ignored. Fidelity limits are not discussed. Real vehicles experience rare steering jerks during combined maneuvers.</p>
+<p>Another failure involves document theater. Teams produce traceability matrices and test reports to satisfy audits. Evidence is shallow. Tests do not reflect realistic driver behavior or worst-case timing. Release decisions rely on green dashboards, not deep analysis.</p>
+<p>Agile practices can fail too. Frequent changes enter the codebase. Regression tests lag behind. Coverage drops silently. Safety case and ASPICE documentation are not updated. Release readiness becomes a guess.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide whether verification and validation are treated as checklists or as learning tools. You choose whether traceability is real or decorative. You decide whether MIL, SIL, PIL, and HIL are used strategically.</p>
+<p>Customer implications are direct. OEMs ask for evidence, not slogans. They want to see how requirements map to tests. They ask how fault injection and coverage support steering safety. Weak answers damage trust.</p>
+<p>Safety implications are severe. ISO 26262 safety goals depend on credible evidence. If tests miss critical scenarios, safety assumptions fail. ASPICE process ratings cannot compensate for missing coverage or weak fault injection.</p>
+<p>Cybersecurity interacts with verification and validation. Security features add complexity and timing effects. Tests must cover security-related failure modes, such as invalid messages or blocked updates. Pipelines must protect test artifacts and configurations.</p>
+<p>Schedule implications are unavoidable. Deep testing takes time. HIL rigs are scarce. Fault injection campaigns require planning. You decide whether to delay features or reduce test scope. You must explain these decisions to OEMs and internal stakeholders.</p>
+<p>A green pipeline is evidence, not release approval. It shows tests passed under certain conditions. It does not prove that coverage is sufficient or that fidelity limits are understood. Release readiness requires a broader checklist and judgment.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions cut through document theater. They focus on evidence quality and limits.</p>
+<ul>
+<li><b>Traceability:</b> “Show me the chain from torque requirements to HIL tests and results.”</li>
+<li><b>Test levels:</b> “What do MIL, SIL, PIL, and HIL each add for EPS torque control?”</li>
+<li><b>Fault injection:</b> “Which faults did we inject, and how did the system respond?”</li>
+<li><b>Coverage:</b> “What coverage metrics do we track, and how do they relate to safety goals?”</li>
+<li><b>Flaky tests:</b> “Which tests are flaky, and what have we done about them?”</li>
+<li><b>Fidelity limits:</b> “Where do our test environments differ from real vehicles, and how do we compensate?”</li>
+<li><b>ASPICE and safety:</b> “How do ASPICE assessments and ISO 26262 safety case reinforce each other, not just coexist?”</li>
+<li><b>Agile:</b> “How do we keep traceability and coverage current under frequent changes?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We follow the V-model and ASPICE. All tests are automated, and the pipeline is green. Coverage is above our target. ISO 26262 is handled by the safety team. Agile keeps us flexible.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“Torque-control requirements trace to MIL, SIL, PIL, and HIL tests, including fault injection scenarios. We track requirements coverage and structural coverage for safety-relevant code. Flaky tests are either fixed or removed, with documented reasons. We document fidelity limits for each environment and use vehicle tests to close gaps. ASPICE assessments confirm process consistency, while the ISO 26262 safety case integrates test evidence. Agile changes trigger traceability updates and regression test selection.”</p>
+</div>
+</div>
+<p>The weak answer hides behind frameworks and metrics. It ignores evidence quality and limits. It separates safety from development.</p>
+<p>The strong answer shows integrated thinking. It connects test levels, coverage, and safety case. It treats ASPICE and Agile as tools, not shields.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you can read verification and validation evidence, not just approve plans. They want to see if you understand the V-model, traceability, and test levels at leadership depth.</p>
+<p>They also test your ability to distinguish evidence from theater. Do you ask about fault injection, coverage, and fidelity limits? Do you challenge green dashboards? Do you connect ASPICE, ISO 26262, and Agile coherently?</p>
+<p>They test your ability to lead release decisions. Do you talk about release-readiness checklists? Do you recognize that some risks remain? Do you show how you would explain decisions to OEMs and internal stakeholders?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat MIL, SIL, PIL, and HIL as buzzwords. They do not understand what each level reveals. They assume more levels automatically mean better testing.</p>
+<p>Beginners also ignore flaky tests. They rerun until green and move on. They do not ask why tests are unstable. They accept coverage numbers without understanding what is covered.</p>
+<p>Executives may treat ASPICE ratings as proof of quality. They focus on achieving a certain level. They do not ask whether processes produce meaningful evidence. They may push for ISO 26262 compliance without reading the safety case.</p>
+<p>Executives sometimes confuse Agile speed with test depth. They celebrate frequent releases. They do not ask whether regression tests keep up. They may accept green pipelines as release approval.</p>
+<p>Another mistake is ignoring fidelity limits. Leaders assume HIL equals reality. They do not ask how models differ from real vehicles. Surprises appear in fleet behavior.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<p>Use these items to test your understanding of verification, validation, and ASPICE.</p>
+<label class="chk"><input type="checkbox"> I can explain the V-model using an EPS torque-control example.</label>
+<label class="chk"><input type="checkbox"> I can describe what MIL, SIL, PIL, and HIL each add to confidence.</label>
+<label class="chk"><input type="checkbox"> I can ask specific questions about fault injection and coverage.</label>
+<label class="chk"><input type="checkbox"> I can distinguish real evidence from document theater in ASPICE contexts.</label>
+<label class="chk"><input type="checkbox"> I can outline how Agile changes affect traceability and test selection.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Scenario:</b> An EPS program is approaching release. Dashboards show green pipelines, high coverage, and successful ASPICE assessments. However, recent vehicle tests reported rare steering jerks during combined maneuvers. The safety case is nearly complete.</p>
+<p><b>Task:</b> As lead software manager, build a release-readiness checklist and decide whether to release, delay, or conditionally approve. Each checklist item must have a one-line reason.</p>
+<p><b>Release-readiness checklist with reasons:</b></p>
+<ul>
+<li><b>Requirements traceability complete:</b> Every safety-relevant torque requirement must link to tests and results, or gaps are visible.</li>
+<li><b>MIL/SIL/PIL/HIL coverage of critical scenarios:</b> Combined maneuvers and fault cases must appear across test levels, not just nominal runs.</li>
+<li><b>Fault injection campaign reviewed:</b> Injected faults must cover sensors, communication, internal errors, and reset behavior, with clear outcomes.</li>
+<li><b>Coverage metrics interpreted, not just numbers:</b> Requirements and structural coverage must be tied to safety goals, with known blind spots.</li>
+<li><b>Flaky tests resolved or justified:</b> Unstable tests must be fixed or removed, with documented risk assessment.</li>
+<li><b>Fidelity limits documented:</b> Differences between HIL, rigs, and vehicles must be understood, with compensating tests or margins.</li>
+<li><b>Safety case aligned with evidence:</b> ISO 26262 arguments must reference actual test results, not assumed behavior.</li>
+<li><b>ASPICE findings integrated:</b> Process weaknesses identified in assessments must be addressed or explicitly accepted with mitigation.</li>
+<li><b>Agile change log reviewed:</b> Late changes must have targeted regression tests and updated traceability.</li>
+<li><b>Customer communication plan ready:</b> OEMs must receive a clear explanation of residual risks and evidence.</li>
+</ul>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>Assess evidence versus dashboards:</b> Review traceability, test reports, and fault injection results. Do not rely solely on pipeline status or coverage percentages.</li>
+<li><b>Investigate steering jerks:</b> Treat vehicle reports as high-priority signals. Check whether reported maneuvers appear in MIL, SIL, PIL, and HIL tests. If not, design targeted tests.</li>
+<li><b>Decide on release stance:</b> If jerks are understood and mitigated, release with documented residual risk and monitoring. If root cause is unclear, delay release or limit deployment. Conditional approval might involve restricted use or additional fleet monitoring.</li>
+<li><b>Integrate ASPICE and safety case:</b> Use ASPICE findings to strengthen processes that support safety evidence. Ensure that safety case arguments reflect actual process maturity and test depth.</li>
+<li><b>Align with Agile practices:</b> Ensure that late changes are fully traced and tested. If Agile cadence outpaced verification, slow down or add stabilization iterations before release.</li>
+<li><b>Communicate clearly:</b> Explain decisions to OEMs and internal stakeholders using the checklist. Avoid vague assurances. Use concrete evidence and known limits.</li>
+</ul>
+<p>This exercise shows whether you can turn frameworks into decisions. It reveals your ability to read evidence, respect limits, and lead release readiness for EPS torque-control.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical interpretation of the V-model in automotive EPS programs [VERIFY].</li>
+<li>Representative use of MIL, SIL, PIL, and HIL for torque-control verification and validation [VERIFY].</li>
+<li>Common coverage metrics, including MC/DC, used for safety-relevant automotive software [VERIFY].</li>
+<li>Typical scope and purpose of Automotive SPICE assessments in steering-related ECUs [VERIFY].</li>
+<li>Relationship patterns between ASPICE process assessments and ISO 26262 safety cases in practice [VERIFY].</li>
+<li>Realistic examples of document theater in automotive verification and validation activities [VERIFY].</li>
+<li>Common approaches to handling flaky tests and fidelity limits in EPS programs [VERIFY].</li>
+<li>Representative Agile practices used in safety-critical automotive software development and their impact on V&V [VERIFY].</li>
+</ul></div>
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

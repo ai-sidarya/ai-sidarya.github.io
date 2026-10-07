@@ -1,0 +1,128 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Architecture and AUTOSAR for EPS Leaders</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 05</div>
+<h1>Chapter 05: Architecture and AUTOSAR</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read the AUTOSAR layers, you cannot judge EPS torque-control safety, timing, or change impact.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Architecture is how software pieces fit together, not just diagrams. AUTOSAR is a standardized architecture framework for automotive software. It defines layers, interfaces, and configuration concepts for ECUs.</p>
+<p>Classic AUTOSAR targets microcontroller-based ECUs with static configuration. Adaptive AUTOSAR targets more dynamic, high-performance platforms [VERIFY]. EPS torque-control usually runs on Classic AUTOSAR today [VERIFY].</p>
+<p>Key layers: application software, RTE (Runtime Environment), basic software, MCAL (Microcontroller Abstraction Layer), OS, communication and diagnostic stacks. You must understand how torque-control logic sits on top of these layers.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Application software contains software components (SWCs). Each SWC encapsulates related functionality. Runnables are the smallest executable units inside SWCs. The RTE connects SWCs to each other and to basic software.</p>
+<p>Basic software includes communication stacks, diagnostic services, memory services, and OS integration. MCAL abstracts hardware registers and peripherals. The OS schedules tasks and runnables according to priorities and timing.</p>
+<p>Communication stacks handle CAN, CAN FD, LIN, and Ethernet. Diagnostic stacks handle fault reporting and service requests. Calibration mechanisms allow changing parameters without recompiling.</p>
+<div class="flow"><span>Application SWCs</span><i>&rarr;</i><span>Runnables</span><i>&rarr;</i><span>RTE</span><i>&rarr;</i><span>Basic software</span><i>&rarr;</i><span>MCAL</span><i>&rarr;</i><span>Hardware</span></div>
+<p>Layering separates concerns. Coupling is how strongly modules depend on each other. Cohesion is how well a module’s responsibilities fit together. Good architecture minimizes unnecessary coupling and maximizes cohesion.</p>
+<table>
+<thead>
+<tr><th>Layer</th><th>Role</th><th>EPS torque-control example</th></tr>
+</thead>
+<tbody>
+<tr><td>Application SWCs</td><td>Implement domain logic.</td><td>Torque calculation, plausibility checks, mode management.</td></tr>
+<tr><td>RTE</td><td>Connects SWCs and services.</td><td>Delivers sensor data to torque SWC, sends commands to motor driver SWC.</td></tr>
+<tr><td>Basic software</td><td>Provides services.</td><td>Communication, diagnostics, NVRAM, watchdog, OS integration.</td></tr>
+<tr><td>MCAL</td><td>Abstracts hardware.</td><td>ADC drivers for torque sensors, PWM drivers for motor control.</td></tr>
+<tr><td>OS</td><td>Schedules tasks.</td><td>Runs torque-control runnable periodically, handles communication events.</td></tr>
+</tbody>
+</table>
+<p>Timing and memory budgets are allocated across layers. Each runnable has a period and worst-case execution time. Each SWC and stack consumes RAM and Flash. Variants and calibration add configuration complexity.</p>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Consider an EPS ECU using Classic AUTOSAR. The torque-control SWC receives torque and angle signals, plus vehicle speed. It outputs desired assist torque and mode information.</p>
+<p>Runnables inside the torque SWC might include:</p>
+<ul>
+<li><b>Torque_Read:</b> Reads sensor data via RTE from ADC and communication SWCs.</li>
+<li><b>Torque_Compute:</b> Applies control algorithms and plausibility checks.</li>
+<li><b>Torque_Output:</b> Sends commands to motor driver SWC via RTE.</li>
+</ul>
+<p>Communication SWCs handle CAN or Ethernet messages. Diagnostic SWCs handle fault codes and service requests. Calibration SWCs expose parameters such as assist curves and limits.</p>
+<p>Basic software communication stacks implement CAN drivers, transport protocols, and network management. MCAL provides ADC and PWM drivers. The OS schedules runnables according to configured priorities and periods.</p>
+<p>Variants appear when different vehicle platforms share the same ECU. One variant may use different assist curves, communication signals, or diagnostic behavior. Calibration allows tuning without changing code. Variant handling and calibration must respect timing and memory budgets.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider an architecture where torque-control runnables share a task with heavy diagnostics. The task period is tight. Diagnostics grow over time, adding more processing.</p>
+<p>Under heavy diagnostic load, the task overruns its period. Torque_Compute runs late. PWM updates lag behind sensor changes. The driver feels steering lag or brief jerks.</p>
+<p>Coupling can also cause failures. Torque SWC depends directly on communication SWC internals, not just RTE interfaces. A change in communication SWC breaks torque SWC behavior. A variant adds new signals, increasing complexity.</p>
+<p>Technical debt accumulates when quick fixes bypass architecture. Extra flags, global variables, and ad-hoc calibration parameters appear. Cohesion drops. Understanding change impact becomes hard.</p>
+<p>Adaptive AUTOSAR adds dynamic behavior. If EPS functions move to Adaptive platforms without careful timing analysis, real-time guarantees may weaken [VERIFY]. Scheduling and resource management differ. Torque-control may suffer.</p>
+
+<h2>5. What a manager decides <span class="lvl l3">Interview depth</span></h2>
+<p>You decide how architecture is challenged and maintained. You choose whether torque-control SWCs remain cohesive. You decide whether runnables share tasks with diagnostics or communication.</p>
+<p>Customer implications are direct. OEMs expect clear architecture descriptions and predictable behavior. They ask how variants are handled and how calibration affects timing. You must answer with concrete architecture facts.</p>
+<p>Safety implications involve timing and isolation. ASIL D torque-control goals require predictable execution and controlled dependencies. Architecture must support isolation of safety-critical functions from non-safety features.</p>
+<p>Cybersecurity interacts with architecture. Communication and diagnostic stacks handle security features. Secure communication adds processing and latency. You must ensure security features do not break torque-control timing.</p>
+<p>Schedule implications include architecture changes. Refactoring SWCs or tasks takes time. Variant handling and calibration changes require careful testing. You decide whether to accept architectural shortcuts or invest in cleanup.</p>
+<p>You must challenge architecture without bypassing the architect. That means asking hard questions, not redesigning personally. You set constraints and priorities; the architect proposes solutions.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions focus on layering, timing, and change impact. They respect the architect’s role but demand clarity.</p>
+<ul>
+<li>“Show me where the torque-control SWC sits in the AUTOSAR stack.”</li>
+<li>“Which runnables implement torque calculation, and what are their periods and WCETs?”</li>
+<li>“Which tasks host torque runnables, and what else runs there?”</li>
+<li>“How do variants change SWC configuration, and how do we protect timing budgets?”</li>
+<li>“How does calibration affect memory and execution time?”</li>
+<li>“Which dependencies between SWCs are intentional, and which are technical debt?”</li>
+<li>“How do communication and diagnostic stacks affect torque-control timing?”</li>
+<li>“When we change a communication signal, how do we perform change-impact analysis?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We use AUTOSAR, so the architecture is standard. The torque-control runs in an application component. Variants are handled by configuration. Timing is fine because the hardware is fast.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“Torque-control is implemented in a dedicated SWC with three main runnables. They run in a high-priority task with defined periods and measured WCET. Diagnostics and communication run in separate tasks to protect timing. Variants change configuration but we track their impact on timing and memory budgets. Change-impact analysis covers SWC interfaces, RTE connections, and calibration parameters.”</p>
+</div>
+</div>
+<p>The weak answer hides behind “standard” and “fast hardware.” It ignores timing, layering, and change impact. It does not show ownership.</p>
+<p>The strong answer names SWCs, runnables, tasks, and budgets. It shows measurement and analysis. It treats AUTOSAR as a framework, not a guarantee.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you can read architecture diagrams and AUTOSAR concepts. They want to see if you understand SWCs, runnables, RTE, and basic software at leadership depth. They check whether you can connect architecture to torque-control behavior.</p>
+<p>They also test your ability to challenge architecture constructively. Do you ask about timing budgets, memory usage, and coupling? Do you respect the architect’s role while insisting on clarity?</p>
+<p>They test your understanding of variants and calibration. Do you recognize that configuration changes can break timing? Do you understand that technical debt hides in SWC dependencies?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat AUTOSAR as magic. They assume layering solves all problems. They ignore runnables and tasks. They focus only on SWC names.</p>
+<p>Beginners also underestimate coupling. They allow SWCs to depend on each other’s internals. They bypass RTE interfaces. Technical debt grows quietly.</p>
+<p>Executives assume architecture is “done” once diagrams exist. They push features and variants without revisiting timing and memory budgets. They treat AUTOSAR compliance as proof of safety.</p>
+<p>Executives may bypass architects. They dictate solutions instead of constraints. Architects become implementers, not designers. Architecture drifts under pressure.</p>
+<p>Another mistake is ignoring change-impact analysis. Leaders approve changes without asking which SWCs, runnables, and stacks are affected. Surprises appear in vehicle tests.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<p>Use these items to test your architecture understanding.</p>
+<label class="chk"><input type="checkbox"> I can explain where torque-control SWCs sit in the AUTOSAR stack.</label>
+<label class="chk"><input type="checkbox"> I can describe runnables, tasks, and timing budgets for torque-control.</label>
+<label class="chk"><input type="checkbox"> I can ask specific questions about variants and calibration impact.</label>
+<label class="chk"><input type="checkbox"> I can distinguish coupling and cohesion in EPS architecture.</label>
+<label class="chk"><input type="checkbox"> I can outline how to challenge architecture without bypassing the architect.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Architecture review case:</b> You join an EPS program using Classic AUTOSAR. Field tests show occasional steering lag during rapid lane changes. The architect presents a diagram showing torque-control SWC, diagnostics SWC, communication SWC, and tasks.</p>
+<p><b>Task:</b> Conduct a leadership-level architecture review. Focus on timing, layering, variants, and technical debt. Outline questions and possible actions.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>Timing and tasks:</b> Ask which tasks host torque runnables and what else runs there. Request measured WCET and CPU load for torque tasks under worst communication and diagnostic load. If diagnostics share the same task, discuss separating them or adjusting priorities.</li>
+<li><b>Layering and dependencies:</b> Ask how torque SWC interacts with communication and diagnostics. Check whether it uses only RTE interfaces or accesses internals. Identify any global variables or cross-layer shortcuts. Propose refactoring to reduce coupling and improve cohesion.</li>
+<li><b>Variants and calibration:</b> Ask how variants change SWC configuration and calibration. Request timing and memory budgets per variant. If variants add features without revisiting budgets, insist on updated analysis. Consider limiting variant complexity or splitting SWCs.</li>
+<li><b>Technical debt:</b> Ask for examples of past quick fixes. Identify flags, ad-hoc parameters, or duplicated logic. Discuss a plan to pay down technical debt, starting with safety-critical paths. Tie this plan to milestones and customer communication.</li>
+<li><b>Change-impact analysis:</b> Ask how changes to communication signals or diagnostics are analyzed. Request a documented process linking SWCs, runnables, tasks, and stacks. If the process is weak, propose strengthening it and making it part of release criteria.</li>
+<li><b>Leadership stance:</b> Clarify that you set constraints: predictable timing, controlled coupling, and clear variant handling. Invite the architect to propose solutions within those constraints. Commit to supporting architecture changes in planning and customer discussions.</li>
+</ul>
+<p>This exercise shows whether you can lead architecture discussions without drawing boxes yourself. It reveals your ability to connect AUTOSAR concepts to steering behavior, safety goals, and program decisions.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical use of Classic AUTOSAR for EPS torque-control ECUs in current production programs [VERIFY].</li>
+<li>Representative separation of application SWCs, RTE, basic software, MCAL, and OS in AUTOSAR-based EPS architectures [VERIFY].</li>
+<li>Common practice for mapping torque-control runnables to high-priority tasks with defined periods and WCET [VERIFY].</li>
+<li>Typical use of CAN, CAN FD, LIN, and Ethernet stacks within AUTOSAR basic software for steering-related communication [VERIFY].</li>
+<li>Realistic scenarios where diagnostics and communication load affect torque-control timing in AUTOSAR systems [VERIFY].</li>
+<li>Typical approaches to variant handling and calibration in AUTOSAR-based EPS ECUs, including timing and memory budget management [VERIFY].</li>
+<li>Current adoption patterns of Adaptive AUTOSAR for safety-critical control functions such as EPS torque-control [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

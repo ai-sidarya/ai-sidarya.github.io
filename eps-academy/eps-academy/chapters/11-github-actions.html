@@ -1,0 +1,242 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GitHub and GitHub Actions for EPS Leaders</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 11</div>
+<h1>Chapter 11: GitHub and GitHub Actions</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read GitHub workflows, you cannot judge EPS software evidence, security, or release control.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>GitHub is a source-hosting platform. GitHub Actions is its automation engine. Together they control builds, tests, and releases.</p>
+<p>Protected branches enforce rules before changes land. CODEOWNERS define who must review changes. Required checks ensure workflows pass before merging. These controls shape what reaches EPS torque-control code.</p>
+<p>Workflows are automation definitions. Jobs are units of work inside workflows. Runners execute jobs. Hosted runners are provided by GitHub. Self-hosted runners run on your own machines.</p>
+<p>Secrets store sensitive values such as tokens or keys. Permissions define what workflows can do. OIDC (OpenID Connect) allows short-lived cloud credentials without long-lived secrets. Reusable workflows share logic across repositories.</p>
+<p>Third-party actions are prebuilt steps from others. Pinning means locking them to specific versions or commits. Fork risks arise when external contributors run workflows. Artifact attestations describe how build outputs were produced.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>GitHub Actions uses YAML files to define workflows. Each workflow has triggers, jobs, and steps. Triggers include push, pull_request, and schedule.</p>
+<p>Jobs run on runners. Each job has a name, runs-on setting, and steps. Steps call actions or run shell commands. Actions can be official, internal, or third-party.</p>
+<p>Protected branches require status checks and reviews. CODEOWNERS files map paths to reviewers. Required checks link workflows to branch protection. Together they enforce process before code merges.</p>
+<div class="flow"><span>Developer pushes change</span><i>&rarr;</i><span>Workflow runs on runner</span><i>&rarr;</i><span>Checks report status</span><i>&rarr;</i><span>Protected branch enforces rules</span><i>&rarr;</i><span>Merge or block</span></div>
+<p>Secrets are stored in GitHub and injected into workflows. Permissions control which APIs workflows can call. OIDC lets workflows request cloud tokens dynamically. Reusable workflows centralize patterns such as build-and-test or release packaging.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>Role</th><th>EPS leadership question</th></tr>
+</thead>
+<tbody>
+<tr><td>Protected branches</td><td>Prevent direct pushes and enforce checks.</td><td>“Which branches gate EPS releases, and how?”</td></tr>
+<tr><td>CODEOWNERS</td><td>Define mandatory reviewers.</td><td>“Who must approve torque-control changes?”</td></tr>
+<tr><td>Required checks</td><td>Bind workflows to merge rules.</td><td>“Which tests must pass before merging?”</td></tr>
+<tr><td>Self-hosted runners</td><td>Run jobs on controlled hardware.</td><td>“Where do safety-critical builds run?”</td></tr>
+<tr><td>Secrets and OIDC</td><td>Protect credentials.</td><td>“How do workflows access cloud resources safely?”</td></tr>
+<tr><td>Artifact attestations</td><td>Describe build provenance.</td><td>“Can we prove how this binary was built?”</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Imagine an EPS repository hosting torque-control software. The main branch represents integration. A release branch represents candidate software for vehicles.</p>
+<p>Protected branches block direct pushes. Only pull requests can change main or release. CODEOWNERS require reviews from safety, architecture, and calibration leads for specific directories.</p>
+<p>Required checks include unit tests, integration tests, static analysis, and HIL trigger workflows. Self-hosted runners build binaries using the same toolchain as production. Hosted runners handle lighter tasks such as documentation.</p>
+<p>Secrets store tokens for artifact storage, issue trackers, and cloud HIL orchestration. Permissions restrict workflows to necessary scopes. OIDC is used to obtain short-lived tokens for cloud storage or signing services.</p>
+<p>Reusable workflows implement common patterns: build-and-test, static-analysis, release-packaging. Third-party actions handle tasks such as caching, notifications, or SBOM generation. Pinning locks them to known versions.</p>
+<p>Artifact attestations record build metadata: commit, workflow, runner type, toolchain version, and environment. Release decisions reference these attestations as part of the evidence chain.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a repository where protected branches are misconfigured. Required checks cover unit tests only. Integration and safety tests run in optional workflows.</p>
+<p>A change to torque-control timing passes unit tests but breaks integration. The pipeline is green. The pull request merges. Vehicles receive software with subtle steering jerks under combined maneuvers.</p>
+<p>Another failure involves secrets and permissions. A workflow runs on a self-hosted runner with broad permissions. Secrets include long-lived tokens for artifact storage. A compromised runner leaks tokens. Attackers can upload or replace binaries.</p>
+<p>Third-party actions can fail too. A workflow uses an unpinned action from a public repository. The action changes behavior or is compromised. Builds start including unexpected steps. Evidence becomes unreliable.</p>
+<p>Fork risks appear when external contributors open pull requests. Workflows may run with access to secrets or internal resources. If branch protection and workflow permissions are weak, attackers can exfiltrate data or manipulate artifacts.</p>
+<p>Artifact attestations can be missing or ignored. Release decisions rely on binary hashes only. When a defect appears, nobody can reconstruct which workflow or runner produced the binary. Root-cause analysis stalls.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide which branches are protected and how strictly. You choose which checks are required. You decide who appears in CODEOWNERS for safety-critical paths.</p>
+<p>Customer implications are direct. OEMs ask how you control changes to steering software. They expect clear rules for reviews and tests. Weak branch protection undermines trust.</p>
+<p>Safety implications involve evidence. ASIL D torque-control goals rely on credible test results and build provenance. If workflows can bypass tests or produce untraceable binaries, the safety case weakens.</p>
+<p>Cybersecurity implications involve secrets, runners, and third-party actions. You decide whether self-hosted runners are hardened. You decide whether OIDC replaces long-lived tokens. You decide whether third-party actions are pinned and reviewed.</p>
+<p>Schedule implications include pipeline design and maintenance. Strong controls may slow merges. Weak controls may speed merges but increase risk. You must balance throughput with safety and security.</p>
+<p>A green pipeline is evidence, not release approval. It shows that defined checks passed. It does not prove that checks are sufficient or that workflows are secure. Release decisions must consider pipeline design, artifact attestations, and safety case status.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions connect GitHub mechanics to steering risk and evidence quality.</p>
+<ul>
+<li><b>Branch control:</b> “Which branches gate EPS releases, and what protections apply?”</li>
+<li><b>Reviews:</b> “How does CODEOWNERS ensure safety, architecture, and calibration review for torque-control changes?”</li>
+<li><b>Checks:</b> “Which workflows are required before merging, and what do they test?”</li>
+<li><b>Runners:</b> “Which jobs run on self-hosted runners, and how are those runners secured?”</li>
+<li><b>Secrets and permissions:</b> “Which secrets exist, who can use them, and what are workflow permissions?”</li>
+<li><b>Third-party actions:</b> “Which external actions do we use, and how are they pinned and reviewed?”</li>
+<li><b>Forks:</b> “How do we handle workflows for pull requests from forks without exposing secrets?”</li>
+<li><b>Attestations:</b> “How do artifact attestations feed into release decisions and incident analysis?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We use GitHub Actions and protected branches. All tests run automatically, and the pipeline is green. Self-hosted runners are internal, so they’re safe. Third-party actions are popular and well maintained.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“Main and release branches are protected with required checks for unit, integration, static analysis, and safety-related tests. CODEOWNERS enforce review from safety, architecture, and calibration leads for torque-control paths. Self-hosted runners are hardened, isolated, and used only for safety-critical builds, with minimal permissions. Third-party actions are pinned to specific commits and reviewed. Fork pull requests run limited workflows without secrets. Artifact attestations record build provenance and are referenced in release and incident reviews.”</p>
+</div>
+</div>
+<p>The weak answer hides behind generic claims. It ignores specific controls, risks, and evidence. It treats “internal” as synonymous with “secure.”</p>
+<p>The strong answer names concrete protections and practices. It connects GitHub configuration to safety, security, and release decisions. It shows active management of risks.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you can read GitHub configuration at leadership depth. They want to see if you understand protected branches, CODEOWNERS, required checks, and workflows as control mechanisms.</p>
+<p>They also test your security awareness. Do you talk about secrets, permissions, runners, and third-party actions? Do you recognize fork risks and artifact provenance? Do you connect pipeline design to safety and cybersecurity?</p>
+<p>They test your ability to ask sharp questions and make decisions. Do you challenge vague “green pipeline” claims? Do you insist on pinned actions and hardened runners? Do you treat GitHub configuration as part of the EPS product environment?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat workflows as magic. They copy YAML from examples without understanding triggers, permissions, or runner choices. They assume more automation always means more safety.</p>
+<p>Beginners also ignore secrets and third-party actions. They store long-lived tokens as secrets and use unpinned actions. They do not consider how forks or compromised runners could abuse workflows.</p>
+<p>Executives may treat GitHub as “just tooling.” They focus on features and safety cases. They assume DevOps teams handle pipelines. They do not ask how branch protection and required checks relate to release readiness.</p>
+<p>Executives may also overtrust green dashboards. They see passing checks as proof of quality. They do not ask which tests run, what coverage exists, or how artifacts are traced. They ignore artifact attestations and provenance.</p>
+<p>Another mistake is mixing safety-critical and non-critical workflows without distinction. Leaders allow experimental workflows to run on the same runners with broad permissions. Boundaries blur. Risks increase.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<p>Use these items to test your understanding of GitHub and GitHub Actions for EPS.</p>
+<label class="chk"><input type="checkbox"> I can explain how protected branches, CODEOWNERS, and required checks control EPS changes.</label>
+<label class="chk"><input type="checkbox"> I can distinguish hosted and self-hosted runners and describe when each should be used.</label>
+<label class="chk"><input type="checkbox"> I can describe how secrets, permissions, and OIDC affect workflow security.</label>
+<label class="chk"><input type="checkbox"> I can explain why pinning third-party actions and managing fork risks matter.</label>
+<label class="chk"><input type="checkbox"> I can describe how artifact attestations support release decisions and incident analysis.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Illustrative YAML Example 1: Basic protected-branch workflow (illustrative)</b></p>
+<div class="box test"><b class="tag">Illustrative</b>
+<pre>
+name: eps-ci
+
+on:
+  pull_request:
+    branches: [ main, release ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: ./build.sh
+      - name: Test
+        run: ./run-tests.sh
+</pre>
+<p><b>Line-by-line explanation:</b></p>
+<ul>
+<li><b>name:</b> Labels the workflow as “eps-ci” for dashboards.</li>
+<li><b>on:</b> Defines trigger. Here, pull requests targeting main or release branches.</li>
+<li><b>branches:</b> Limits trigger to protected branches main and release.</li>
+<li><b>jobs:</b> Starts job definitions. Each job runs independently.</li>
+<li><b>build-and-test:</b> Names the job that builds and tests EPS code.</li>
+<li><b>runs-on:</b> Uses a hosted Ubuntu runner. Suitable for non-safety-critical builds.</li>
+<li><b>steps:</b> Lists actions and commands executed in order.</li>
+<li><b>actions/checkout@v4:</b> Checks out repository code at a pinned version of the checkout action.</li>
+<li><b>Build step:</b> Runs build script. Must be deterministic and logged.</li>
+<li><b>Test step:</b> Runs test script. Required check status depends on this step.</li>
+</ul>
+</div>
+
+<p><b>Illustrative YAML Example 2: Self-hosted runner with limited permissions (illustrative)</b></p>
+<div class="box test"><b class="tag">Illustrative</b>
+<pre>
+name: eps-release-build
+
+on:
+  push:
+    branches: [ release ]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-release:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build release binary
+        run: ./build-release.sh
+      - name: Upload artifact
+        run: ./upload-artifact.sh
+</pre>
+<p><b>Line-by-line explanation:</b></p>
+<ul>
+<li><b>name:</b> Labels workflow for release builds.</li>
+<li><b>on push:</b> Triggers when commits land on release branch.</li>
+<li><b>branches:</b> Limits trigger to release branch only.</li>
+<li><b>permissions:</b> Restricts workflow’s GitHub API access. contents: read, packages: write.</li>
+<li><b>build-release job:</b> Defines job for release binary creation.</li>
+<li><b>runs-on self-hosted:</b> Uses controlled runner with hardened environment and production toolchain.</li>
+<li><b>checkout step:</b> Retrieves code at specific commit.</li>
+<li><b>Build release binary:</b> Runs script that must be traceable and reproducible.</li>
+<li><b>Upload artifact:</b> Publishes binary to internal storage or package registry.</li>
+</ul>
+</div>
+
+<p><b>Illustrative YAML Example 3: Reusable workflow with OIDC and pinned third-party action (illustrative)</b></p>
+<div class="box test"><b class="tag">Illustrative</b>
+<pre>
+name: eps-secure-artifact
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  sign-and-attest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup signer
+        uses: thirdparty/signer-action@c0ffee123
+      - name: Get cloud token
+        id: oidc
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // OIDC token retrieval placeholder
+      - name: Sign artifact
+        run: ./sign-artifact.sh
+      - name: Create attestation
+        run: ./create-attestation.sh
+</pre>
+<p><b>Line-by-line explanation:</b></p>
+<ul>
+<li><b>name:</b> Names reusable workflow for secure artifact handling.</li>
+<li><b>on workflow_call:</b> Marks workflow as reusable. Other workflows can call it.</li>
+<li><b>permissions id-token: write:</b> Allows OIDC token issuance for cloud authentication.</li>
+<li><b>permissions contents: read:</b> Limits repository access to read-only.</li>
+<li><b>sign-and-attest job:</b> Defines job that signs artifacts and creates attestations.</li>
+<li><b>runs-on ubuntu-latest:</b> Uses hosted runner for signing and attestation tasks.</li>
+<li><b>checkout step:</b> Retrieves code and artifacts needed for signing.</li>
+<li><b>Setup signer:</b> Uses pinned third-party signer action at specific commit c0ffee123.</li>
+<li><b>Get cloud token:</b> Illustrative step using OIDC to obtain short-lived cloud token.</li>
+<li><b>Sign artifact:</b> Runs script to sign binary with controlled keys.</li>
+<li><b>Create attestation:</b> Runs script to generate artifact attestation metadata.</li>
+</ul>
+</div>
+
+<p><b>Debugging and governance method:</b></p>
+<ul>
+<li><b>Reproduce:</b> Identify exact workflow run, commit, and branch where an issue appeared.</li>
+<li><b>Capture configuration:</b> Record YAML definitions, branch protection settings, CODEOWNERS, and runner details at that time.</li>
+<li><b>Isolate:</b> Narrow down to specific job or step causing failure or risk. Disable non-essential steps temporarily.</li>
+<li><b>Root cause versus escape point:</b> Root cause is misconfiguration or defect in workflow, action, or script. Escape point is where branch protection, required checks, or attestations failed to catch it.</li>
+<li><b>Governance:</b> Update reusable workflows, branch rules, and action pinning policies. Document changes and tie them to safety and security cases.</li>
+</ul>
+
+<p><b>Answer notes:</b> A strong leader treats GitHub configuration as part of the EPS environment. They insist on clear branch rules, pinned actions, hardened runners, and artifact attestations. They use debugging and governance methods to turn incidents into structural improvements, not one-off fixes.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical use of protected branches and required checks for safety-critical automotive software repositories [VERIFY].</li>
+<li>Representative patterns for CODEOWNERS in EPS torque-control projects, including safety and architecture review roles [VERIFY].</li>
+<li>Common practices for using self-hosted runners for production toolchains and hardened environments in automotive programs [VERIFY].</li>
+<li>Standard approaches to managing secrets and permissions in GitHub Actions for safety-relevant ECUs [VERIFY].</li>
+<li>Typical use of OIDC in GitHub Actions to obtain short-lived cloud credentials for signing or storage [VERIFY].</li>
+<li>Realistic risks associated with unpinned third-party actions and forked pull requests in automotive repositories [VERIFY].</li>
+<li>Representative use of artifact attestations in automotive release processes and incident investigations [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

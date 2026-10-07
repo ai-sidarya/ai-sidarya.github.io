@@ -1,0 +1,190 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Integrated Case Studies</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 22</div>
+<h1>Chapter 22: Integrated Case Studies</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>Strong leaders diagnose facts, frame unknowns, choose options deliberately, act fast in the first 24 hours, communicate clearly, and prevent recurrence.</div>
+
+<h2>1. Case Study A — Unintended Assist Incident Before a Milestone <span class="lvl l1">Core</span></h2>
+
+<h3>Facts</h3>
+<p>During pre‑milestone vehicle tests, a driver reports unintended assist during a tight maneuver. Logs show a transient torque spike. No DTCs. Calibration unchanged. Software build is new. OEM milestone review is in 48 hours.</p>
+
+<h3>Unknowns</h3>
+<ul>
+<li>Is the spike reproducible?</li>
+<li>Is it software timing, sensor noise, or calibration interpolation?</li>
+<li>Is the issue limited to one vehicle or systemic?</li>
+<li>Does the safety case already cover this maneuver?</li>
+<li>Is containment needed before milestone?</li>
+</ul>
+
+<h3>Options</h3>
+<ul>
+<li><b>Option A:</b> Delay milestone, investigate fully.</li>
+<li><b>Option B:</b> Apply containment (assist limit) and proceed with milestone.</li>
+<li><b>Option C:</b> Proceed with milestone, commit to rapid follow‑up.</li>
+</ul>
+
+<h3>Recommended Decision</h3>
+<p>Choose <b>Option B</b>: apply containment, proceed with milestone with transparent communication. Safety risk is low but non‑zero; containment reduces exposure.</p>
+
+<h3>First 24 Hours</h3>
+<ul>
+<li>Reproduce issue on test bench and vehicle.</li>
+<li>Run targeted SIL/HIL tests around maneuver extremes.</li>
+<li>Apply temporary assist‑limit containment.</li>
+<li>Prepare clear milestone briefing: facts, containment, next steps.</li>
+</ul>
+
+<h3>Communication</h3>
+<p>To OEM: “We observed a transient assist spike in a specific maneuver. Containment is applied. Investigation is underway. No safety concerns at this time. We will provide updates every 48 hours.”</p>
+
+<h3>Prevention</h3>
+<ul>
+<li>Add combined maneuver tests to regression suite.</li>
+<li>Expand calibration interpolation checks.</li>
+<li>Improve sensor noise filtering validation.</li>
+</ul>
+
+<h3>Tough Follow‑Up</h3>
+<p>Ask calibration and software leads: “Why did our tests not cover this maneuver? What escape point allowed this through?”</p>
+
+<hr>
+
+<h2>2. Case Study B — ASIL D Evidence Incomplete at Release <span class="lvl l1">Core</span></h2>
+
+<h3>Facts</h3>
+<p>Release date is in two weeks. Safety case shows missing evidence for two ASIL D safety goals. HIL tests incomplete. OEM expects full ASIL D package. Program pressure is high.</p>
+
+<h3>Unknowns</h3>
+<ul>
+<li>Is missing evidence due to test gaps or analysis gaps?</li>
+<li>Can tests be completed in time?</li>
+<li>Are safety goals incorrectly scoped?</li>
+<li>Does OEM accept staged evidence?</li>
+</ul>
+
+<h3>Options</h3>
+<ul>
+<li><b>Option A:</b> Delay release until evidence is complete.</li>
+<li><b>Option B:</b> Deliver staged evidence with clear risk statement.</li>
+<li><b>Option C:</b> Re‑scope safety goals (dangerous if unjustified).</li>
+</ul>
+
+<h3>Recommended Decision</h3>
+<p>Choose <b>Option B</b>: staged evidence with explicit risk and timeline. Never re‑scope safety goals without strong justification.</p>
+
+<h3>First 24 Hours</h3>
+<ul>
+<li>Identify exact missing evidence.</li>
+<li>Run accelerated HIL tests with clear coverage boundaries.</li>
+<li>Prepare staged safety case addendum.</li>
+<li>Align with safety lead and OEM safety counterpart.</li>
+</ul>
+
+<h3>Communication</h3>
+<p>To OEM: “Two ASIL D goals have incomplete evidence. We propose staged delivery: partial evidence now, full evidence in 3 weeks. No known safety risk. Here is the detailed plan.”</p>
+
+<h3>Prevention</h3>
+<ul>
+<li>Introduce safety case progress dashboards.</li>
+<li>Link safety goals to test coverage explicitly.</li>
+<li>Run mid‑cycle safety case audits.</li>
+</ul>
+
+<h3>Tough Follow‑Up</h3>
+<p>Ask safety team: “Why did we discover missing evidence this late? What structural change prevents recurrence?”</p>
+
+<hr>
+
+<h2>3. Case Study C — Two Regions Blaming Each Other <span class="lvl l1">Core</span></h2>
+
+<h3>Facts</h3>
+<p>Region A owns torque‑control software. Region B owns calibration. Steering oscillations appear in integration. Region A claims calibration changed without notice. Region B claims software timing changed. Diagnostics unclear.</p>
+
+<h3>Unknowns</h3>
+<ul>
+<li>Which change triggered oscillations?</li>
+<li>Are interface specs outdated?</li>
+<li>Is timing or calibration the root cause?</li>
+<li>Are diagnostics misleading?</li>
+</ul>
+
+<h3>Options</h3>
+<ul>
+<li><b>Option A:</b> Escalate to executives (premature).</li>
+<li><b>Option B:</b> Run cross‑region blameless review.</li>
+<li><b>Option C:</b> Freeze both changes and roll back.</li>
+</ul>
+
+<h3>Recommended Decision</h3>
+<p>Choose <b>Option B</b>: structured cross‑region blameless review with interface owner leading.</p>
+
+<h3>First 24 Hours</h3>
+<ul>
+<li>Assign interface owner for control–calibration boundary.</li>
+<li>Collect logs, traces, timing diagrams.</li>
+<li>Run joint SIL/HIL tests with both regions present.</li>
+<li>Document findings in shared workspace.</li>
+</ul>
+
+<h3>Communication</h3>
+<p>To both regions: “We will run a blameless integration review. Focus on system behavior, not fault. Interface owner leads. Goal: identify root cause within 48 hours.”</p>
+
+<h3>Prevention</h3>
+<ul>
+<li>Introduce cross‑region integration rituals.</li>
+<li>Update interface agreements and decision rights.</li>
+<li>Improve diagnostics clarity.</li>
+</ul>
+
+<h3>Tough Follow‑Up</h3>
+<p>Ask both regions: “What structural gaps allowed this conflict? How do we prevent cross‑region blame cycles?”</p>
+
+<hr>
+
+<h2>4. Case Study D — Third‑Party Dependency Vulnerability <span class="lvl l1">Core</span></h2>
+
+<h3>Facts</h3>
+<p>A third‑party library used in EPS diagnostics has a newly disclosed vulnerability. Exploit allows unauthorized access to logs. Library is used in both development and vehicle tooling. OEM asks for impact assessment within 24 hours.</p>
+
+<h3>Unknowns</h3>
+<ul>
+<li>Is EPS ECU exposed or only tooling?</li>
+<li>Is vulnerability exploitable in vehicle context?</li>
+<li>Is patch available?</li>
+<li>Does patch affect timing or memory?</li>
+</ul>
+
+<h3>Options</h3>
+<ul>
+<li><b>Option A:</b> Patch immediately without analysis (risky).</li>
+<li><b>Option B:</b> Assess exposure, apply containment, plan patch.</li>
+<li><b>Option C:</b> Remove dependency entirely (slow).</li>
+</ul>
+
+<h3>Recommended Decision</h3>
+<p>Choose <b>Option B</b>: assess exposure, apply containment, plan patch with full validation.</p>
+
+<h3>First 24 Hours</h3>
+<ul>
+<li>Identify where library is used.</li>
+<li>Assess exploitability in EPS context.</li>
+<li>Disable vulnerable diagnostic paths temporarily.</li>
+<li>Prepare OEM briefing: exposure, containment, patch plan.</li>
+</ul>
+
+<h3>Communication</h3>
+<p>To OEM: “Vulnerability affects diagnostic tooling, not EPS ECU. Containment applied. Patch planned within 72 hours. No vehicle safety impact.”</p>
+
+<h3>Prevention</h3>
+<ul>
+<li>Introduce SBOM tracking.</li>
+<li>Run periodic dependency audits.</li>
+<li>Define patch validation flow for safety‑critical systems.</li>
+</ul>
+
+<h3>Tough Follow‑Up</h3>
+<p>Ask security team: “Why was dependency risk not flagged earlier? How do we strengthen SBOM governance?”</p>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI‑Driven Engineering Leadership</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 13</div>
+<h1>Chapter 13: AI‑Driven Engineering Leadership</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot name AI risks and guardrails, you cannot safely use AI in EPS engineering decisions.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>AI‑driven leadership means using AI tools to change how teams work, not to replace judgment. Large Language Models (LLMs) generate text, code, and explanations from prompts. They can accelerate understanding and exploration but also produce wrong or misleading output.</p>
+<p>Hallucination is when an LLM produces confident but incorrect information. Prompt injection is when input tries to override intended behavior or steal data. Data leakage is when sensitive information leaves controlled environments through prompts, logs, or integrations.</p>
+<p>Human‑in‑the‑loop means people remain responsible for decisions. Governance is the set of rules, processes, and checks that control AI use. In safety‑critical EPS work, AI must support engineers, not act as an oracle.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>AI use cases span the software lifecycle: requirements, architecture, coding, testing, safety, and operations. Each use case needs a defined user, workflow, risk, guardrail, metric, and stop criteria.</p>
+<p>GitHub Copilot is an AI coding assistant integrated into editors. It suggests code and tests based on context. In safety‑critical work, Copilot can help explore options but cannot guarantee correctness or compliance.</p>
+<p>Governance defines where AI is allowed, what data it can see, and how output is reviewed. Metrics measure impact beyond usage counts: defect trends, cycle time, review quality, and safety case clarity.</p>
+<div class="flow"><span>Define use case</span><i>&rarr;</i><span>Identify risks</span><i>&rarr;</i><span>Set guardrails</span><i>&rarr;</i><span>Deploy AI</span><i>&rarr;</i><span>Measure impact</span><i>&rarr;</i><span>Adjust or stop</span></div>
+<p>Stop criteria define when AI use must pause or change. Examples include unexpected defects, safety case conflicts, or data exposure incidents. Leadership must act when stop criteria are met.</p>
+<table>
+<thead>
+<tr><th>Element</th><th>Question</th><th>EPS example</th></tr>
+</thead>
+<tbody>
+<tr><td>User</td><td>Who uses AI?</td><td>Lead engineer reviewing torque‑control tests.</td></tr>
+<tr><td>Workflow</td><td>Where does AI fit?</td><td>Drafting test ideas, not approving safety cases.</td></tr>
+<tr><td>Risk</td><td>What can go wrong?</td><td>AI suggests incomplete fault scenarios.</td></tr>
+<tr><td>Guardrail</td><td>How do we limit risk?</td><td>Mandatory human review and traceability checks.</td></tr>
+<tr><td>Metric</td><td>How do we measure impact?</td><td>Defect detection rate in steering tests.</td></tr>
+<tr><td>Stop criteria</td><td>When do we stop?</td><td>AI‑inspired changes cause safety case gaps.</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Consider an EPS program using AI to support test design. Engineers ask an LLM for additional fault scenarios and corner cases. AI suggests combinations of sensor glitches, communication bursts, and driver maneuvers.</p>
+<p>Human engineers review suggestions, select relevant ones, and design tests. They link tests to requirements and safety goals. AI output becomes input, not evidence.</p>
+<p>GitHub Copilot helps write test harness code and scripts. It suggests loops, assertions, and logging. Engineers check each suggestion for correctness, determinism, and MISRA alignment [VERIFY].</p>
+<p>Governance rules forbid using AI to generate safety case arguments or final calibration. AI can draft text, but safety engineers must rewrite and verify. AI cannot approve release or modify safety goals.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Imagine a team using AI to draft torque‑control requirements. The LLM suggests plausible but incomplete requirements. It misses rare combined maneuvers and specific fault reactions.</p>
+<p>Engineers trust the AI output too much. They copy requirements with minimal review. Tests follow these requirements. Real vehicles later show steering jerks in untested scenarios.</p>
+<p>Another failure involves prompt injection. A shared prompt template includes instructions from external sources. A malicious or careless input tries to override internal rules. AI output includes unsafe suggestions or leaks internal details.</p>
+<p>Data leakage can occur when engineers paste proprietary calibration or safety case text into public AI tools. The data may be stored or used to train models [VERIFY]. Governance fails to prevent this.</p>
+<p>GitHub Copilot can fail by suggesting code that looks correct but hides subtle race conditions or timing issues. In EPS, such defects can affect steering behavior. If teams treat Copilot output as “probably fine,” defects slip through.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide where AI is allowed and where it is banned. You choose which use cases are pilot, standard, or prohibited. You decide how AI interacts with safety and cybersecurity processes.</p>
+<p>Customer implications include transparency and trust. OEMs will ask how AI is used in development. They expect clear boundaries and evidence that safety decisions remain human‑owned.</p>
+<p>Safety implications are direct. AI cannot be a safety argument. Safety goals, hazards, and mitigations must be defined and reviewed by humans. AI can help explore options but cannot replace analysis.</p>
+<p>Cybersecurity implications involve data handling and tool integration. AI tools must not expose secrets, calibration, or safety case details. Prompt injection and data leakage risks must be managed.</p>
+<p>Schedule implications include productivity and rework. AI can speed drafting and exploration. It can also create subtle defects that cost time later. You decide whether to accept AI‑driven speed or slow down for deeper review.</p>
+<p>A green pipeline that includes AI‑generated code is still just evidence. It shows tests passed under certain conditions. It does not prove that AI output is safe or complete. Release decisions must consider AI’s role and limits.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions focus on use cases, risks, and guardrails, not hype.</p>
+<ul>
+<li>“Where exactly do we use AI in the EPS lifecycle, and why?”</li>
+<li>“Which decisions remain strictly human, regardless of AI suggestions?”</li>
+<li>“How do we detect and handle hallucinations in requirements, tests, or code?”</li>
+<li>“What is our policy on data pasted into AI tools?”</li>
+<li>“How do we prevent prompt injection in shared templates or scripts?”</li>
+<li>“How do we measure AI impact beyond usage counts or anecdotal stories?”</li>
+<li>“What are our stop criteria for AI use in safety‑critical work?”</li>
+<li>“How do we treat GitHub Copilot suggestions in safety‑critical code reviews?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We encourage AI everywhere. Copilot speeds up coding, and LLMs help with requirements and safety cases. Engineers are experienced, so they’ll catch issues. Usage is high, so impact must be good.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“We defined specific AI use cases across the EPS lifecycle. AI supports exploration and drafting but never replaces safety or release decisions. Copilot is allowed for non‑safety‑critical scaffolding and test harnesses, with mandatory review. We track impact through defect trends, review quality, and cycle time, not just usage. We have clear data policies, guardrails against prompt injection, and stop criteria when AI use conflicts with safety or security.”</p>
+</div>
+</div>
+<p>The weak answer treats AI as a universal accelerator. It ignores hallucination, data leakage, and governance. It relies on experience instead of structure.</p>
+<p>The strong answer names boundaries, metrics, and guardrails. It treats AI as a tool under leadership control, not an uncontrolled force.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you understand AI limits and risks. They want to see if you can explain hallucination, prompt injection, and data leakage in plain language. They check whether you insist on human‑in‑the‑loop for safety‑critical decisions.</p>
+<p>They also test your ability to design governance. Do you talk about use cases, guardrails, metrics, and stop criteria? Do you connect AI use to safety, cybersecurity, and customer trust?</p>
+<p>They test whether you can be balanced about tools like GitHub Copilot. Do you acknowledge benefits and risks? Do you avoid both hype and blanket bans?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat AI output as truth. They copy requirements, tests, or code without deep review. They underestimate hallucination and subtle defects.</p>
+<p>Beginners also ignore data leakage. They paste proprietary details into public tools. They do not ask where data goes or how it is used.</p>
+<p>Executives may chase AI usage metrics. They celebrate high Copilot adoption or prompt counts. They do not ask about defect trends, safety case quality, or rework.</p>
+<p>Executives may also ban AI entirely without nuance. They lose potential benefits in non‑critical areas. Teams then use AI informally without governance.</p>
+<p>Another mistake is missing stop criteria. Leaders do not define when AI use must pause. Incidents become surprises instead of triggers for controlled change.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can explain hallucination, prompt injection, and data leakage in simple terms.</label>
+<label class="chk"><input type="checkbox"> I can name at least three AI use cases in the EPS lifecycle with clear guardrails.</label>
+<label class="chk"><input type="checkbox"> I can describe how GitHub Copilot fits into safety‑critical work without owning decisions.</label>
+<label class="chk"><input type="checkbox"> I can propose metrics for AI impact beyond usage counts.</label>
+<label class="chk"><input type="checkbox"> I can define stop criteria for AI use when safety or security is at risk.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Scenario:</b> Your organization wants a 30‑60‑90 day plan for AI‑driven engineering leadership in an EPS program. Executives expect faster delivery. Safety and cybersecurity teams are cautious. Developers already use Copilot informally.</p>
+<p><b>Task:</b> Build a 30‑60‑90 plan that defines use cases, guardrails, metrics, and stop criteria. Include GitHub Copilot and LLM use. Keep safety and security central.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>First 30 days – Discover and define:</b> Map current informal AI use across the EPS lifecycle. Identify where Copilot and LLMs are already used. Define initial allowed and prohibited areas: allow AI for documentation drafts, exploratory test ideas, and non‑critical scripts; prohibit AI for safety case arguments, final calibration, and release approvals. Draft data handling rules: no proprietary calibration or safety case text in public tools. Define initial metrics: number of AI‑assisted artifacts reviewed, defect findings linked to AI suggestions, and review time.</li>
+<li><b>First 30 days – Governance skeleton:</b> Create a simple AI use policy. Define roles: engineering leads own use cases, safety and security leads own guardrails. Establish a lightweight approval process for new AI use cases. Communicate that AI output is never automatically safe or compliant.</li>
+<li><b>Days 31‑60 – Pilot and measure:</b> Select two or three pilot use cases: AI‑assisted test design for EPS fault scenarios, Copilot‑assisted test harness coding, and AI‑drafted design review summaries. For each, define user, workflow, risks, guardrails, metrics, and stop criteria. Train teams on hallucination, prompt injection, and data leakage. Start collecting metrics: defect detection rate in pilot areas, review effort, and rework caused by AI suggestions.</li>
+<li><b>Days 31‑60 – Integrate with safety and security:</b> Involve safety and cybersecurity teams in pilot reviews. Ensure AI‑assisted artifacts are clearly marked and traced. Confirm that safety case arguments reference human‑verified evidence only. Review data handling logs and access controls for AI tools.</li>
+<li><b>Days 61‑90 – Decide and scale:</b> Evaluate pilot results. If AI improves test coverage or review quality without increasing defects, expand use cautiously. If AI causes subtle defects or data concerns, tighten guardrails or reduce scope. Formalize AI governance: approved use cases, prohibited areas, review requirements, and incident response. Integrate AI metrics into regular program reviews alongside ASPICE, ISO 26262, and cybersecurity metrics.</li>
+<li><b>Days 61‑90 – Copilot policy:</b> Define Copilot usage rules: allowed for scaffolding, non‑critical utilities, and test harnesses; restricted for safety‑critical control code. Require reviewers to treat Copilot‑generated code as any other code, with explicit attention to concurrency, timing, and undefined behavior. Track where Copilot suggestions are accepted and link them to defect data.</li>
+<li><b>Stop criteria across the plan:</b> Define clear triggers: AI‑assisted artifacts causing safety case gaps, data leakage incidents, or repeated subtle defects in steering behavior. If triggered, pause affected use cases, investigate root cause versus escape point, and adjust governance.</li>
+<li><b>Leadership stance:</b> Communicate that AI is a tool under control, not a mandate. Emphasize that safety and security override speed. Use metrics and incidents to refine practice, not to justify hype or bans.</li>
+</ul>
+<p>This exercise shows whether you can turn AI concepts into a concrete leadership plan. It reveals your ability to balance opportunity and risk, integrate AI with safety and cybersecurity, and measure impact beyond usage counts.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical use patterns of GitHub Copilot in safety‑critical or regulated software environments [VERIFY].</li>
+<li>Representative risks of hallucination, prompt injection, and data leakage in LLM use for engineering work [VERIFY].</li>
+<li>Common governance approaches for AI tools across automotive software lifecycles, including safety and cybersecurity involvement [VERIFY].</li>
+<li>Realistic metrics used by organizations to measure AI impact beyond usage counts, such as defect trends and cycle time [VERIFY].</li>
+<li>Typical policies on AI use in safety case drafting and calibration work in automotive programs [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

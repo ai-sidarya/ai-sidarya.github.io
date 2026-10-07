@@ -1,0 +1,161 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reading Embedded C and Scripts</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 04</div>
+<h1>Chapter 04: Reading Embedded C and Scripts</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read embedded C precisely, you cannot judge EPS software safety, timing, or failure modes.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Reading embedded C is about spotting risks, not writing code. You must understand how volatile, const, static, pointers, and bit operations affect timing and correctness. You must recognize undefined behavior, integer overflow, and signed versus unsigned traps.</p>
+<p>Interrupt Service Routines (ISRs) require special care. ISR-safe code avoids blocking, shared-state races, and long execution. MISRA concepts guide safer C usage by restricting dangerous constructs. Static analysis tools detect defects early but require interpretation.</p>
+<p>Scripts matter too. Build scripts, flashing scripts, and test scripts become production infrastructure when they control releases or diagnostics. You must read them with the same rigor as C code.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Embedded C interacts directly with hardware. volatile tells the compiler a variable can change outside normal code flow. const marks data that must not change. static controls lifetime and visibility.</p>
+<p>Pointers access memory directly. Bit operations pack or unpack sensor data. Integer overflow occurs when arithmetic exceeds type limits. Signed versus unsigned mismatches cause subtle bugs.</p>
+<p>Undefined behavior is any operation where the C standard gives no guarantee. Examples include out-of-bounds access or shifting by too many bits. Undefined behavior can break timing and torque control.</p>
+<div class="flow"><span>Read variable</span><i>&rarr;</i><span>Check qualifiers</span><i>&rarr;</i><span>Check type</span><i>&rarr;</i><span>Check concurrency</span><i>&rarr;</i><span>Check side effects</span></div>
+<p>Static analysis tools scan code for defects. They flag risky patterns, but not all warnings matter. You must judge which warnings affect safety goals. Unit-test seams are places where code can be isolated for testing.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>Risk</th><th>Leadership question</th></tr>
+</thead>
+<tbody>
+<tr><td>volatile</td><td>Missing volatile breaks ISR or hardware reads.</td><td>“Which variables depend on hardware or interrupts?”</td></tr>
+<tr><td>const</td><td>Missing const allows accidental changes.</td><td>“Which calibration values must never change?”</td></tr>
+<tr><td>static</td><td>Hidden state complicates debugging.</td><td>“Where do we rely on persistent state?”</td></tr>
+<tr><td>Signed/unsigned</td><td>Wrong comparisons cause torque spikes.</td><td>“Where do we mix signed and unsigned?”</td></tr>
+<tr><td>Undefined behavior</td><td>Breaks determinism.</td><td>“Which operations rely on compiler-specific behavior?”</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>EPS torque control reads torque and angle sensors, computes assist, and updates PWM. C code handles ADC results, scaling, filtering, and plausibility checks. Communication code handles CAN or Ethernet frames.</p>
+<p>volatile is required for ADC result registers. const is required for calibration tables. static may hold filter history. Bit operations pack torque values into CAN frames.</p>
+<p>Signed versus unsigned errors can flip torque direction. Integer overflow can saturate torque commands. Undefined behavior can corrupt sensor data. ISR-safe code ensures torque updates remain deterministic.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a torque sensor read implemented without volatile. The compiler optimizes away repeated reads. The code uses a cached value instead of the latest sensor reading.</p>
+<p>During fast steering maneuvers, the cached value lags behind reality. Torque control computes assist from stale data. The driver feels a brief steering pull.</p>
+<p>Another failure involves signed versus unsigned mismatch. A negative torque offset is stored in an unsigned variable. The value wraps to a large positive number. The system commands unintended assist.</p>
+<p>Undefined behavior also causes failures. A bit shift by more than the width of the type yields unpredictable results. Torque scaling becomes erratic. Steering feel degrades.</p>
+<p>Scripts fail too. A flashing script silently skips a calibration file. The ECU runs with default torque limits. The vehicle feels heavy at low speed. The issue appears only in certain builds.</p>
+
+<h2>5. What a manager decides <span class="lvl l3">Interview depth</span></h2>
+<p>You decide how deeply the team reviews C code. You choose whether volatile, const, and static usage is audited. You decide whether signed versus unsigned mismatches are banned.</p>
+<p>Customer implications are direct. OEMs expect predictable torque behavior. If you cannot explain a defect caused by undefined behavior, trust erodes. You must ensure code is readable and defensible.</p>
+<p>Safety implications are severe. ASIL D torque-control goals require deterministic behavior. Undefined behavior breaks determinism. Integer overflow breaks plausibility. ISR races break timing.</p>
+<p>Cybersecurity interacts with scripts. Build scripts that handle keys or flashing become attack surfaces. If scripts become production infrastructure, they must be reviewed like code.</p>
+<p>Schedule implications matter. Deep code reviews take time. Static analysis warnings require triage. You decide whether to delay features to fix foundational defects.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions expose unsafe assumptions. They focus on reading, not writing.</p>
+<ul>
+<li>“Show me where volatile is required for hardware registers.”</li>
+<li>“Which calibration values must be const, and how do we enforce it?”</li>
+<li>“Where do we mix signed and unsigned types in torque calculations?”</li>
+<li>“Which operations rely on undefined behavior or compiler quirks?”</li>
+<li>“How do we ensure ISR-safe access to shared variables?”</li>
+<li>“Which static analysis warnings affect torque control?”</li>
+<li>“Which scripts are now production infrastructure, and who owns them?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“The code follows MISRA, so it’s safe. The compiler handles volatile and static. Scripts are simple helpers. We fix warnings when needed.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“We review volatile usage for all hardware registers and ISR-shared variables. We enforce const for calibration. We scan for signed/unsigned mismatches and undefined behavior. Static analysis warnings are triaged by safety impact. Scripts that control flashing or builds are treated as production infrastructure.”</p>
+</div>
+</div>
+<p>The weak answer trusts tools and rules blindly. It ignores reading and reasoning. It misses safety implications.</p>
+<p>The strong answer shows active judgment. It connects C constructs to torque behavior. It treats scripts as part of the product.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you can read embedded C at leadership depth. They want to see if you can spot risks without writing code. They check whether you understand how C constructs affect EPS torque control.</p>
+<p>They also test your ability to reason about scripts. They want to know if you treat build and flashing scripts as production infrastructure. They check whether you understand debugging flow.</p>
+<p>They test your ability to connect defects to safety goals. They want to see if you can explain how undefined behavior breaks determinism.</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners assume volatile is optional. They trust the compiler to read hardware registers correctly. They ignore signed versus unsigned traps.</p>
+<p>Beginners also misunderstand static. They think static means “fast,” not “persistent.” They miss hidden state that breaks tests.</p>
+<p>Executives assume MISRA compliance guarantees safety. They treat static analysis warnings as noise. They ignore scripts until they break releases.</p>
+<p>Executives may also skip reading code. They rely on summaries. They miss subtle defects that cause torque spikes.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can explain why volatile is required for hardware registers.</label>
+<label class="chk"><input type="checkbox"> I can spot signed versus unsigned mismatches in torque code.</label>
+<label class="chk"><input type="checkbox"> I can explain undefined behavior without quoting standards.</label>
+<label class="chk"><input type="checkbox"> I can describe when scripts become production infrastructure.</label>
+<label class="chk"><input type="checkbox"> I can outline a debugging flow from reproduce to root cause.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Five short code snippets with defects:</b></p>
+
+<div class="box test"><b class="tag">Snippet 1</b>
+<pre>
+uint16_t torque;
+uint16_t *p = &torque;
+*p = *p + 50000;  // defect
+</pre>
+<p><b>Defect:</b> Integer overflow wraps silently. Torque spikes possible.</p>
+<p><b>Answer notes:</b> Check type limits. Use saturation logic. Review scaling.</p>
+</div>
+
+<div class="box test"><b class="tag">Snippet 2</b>
+<pre>
+uint16_t adc_val = ADC_REG;  // missing volatile
+</pre>
+<p><b>Defect:</b> ADC_REG must be volatile. Compiler may cache value.</p>
+<p><b>Answer notes:</b> Hardware registers require volatile. Review ISR paths.</p>
+</div>
+
+<div class="box test"><b class="tag">Snippet 3</b>
+<pre>
+static int offset = -10;
+uint16_t torque = offset + sensor;  // signed/unsigned mix
+</pre>
+<p><b>Defect:</b> Negative offset becomes large positive when cast.</p>
+<p><b>Answer notes:</b> Align types. Validate ranges. Check plausibility.</p>
+</div>
+
+<div class="box test"><b class="tag">Snippet 4</b>
+<pre>
+uint8_t scale = 8;
+uint16_t val = raw << scale;  // undefined if raw too large
+</pre>
+<p><b>Defect:</b> Shift may exceed type width. Undefined behavior.</p>
+<p><b>Answer notes:</b> Check bounds. Use safe shift macros.</p>
+</div>
+
+<div class="box test"><b class="tag">Snippet 5</b>
+<pre>
+ISR(void)
+{
+    shared++;  // not atomic
+}
+</pre>
+<p><b>Defect:</b> Race condition with main code. ISR-safe access missing.</p>
+<p><b>Answer notes:</b> Use atomic operations or disable interrupts briefly.</p>
+</div>
+
+<p><b>Debugging method:</b></p>
+<ul>
+<li><b>Reproduce:</b> Capture exact steering maneuver, speed, and environment.</li>
+<li><b>Capture configuration:</b> Record build version, calibration, and scripts used.</li>
+<li><b>Isolate:</b> Reduce variables. Disable features. Log internal states.</li>
+<li><b>Root cause versus escape point:</b> Root cause is the defect. Escape point is where the system failed to detect it.</li>
+</ul>
+
+<p><b>When scripts become production infrastructure:</b> Scripts become production infrastructure when they control builds, flashing, diagnostics, or release packaging. They must be versioned, reviewed, and tested like code.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical use of volatile for hardware registers in EPS ECUs.</li>
+<li>Common signed versus unsigned pitfalls in torque calculations.</li>
+<li>Representative undefined behavior patterns in embedded C [VERIFY].</li>
+<li>Typical ISR-safe practices in automotive microcontrollers [VERIFY].</li>
+<li>Standard use of CRC, alive counters, and timeouts in torque-related communication [VERIFY].</li>
+<li>Realistic scenarios where scripts become production infrastructure in automotive programs [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

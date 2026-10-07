@@ -1,0 +1,176 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Metrics and Executive Decisions</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 18</div>
+<h1>Chapter 18: Metrics and Executive Decisions</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read metrics critically, you will make bad EPS decisions with confident charts.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Metrics are numbers that describe behavior. Executive decisions rely on them. If metrics are shallow or misused, decisions go wrong.</p>
+<p>Outcome metrics measure what actually changes for customers, safety, and business. Activity metrics measure what teams do: commits, tests, meetings. Both matter, but they are not equal.</p>
+<p>Leading indicators hint at future outcomes. Lagging indicators describe what already happened. Flow metrics describe how work moves through the system. DORA metrics come from software delivery; they can be adapted to embedded EPS work.</p>
+<p>Goodhart’s law says: “When a measure becomes a target, it ceases to be a good measure.” Lines of code and story points are tools, not people metrics. Using them to judge individuals damages trust and behavior.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Outcome versus activity is the first split. Outcome metrics include defect rates, steering incidents, safety case completeness, and customer satisfaction. Activity metrics include number of tests run, commits, reviews, and story points completed.</p>
+<p>Leading indicators might be early defect detection, test coverage trends, or integration frequency. Lagging indicators include field incidents, recalls, and warranty costs. Flow metrics track cycle time, work‑in‑progress, and throughput.</p>
+<p>DORA (Deployment Frequency, Lead Time for Changes, Change Failure Rate, Mean Time to Restore) comes from cloud software. For embedded EPS, you adapt concepts: integration frequency, lead time from change to tested build, release failure rate, and time to containment.</p>
+<div class="flow"><span>Define goals</span><i>&rarr;</i><span>Choose outcome metrics</span><i>&rarr;</i><span>Add leading and flow metrics</span><i>&rarr;</i><span>Watch for Goodhart effects</span><i>&rarr;</i><span>Adjust metrics and decisions</span></div>
+<p>Goodhart’s law warns that people will optimize for metrics if you tie rewards or punishment to them. If you measure story points per person, people inflate estimates. If you measure lines of code, people write verbose code.</p>
+<table>
+<thead>
+<tr><th>Metric type</th><th>Role</th><th>EPS example</th></tr>
+</thead>
+<tbody>
+<tr><td>Outcome</td><td>Measures real impact.</td><td>Steering defect rate per 1,000 vehicles.</td></tr>
+<tr><td>Activity</td><td>Measures effort.</td><td>Number of HIL tests executed per week.</td></tr>
+<tr><td>Leading</td><td>Signals future risk.</td><td>Early defect detection in SIL before HIL.</td></tr>
+<tr><td>Lagging</td><td>Shows past results.</td><td>Warranty claims for steering issues.</td></tr>
+<tr><td>Flow</td><td>Describes work movement.</td><td>Cycle time from change request to integrated build.</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Imagine an EPS program with rising integration delays and occasional steering defects. Executives want metrics to “control” the situation. Teams propose a dashboard.</p>
+<p>Outcome metrics include steering defect rate, safety case coverage, and field incident trends. Leading metrics include integration frequency, test coverage growth, and early defect detection. Flow metrics include cycle time and work‑in‑progress limits.</p>
+<p>DORA‑adapted metrics track how often integrated builds are produced, how long changes take to reach tested builds, how often releases require hotfixes, and how quickly containment is applied after issues.</p>
+<p>Lines of code and story points exist but are used only for planning and capacity, not for judging individuals. Executives focus on system metrics, not personal productivity charts.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a program where executives demand “more productivity.” They choose lines of code per developer and story points per sprint as key metrics. They tie bonuses to these numbers.</p>
+<p>Developers respond by writing verbose code and inflating story point estimates. Quality drops. Steering defects increase. Safety case becomes harder to maintain. Metrics look good; outcomes get worse.</p>
+<p>Another failure involves misusing DORA. Leaders copy cloud metrics without adaptation. They measure deployment frequency but ignore embedded realities like hardware availability and safety validation. Teams rush releases to improve numbers. Integration becomes fragile.</p>
+<p>Flow metrics can fail when misunderstood. Leaders see high work‑in‑progress and push for “more parallel work.” Cycle time increases. Context switching grows. Defects rise. Metrics are read backwards.</p>
+<p>Goodhart’s law appears when metrics become targets. If you set a target of “zero defects,” teams hide issues. If you set a target of “100% test coverage,” teams write trivial tests. Numbers improve; risk remains.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide which metrics matter. You choose outcome metrics that reflect steering safety, customer experience, and business health. You decide how to balance leading, lagging, and flow metrics.</p>
+<p>Customer implications include steering behavior, communication, and responsiveness. Metrics must show whether customers are safer and more satisfied, not just whether teams are busy.</p>
+<p>Safety implications are direct. Metrics must reflect safety case completeness, defect trends, and test effectiveness. You decide whether to track safety goals explicitly or hide them behind generic quality metrics.</p>
+<p>Cybersecurity implications involve vulnerability management, incident response, and secure update behavior. Metrics must show whether security work is effective, not just how many tickets are closed.</p>
+<p>Schedule implications include cycle time, integration frequency, and release readiness. Metrics must help you see bottlenecks and trade‑offs, not push teams into unhealthy speed.</p>
+<p>You also decide how metrics are used. Are they tools for learning or weapons for blame? Goodhart’s law is your responsibility. You must prevent metrics from becoming harmful targets.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions probe metric design and use, not just numbers.</p>
+<ul>
+<li>“Which metrics on our EPS dashboard are true outcome metrics?”</li>
+<li>“What are our leading indicators for steering safety and integration health?”</li>
+<li>“How do our flow metrics show bottlenecks in change and test?”</li>
+<li>“Where could Goodhart’s law be hurting us today?”</li>
+<li>“How are DORA concepts adapted to embedded EPS work here?”</li>
+<li>“How do we ensure lines of code and story points never measure people?”</li>
+<li>“Which metrics drive executive decisions, and are they the right ones?”</li>
+<li>“What metrics would we drop if they cause bad behavior?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We track many metrics: lines of code, story points, test counts, and velocity. Executives like seeing charts. If numbers go up, we assume things are better. DORA is for cloud, so we don’t worry about it.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“Our EPS dashboard focuses on outcome metrics like steering defect rate and safety case coverage, supported by leading and flow metrics such as integration frequency, cycle time, and early defect detection. We adapt DORA concepts to embedded by tracking integrated build frequency, lead time from change to tested build, release failure rate, and time to containment. Lines of code and story points are planning tools only; we explicitly forbid using them to judge individuals. We regularly review metrics for Goodhart effects and drop or adjust any that drive bad behavior.”</p>
+</div>
+</div>
+<p>The weak answer treats metrics as decoration. It assumes more charts mean better control. It ignores outcome, flow, and Goodhart.</p>
+<p>The strong answer shows deliberate metric design. It connects metrics to safety, flow, and behavior. It treats metrics as tools for learning.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you understand metrics beyond buzzwords. They want to see if you can distinguish outcome from activity, leading from lagging, and flow from simple counts.</p>
+<p>They also test your ability to adapt DORA to embedded EPS work. Do you understand integration frequency, lead time, failure rate, and recovery time in your context?</p>
+<p>They test whether you recognize Goodhart’s law. Do you talk about behavior changes when metrics become targets? Do you protect people from harmful measurement?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners focus on easy metrics: lines of code, story points, test counts. They ignore outcomes. They assume more activity means more value.</p>
+<p>Beginners also misunderstand flow metrics. They see high work‑in‑progress as “busy” and good. They ignore cycle time and bottlenecks.</p>
+<p>Executives may chase vanity metrics: velocity, usage, or chart density. They reward teams for “improving numbers” without checking outcomes. Goodhart’s law hits hard.</p>
+<p>Executives may copy DORA without adaptation. They demand cloud‑style deployment frequency in embedded programs. Teams struggle and cut corners.</p>
+<p>Another mistake is using metrics to judge individuals. Leaders compare story points per person or defect counts per developer. Trust collapses. People game metrics or hide issues.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can distinguish outcome, activity, leading, lagging, and flow metrics on our EPS dashboard.</label>
+<label class="chk"><input type="checkbox"> I can explain how DORA concepts are adapted to embedded EPS work.</label>
+<label class="chk"><input type="checkbox"> I can identify at least one current Goodhart risk in our metrics.</label>
+<label class="chk"><input type="checkbox"> I can explain why lines of code and story points must not measure people.</label>
+<label class="chk"><input type="checkbox"> I can describe how metrics drive executive decisions in our program.</label>
+
+<h2>11. Sample dashboard with explanations <span class="lvl l4">Expert</span></h2>
+<p>Below is a sample EPS metrics dashboard. Each metric includes a one‑line explanation.</p>
+<table>
+<thead>
+<tr><th>Metric</th><th>Type</th><th>Description (one line)</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Steering defect rate (per 1,000 vehicles)</td>
+<td>Outcome, lagging</td>
+<td>Measures real steering issues seen in the field, directly reflecting customer and safety impact.</td>
+</tr>
+<tr>
+<td>Safety case coverage (% of safety goals with current evidence)</td>
+<td>Outcome, leading/lagging</td>
+<td>Shows how many safety goals have up‑to‑date, reviewed evidence, indicating safety case health.</td>
+</tr>
+<tr>
+<td>Integration frequency (integrated EPS builds per week)</td>
+<td>Flow, leading</td>
+<td>Tracks how often we produce integrated builds, signaling our ability to catch issues early.</td>
+</tr>
+<tr>
+<td>Lead time from change to tested build (median days)</td>
+<td>Flow, leading</td>
+<td>Measures how long it takes a change to reach a tested integrated build, revealing bottlenecks.</td>
+</tr>
+<tr>
+<td>Release failure rate (% of releases needing hotfix)</td>
+<td>DORA‑adapted, outcome</td>
+<td>Shows how often releases require urgent fixes, indicating release quality and readiness.</td>
+</tr>
+<tr>
+<td>Time to containment for critical EPS issues (median days)</td>
+<td>DORA‑adapted, lagging</td>
+<td>Measures how quickly we apply effective containment after critical steering issues are found.</td>
+</tr>
+<tr>
+<td>Early defect detection rate (defects found in SIL/HIL before vehicle)</td>
+<td>Leading, outcome‑linked</td>
+<td>Shows how many defects we catch before vehicle tests, indicating test effectiveness.</td>
+</tr>
+<tr>
+<td>Cycle time for change requests (median days from CR to decision)</td>
+<td>Flow, leading</td>
+<td>Measures how quickly we decide on scope and cost for changes, affecting responsiveness.</td>
+</tr>
+<tr>
+<td>Work‑in‑progress (WIP) limit adherence (% of time within WIP limits)</td>
+<td>Flow, leading</td>
+<td>Shows whether teams respect WIP limits, affecting cycle time and focus.</td>
+</tr>
+<tr>
+<td>Team health survey score (psychological safety index)</td>
+<td>Outcome (people), leading</td>
+<td>Measures how safe people feel to speak up, affecting defect reporting and learning.</td>
+</tr>
+<tr>
+<td>Lines of code (LoC) per release</td>
+<td>Activity (context only)</td>
+<td>Provides context for system size; explicitly not used to judge individuals or productivity.</td>
+</tr>
+<tr>
+<td>Story points completed per sprint (team level)</td>
+<td>Activity (planning)</td>
+<td>Helps plan capacity at team level; explicitly not used to compare or rank people.</td>
+</tr>
+</tbody>
+</table>
+<p>In this dashboard, outcome metrics anchor decisions. Leading and flow metrics help predict and improve outcomes. DORA concepts are adapted to embedded EPS realities. Lines of code and story points are clearly marked as planning context, not people metrics.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Representative adaptations of DORA metrics for embedded and automotive software programs [VERIFY].</li>
+<li>Common flow metrics used in EPS and safety‑critical development to track cycle time and bottlenecks [VERIFY].</li>
+<li>Typical patterns of Goodhart’s law in engineering metrics, including lines of code and story points [VERIFY].</li>
+<li>Standard practices for designing dashboards that emphasize outcome and leading indicators over vanity metrics [VERIFY].</li>
+<li>Realistic examples of metrics driving executive decisions in automotive software and EPS programs [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

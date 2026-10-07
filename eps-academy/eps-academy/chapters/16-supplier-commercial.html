@@ -1,0 +1,128 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Supplier, OEM and Commercial Management</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 16</div>
+<h1>Chapter 16: Supplier, OEM and Commercial Management</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you cannot read commercial agreements, you cannot protect EPS safety, scope, or trust under pressure.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Supplier–OEM management is about interfaces, responsibilities, and money, not just delivery dates. Every EPS issue eventually touches contracts. Technical decisions live inside commercial frames.</p>
+<p>Interface agreements define who does what, when, and how. Safety and security responsibility splits decide who owns hazards, mitigations, and evidence. Change requests move scope, cost, and schedule.</p>
+<p>Scope claims are arguments about what was promised versus what is now expected. Cost and headcount trade‑offs decide whether you absorb work or push back. Offshore versus onshore choices affect capability, communication, and trust.</p>
+<p>Negotiating without breaking trust means pushing hard on issues while protecting relationships. You must separate the problem from the people. EPS programs are long; burned bridges hurt later.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Interface agreements sit between OEM and supplier. They describe signals, data, timing, diagnostics, safety responsibilities, and security responsibilities. They may be part of larger statements of work or technical annexes.</p>
+<p>Safety responsibility splits define which party owns safety goals, hazard analysis, and safety case integration. Security splits define who owns threat analysis, secure boot, key management, and update security. Practice varies by organization.</p>
+<p>Change requests (CRs) formalize changes to scope, requirements, or timing. Each CR should state reason, impact, and proposed cost or schedule adjustment. Scope claims often trigger CRs.</p>
+<div class="flow"><span>Baseline agreement</span><i>&rarr;</i><span>New requirement or issue</span><i>&rarr;</i><span>Scope claim</span><i>&rarr;</i><span>Change request</span><i>&rarr;</i><span>Negotiation</span><i>&rarr;</i><span>Updated agreement</span></div>
+<p>Cost and headcount trade‑offs appear when scope grows or quality issues arise. Offshore versus onshore decisions affect who does the work and how communication flows. Negotiation must consider technical risk, customer expectations, and team health.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>Role</th><th>EPS example</th></tr>
+</thead>
+<tbody>
+<tr><td>Interface agreement</td><td>Defines responsibilities and boundaries.</td><td>Who owns torque‑sensor diagnostics and CAN messages.</td></tr>
+<tr><td>Safety split</td><td>Assigns safety case ownership.</td><td>OEM owns vehicle‑level hazards; supplier owns EPS ECU safety case.</td></tr>
+<tr><td>Security split</td><td>Assigns cybersecurity tasks.</td><td>Supplier owns secure boot; OEM owns backend update infrastructure.</td></tr>
+<tr><td>Change request</td><td>Formalizes scope changes.</td><td>New lane‑keeping feature requiring EPS torque overlay.</td></tr>
+<tr><td>Scope claim</td><td>Argues whether work is in scope.</td><td>Supplier claims new feature is out of baseline contract.</td></tr>
+<tr><td>Trustful negotiation</td><td>Protects relationship while resolving conflict.</td><td>Agree on shared risk and staged cost adjustments.</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Imagine an EPS supplier delivering torque‑control software to an OEM. Interface agreement defines torque commands, diagnostics, CAN messages, and safety responsibilities. OEM owns vehicle‑level safety goals. Supplier owns EPS ECU safety case and implementation.</p>
+<p>Mid‑program, OEM requests a new steering feel mode linked to drive profiles. They expect EPS to support dynamic assist curves and additional diagnostics. Supplier reviews baseline agreement and finds no explicit commitment for profile‑based steering.</p>
+<p>Supplier raises a scope claim. They argue that new mode is out of baseline. OEM argues that “flexible steering feel” wording implies such features. Tension rises.</p>
+<p>Supplier proposes a change request. CR describes new feature, required calibration, additional tests, and safety case updates. It estimates cost, headcount, and schedule impact. OEM reviews and negotiates.</p>
+<p>Safety split becomes critical. OEM wants supplier to own hazard analysis for new mode. Supplier insists that vehicle‑level hazards remain OEM responsibility. They agree that supplier will analyze EPS‑specific hazards and mitigations, while OEM updates vehicle‑level safety case.</p>
+<p>Security split also matters. New mode requires additional diagnostic access. Supplier insists on secure access controls. OEM agrees to align with cybersecurity requirements from <a href="07-cybersecurity.html">Chapter 07</a>.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider a program where interface agreements are vague. Safety responsibilities are described as “shared.” Security responsibilities are “joint.” No detailed splits exist.</p>
+<p>When a steering safety issue appears, OEM expects supplier to own full safety case. Supplier expects OEM to integrate hazards and vehicle‑level mitigations. Each side assumes the other will lead. Analysis stalls.</p>
+<p>Change requests can fail too. OEM pushes new features informally. Supplier implements them to keep relationship smooth. No CRs are raised. Scope grows silently. Cost and headcount stay fixed.</p>
+<p>Later, supplier struggles with quality and schedule. They claim scope creep. OEM claims poor execution. Trust erodes. Negotiations become defensive. Safety and security work suffer.</p>
+<p>Offshore versus onshore decisions can fail when driven purely by cost. Critical safety analysis or complex integration is pushed offshore without enough context or authority. Communication gaps appear. Misunderstandings grow.</p>
+<p>Negotiation can break trust when leaders use threats or blame. OEM may threaten future business. Supplier may threaten escalation or legal action. Teams become cautious and defensive. Collaboration weakens.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide how clear interface agreements are. You push for explicit safety and security splits. You decide when to raise change requests and how hard to push scope claims.</p>
+<p>Customer implications include transparency and reliability. OEMs expect clear commitments and honest communication. If you hide scope issues or delay CRs, surprises appear later. Trust drops.</p>
+<p>Safety implications involve responsibility clarity. If safety splits are vague, hazards may be missed or duplicated. You decide whether to accept ambiguous language or insist on explicit roles.</p>
+<p>Cybersecurity implications involve ownership of secure boot, key management, debug‑port control, and update security. You decide whether your organization can own these tasks or needs OEM support. Ambiguity here can create real risk.</p>
+<p>Schedule implications include how quickly you respond to new requirements and issues. Raising CRs early may slow apparent progress but protect long‑term schedule. Absorbing scope silently may speed short‑term progress but create burnout and defects.</p>
+<p>Cost and headcount trade‑offs are your responsibility. You decide whether to absorb work, request more funding, or push back. Offshore versus onshore choices must consider capability, communication, and safety, not just hourly rates.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions connect contracts to safety, security, and delivery reality.</p>
+<ul>
+<li>“Show me the interface agreement. Where are safety and security responsibilities explicitly split?”</li>
+<li>“Which EPS features are clearly in scope, and which are ambiguous?”</li>
+<li>“What is our process for raising change requests when OEM asks for new features or tests?”</li>
+<li>“How do we document scope claims and their outcomes?”</li>
+<li>“Where do offshore teams sit in safety and security work? What decisions remain onshore?”</li>
+<li>“How do we negotiate cost and headcount changes without damaging trust?”</li>
+<li>“Which commercial decisions have affected safety case or cybersecurity work in this program?”</li>
+<li>“How do we explain these splits and trade‑offs to OEM leadership?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“Contracts are handled by commercial. We focus on delivery. Safety and security are shared with OEM. If scope grows, we work harder. Offshore teams are cheaper, so we use them more. Negotiations are about price.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“We treat interface agreements as technical documents. Safety and security responsibilities are explicitly split: OEM owns vehicle‑level hazards and backend security; we own EPS ECU safety case, secure boot, and diagnostics. We raise change requests for new features, tests, or evidence, with clear cost and schedule impacts. Scope claims are documented and resolved early. Offshore teams handle well‑bounded tasks; onshore teams own safety‑critical decisions and complex integration. Negotiations aim to align scope, risk, and cost without damaging trust.”</p>
+</div>
+</div>
+<p>The weak answer disconnects engineering from commercial reality. It hides behind “shared” responsibilities and cost focus. It ignores safety and security implications.</p>
+<p>The strong answer shows integrated leadership. It connects contracts, responsibilities, and technical risk. It treats negotiation as part of safety and delivery, not just price.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you can read and challenge interface agreements. They want to see if you understand safety and security splits, not just technical content. They check whether you can link scope, cost, and headcount to real program behavior.</p>
+<p>They also test your ability to negotiate without breaking trust. Do you talk about early CRs, transparent scope claims, and shared risk? Do you avoid “win‑lose” framing?</p>
+<p>They test whether you can manage offshore versus onshore trade‑offs. Do you recognize where safety‑critical work must stay close to OEM and key experts? Do you avoid pushing complex decisions to low‑context teams?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners ignore contracts. They assume “commercial will handle it.” They do not read interface agreements. They miss safety and security splits. They are surprised when scope or cost conflicts appear.</p>
+<p>Beginners also avoid change requests. They fear conflict. They absorb scope silently. They hope to “catch up later.” Quality and morale suffer.</p>
+<p>Executives may treat offshore versus onshore as purely cost decisions. They push complex safety or security work offshore without enough context or authority. They underestimate communication and trust needs.</p>
+<p>Executives may negotiate aggressively without protecting relationships. They use threats or blame. Short‑term gains become long‑term distrust. OEM and supplier teams become defensive.</p>
+<p>Another mistake is treating safety and security as “included” without explicit splits. Leaders assume someone else owns hazards, threat analysis, or evidence. Gaps appear in audits and incidents.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can explain our interface agreement’s safety and security splits in plain language.</label>
+<label class="chk"><input type="checkbox"> I can describe when and how we raise change requests for new EPS work.</label>
+<label class="chk"><input type="checkbox"> I can identify at least three current scope claims and their outcomes.</label>
+<label class="chk"><input type="checkbox"> I can explain our offshore versus onshore strategy for safety‑critical and commercial work.</label>
+<label class="chk"><input type="checkbox"> I can describe how we negotiate cost and headcount changes without damaging trust.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Scenario:</b> Midway through an EPS program, OEM requests additional cybersecurity features: enhanced debug‑port control, secure diagnostics, and expanded logging. They expect supplier to implement them within existing scope and timing. Your teams are already stretched. Safety and security leads warn that these features require significant design and testing. Commercial team fears conflict.</p>
+<p><b>Task:</b> As lead software manager, outline how you handle interface agreements, safety and security splits, change requests, scope claims, cost and headcount trade‑offs, offshore versus onshore work, and negotiation tone.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>Interface agreement review:</b> Start by reading the existing interface agreement and cybersecurity annex. Identify what is explicitly in scope: debug‑port control, secure boot, key management, diagnostics, and logging. Note any ambiguous language like “appropriate security measures” or “industry‑standard logging.”</li>
+<li><b>Safety and security splits:</b> Clarify responsibilities. Confirm that OEM owns vehicle‑level cybersecurity risk assessment and backend infrastructure. Confirm that supplier owns EPS ECU secure boot, key handling, debug‑port control, and diagnostic access. If splits are vague, propose explicit wording updates.</li>
+<li><b>Scope claim:</b> Assess whether requested features are clearly in scope. If enhanced debug‑port control and secure diagnostics go beyond baseline, document a scope claim. Use concrete references: contract clauses, annexes, and prior meeting notes. Avoid emotional language. Focus on facts.</li>
+<li><b>Change request preparation:</b> Prepare a detailed CR. Describe requested features, technical implications, safety and security impacts, and required design and test work. Estimate cost, headcount, and schedule impact. Include options: full implementation now, staged implementation, or partial features with clear limitations.</li>
+<li><b>Cost and headcount trade‑offs:</b> Work with finance and HR to propose realistic staffing options. Show how additional cybersecurity work affects existing commitments. Avoid promising “we will absorb it” if teams are already overloaded. Link trade‑offs to quality and safety risk.</li>
+<li><b>Offshore versus onshore decisions:</b> Decide which parts of the new work can be offshore. For example, log formatting or non‑critical tooling may move offshore. Core secure‑boot changes, debug‑port control, and diagnostic access design should stay onshore with close OEM interaction. Explain this split to OEM as a safety and security decision, not just a cost choice.</li>
+<li><b>Negotiation tone:</b> In discussions with OEM, separate people from problems. Acknowledge their concerns about cybersecurity and regulatory pressure. Explain your safety and security responsibilities clearly. Present CR as a way to align scope, risk, and cost, not as a barrier. Offer transparency: share high‑level design impacts and test needs.</li>
+<li><b>Trust protection:</b> Avoid surprise. Share early drafts of CR and scope analysis with OEM technical leads before formal commercial meetings. Invite feedback. Show willingness to optimize design and test plans to reduce impact without compromising safety or security.</li>
+<li><b>Decision framing:</b> Frame options around risk and value. For example: “Option A delivers full debug‑port control and secure diagnostics now, with added cost and schedule impact. Option B delivers minimal controls now and expands later, with defined limitations. Option C keeps current scope but increases monitoring and incident response. Here is how each option affects safety, security, and field risk.”</li>
+<li><b>Internal alignment:</b> Align engineering, safety, security, and commercial teams before negotiating. Ensure everyone understands technical implications and agreed positions. Avoid mixed messages to OEM.</li>
+<li><b>Follow‑through:</b> Once agreement is reached, update interface agreements, safety and security splits, and project plans. Communicate changes to offshore and onshore teams. Track progress and risk. Use this case as a learning example for future scope and cybersecurity discussions.</li>
+</ul>
+<p>This exercise shows whether you can connect commercial management to safety and security decisions. It reveals your ability to use interface agreements, scope claims, and change requests as tools for alignment, not weapons, and to negotiate firmly without breaking trust.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical structures and contents of supplier–OEM interface agreements for EPS programs [VERIFY].</li>
+<li>Representative patterns for safety and security responsibility splits between OEM and supplier in steering systems [VERIFY].</li>
+<li>Common practices for raising and negotiating change requests in automotive software contracts [VERIFY].</li>
+<li>Realistic trade‑off patterns between cost, headcount, offshore versus onshore work, and safety or security tasks [VERIFY].</li>
+<li>Typical negotiation approaches used to maintain trust while resolving scope and commercial conflicts in long‑running automotive programs [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

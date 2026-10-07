@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Software‑Defined Vehicle</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 12</div>
+<h1>Chapter 12: Software‑Defined Vehicle</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>SDV changes the car’s compute architecture, but EPS torque control stays deterministic, local, and timing‑bound.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Software‑Defined Vehicle (SDV) means vehicle behavior is shaped primarily by software, not fixed hardware. Features evolve through updates, services, and data. Architecture shifts from many independent ECUs to domain or zonal controllers and centralized compute.</p>
+<p>Service‑oriented architecture (SOA) exposes functions as services. OTA (over‑the‑air) updates deliver new software and configurations. Variants become software configurations rather than hardware splits.</p>
+<p>Safety and security remain foundational. EPS torque control is safety‑critical and time‑bound. It cannot depend on remote compute or variable networks. SDV changes the environment around EPS, not the core control loop.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Traditional vehicles use many ECUs, each with dedicated hardware and software. Domain architecture groups ECUs by function: powertrain, chassis, body, infotainment. Zonal architecture groups ECUs by physical location, reducing wiring and centralizing compute.</p>
+<p>Centralized compute hosts high‑level functions, data processing, and services. SOA allows components to communicate through service calls rather than fixed signals. OTA updates modify software across domains.</p>
+<p>EPS torque control remains on an edge ECU. Deterministic control requires local sensors, local compute, and predictable timing. High‑level features may run centrally, but torque output must remain local.</p>
+<div class="flow"><span>ECU-centric</span><i>&rarr;</i><span>Domain controllers</span><i>&rarr;</i><span>Zonal controllers</span><i>&rarr;</i><span>Central compute + edge control</span></div>
+<p>Variants shift from hardware differences to software configurations. OTA updates modify variants dynamically. Safety and security processes must handle frequent changes.</p>
+<table>
+<thead>
+<tr><th>Architecture</th><th>Role</th><th>EPS impact</th></tr>
+</thead>
+<tbody>
+<tr><td>ECU-centric</td><td>Many independent ECUs.</td><td>EPS runs fully local; minimal external influence.</td></tr>
+<tr><td>Domain</td><td>Functional grouping.</td><td>EPS may share data with chassis domain; control stays local.</td></tr>
+<tr><td>Zonal</td><td>Physical grouping.</td><td>EPS ECU may connect through zonal controller; timing must remain predictable.</td></tr>
+<tr><td>Central compute</td><td>High-level services.</td><td>High-level steering features may run centrally; torque loop stays edge.</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Consider an SDV with zonal architecture. A zonal controller aggregates sensors and communication. A central compute unit runs perception, planning, and service logic. EPS ECU sits near the steering column.</p>
+<p>Central compute may request steering feel changes, lane‑keeping assist parameters, or diagnostics. These arrive as service calls or messages. EPS ECU applies them within safety limits.</p>
+<p>Torque control loop reads torque and angle sensors locally. It computes assist torque every millisecond. It drives the motor through PWM. Timing and determinism remain local.</p>
+<p>OTA updates may change calibration, diagnostics, or high‑level features. EPS ECU must validate updates, maintain safety goals, and ensure deterministic behavior. Security controls protect update paths.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Consider an SDV where steering feel is controlled by a central service. The service sends parameters to EPS ECU. Network latency varies under load.</p>
+<p>During aggressive maneuvers, the service sends rapid updates. Some arrive late. EPS ECU applies outdated parameters. Steering feel becomes inconsistent. Driver feels oscillations.</p>
+<p>Another failure involves OTA updates. A calibration update modifies assist curves. The update passes central validation but fails local plausibility checks. EPS ECU rejects the update, but the system does not report the rejection clearly. OEM sees inconsistent behavior across vehicles.</p>
+<p>Security failures can break safety assumptions. If service calls are not authenticated, attackers could send steering‑related commands. EPS ECU must enforce strict limits and reject unsafe requests.</p>
+
+<h2>5. What a manager decides (customer, safety, cybersecurity, schedule implications) <span class="lvl l3">Interview depth</span></h2>
+<p>You decide how EPS integrates into SDV architecture. You choose which functions remain local and which become services. You decide how OTA updates affect EPS behavior.</p>
+<p>Customer implications include steering feel consistency, update reliability, and diagnostic clarity. OEMs expect predictable behavior across variants and updates.</p>
+<p>Safety implications involve timing and determinism. EPS torque control must remain edge‑based. Central compute may influence parameters but cannot control torque loop directly. Safety case must reflect SDV architecture.</p>
+<p>Cybersecurity implications involve service authentication, update integrity, and zonal controller trust. EPS ECU must reject unsafe commands and validate updates.</p>
+<p>Schedule implications include integration complexity. SDV introduces more interfaces, services, and update paths. You decide whether to delay features or simplify architecture to protect timing.</p>
+<p>A green pipeline is evidence, not release approval. SDV pipelines may test services, OTA flows, and central compute. Release decisions must consider edge timing, safety case, and update behavior.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions connect SDV concepts to steering behavior and safety.</p>
+<ul>
+<li>“Which EPS functions remain edge‑local, and why?”</li>
+<li>“How does zonal architecture affect sensor latency and determinism?”</li>
+<li>“Which steering features run centrally, and how do we bound their influence?”</li>
+<li>“How do OTA updates modify EPS calibration, and how do we validate them locally?”</li>
+<li>“Which service calls affect steering, and how are they authenticated?”</li>
+<li>“How do variants change across SDV platforms, and how do we protect timing?”</li>
+<li>“What happens if central compute is overloaded or unavailable?”</li>
+<li>“How do we explain EPS architecture to OEMs clearly and defensibly?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“SDV centralizes everything. EPS will eventually run as a service. OTA updates handle all changes. Timing issues will be solved by faster hardware.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“SDV centralizes high‑level logic, but EPS torque control stays edge‑local for determinism. Zonal and central compute influence parameters, not the control loop. OTA updates modify calibration and diagnostics, but the EPS ECU validates updates and enforces safety limits. Timing and safety goals drive architectural boundaries.”</p>
+</div>
+</div>
+<p>The weak answer assumes centralization solves timing. It ignores determinism and safety. It predicts unsupported architectural shifts.</p>
+<p>The strong answer explains boundaries. It connects SDV concepts to EPS safety, timing, and update behavior. It avoids unsupported predictions.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you understand SDV beyond buzzwords. They want to see if you can explain domain, zonal, and centralized compute clearly. They check whether you understand SOA, OTA, and variants at leadership depth.</p>
+<p>They also test your ability to protect EPS determinism. Do you explain why torque control stays local? Do you challenge assumptions about centralization? Do you connect SDV architecture to safety and security?</p>
+<p>They test your ability to lead integration. Do you ask about latency, update validation, and service authentication? Do you avoid unsupported predictions?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat SDV as full centralization. They assume all control loops move to central compute. They ignore timing and determinism.</p>
+<p>Beginners also misunderstand SOA. They think service calls replace all signals. They ignore latency, jitter, and safety limits.</p>
+<p>Executives may overpromise SDV features. They assume OTA can modify any behavior safely. They underestimate validation and safety case updates.</p>
+<p>Executives may ignore zonal constraints. They assume zonal controllers behave like simple routers. They overlook timing and security implications.</p>
+<p>Another mistake is unsupported predictions. Leaders speculate about future architectures without evidence. This confuses teams and OEMs.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<label class="chk"><input type="checkbox"> I can explain SDV without predicting unsupported future architectures.</label>
+<label class="chk"><input type="checkbox"> I can distinguish ECU, domain, zonal, and central compute roles.</label>
+<label class="chk"><input type="checkbox"> I can explain why EPS torque control stays deterministic and edge‑local.</label>
+<label class="chk"><input type="checkbox"> I can describe how OTA updates affect EPS safely.</label>
+<label class="chk"><input type="checkbox"> I can explain how SDV variants differ from traditional variants.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>Scenario:</b> An OEM wants to move steering feel computation to central compute in an SDV platform. They ask whether EPS torque control can also move centrally. They expect a quick answer.</p>
+<p><b>Task:</b> As lead software manager, outline your response across timing, safety, security, and SDV architecture boundaries.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>Timing:</b> Explain that torque control requires millisecond‑level determinism. Network latency and jitter make central execution unsafe.</li>
+<li><b>Safety:</b> Safety goals require local sensor access, local fallback, and predictable execution. Central compute cannot guarantee these under all conditions.</li>
+<li><b>Security:</b> Centralizing torque control increases attack surface. Edge ECU enforces strict limits and isolates control loop.</li>
+<li><b>Architecture boundaries:</b> Steering feel computation can run centrally as a high‑level service. EPS ECU applies parameters locally within safety limits.</li>
+<li><b>OTA and variants:</b> OTA updates can modify calibration and high‑level logic. EPS ECU validates updates and maintains deterministic behavior.</li>
+<li><b>Conclusion:</b> Torque control stays edge‑local. Central compute may influence parameters but cannot replace local control loop.</li>
+</ul>
+<p>This exercise shows whether you can explain SDV architecture clearly, defend safety boundaries, and avoid unsupported predictions.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical SDV definitions used in automotive programs [VERIFY].</li>
+<li>Representative domain and zonal architecture patterns in current vehicles [VERIFY].</li>
+<li>Common roles of centralized compute and SOA in production SDV platforms [VERIFY].</li>
+<li>Typical OTA update mechanisms and validation flows for safety‑critical ECUs [VERIFY].</li>
+<li>Realistic constraints on EPS torque control timing and determinism [VERIFY].</li>
+<li>Representative integration patterns between central compute and edge ECUs in steering systems [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

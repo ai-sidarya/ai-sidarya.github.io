@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cybersecurity and DevSecOps for EPS Leaders</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 07</div>
+<h1>Chapter 07: Cybersecurity and DevSecOps</h1>
+<div class="box warn"><b class="tag">Source status</b>Drafted with AI. Verify standards and product details against primary sources before relying on them.</div>
+<div class="box ok"><b class="tag">Takeaway</b>If you ignore cybersecurity, your EPS safety case rests on assumptions attackers can break.</div>
+
+<h2>1. What you must know <span class="lvl l1">Core</span></h2>
+<p>Safety controls random faults and design errors. Security controls intentional attacks and misuse. Both affect steering behavior.</p>
+<p>ISO/SAE 21434 defines a cybersecurity lifecycle for road vehicles in broad terms [VERIFY]. It covers assets, threats, risk assessment, and controls. UNECE R155 and R156 define regulatory expectations for cybersecurity management and software updates [VERIFY].</p>
+<p>DevSecOps means integrating security into development and operations. Pipelines, tools, and processes must protect code, configurations, and releases. EPS torque-control depends on secure boot, key management, debug-port control, and secure update.</p>
+
+<h2>2. How it works <span class="lvl l2">Working</span></h2>
+<p>Cybersecurity starts with assets. Assets are things worth protecting: ECUs, software, keys, configurations, and data. EPS assets include torque-control software, calibration, communication channels, and diagnostic interfaces.</p>
+<p>Threat scenarios describe how attackers might harm assets. TARA (Threat Analysis and Risk Assessment) is a structured way to identify and rate threats [VERIFY]. It considers attacker capability, motivation, and impact.</p>
+<p>Controls mitigate threats. Secure boot ensures only trusted software runs. Key management protects cryptographic keys. Debug-port control restricts access to hardware debug interfaces. Secure update ensures only authenticated, authorized updates reach vehicles.</p>
+<div class="flow"><span>Identify assets</span><i>&rarr;</i><span>Define threat scenarios</span><i>&rarr;</i><span>Perform TARA</span><i>&rarr;</i><span>Select controls</span><i>&rarr;</i><span>Implement and verify</span><i>&rarr;</i><span>Monitor and respond</span></div>
+<p>DevSecOps extends this into pipelines. SBOM (Software Bill of Materials) lists components and dependencies. Vulnerability management tracks known issues in those components. Supply-chain risk covers third-party software, tools, and services.</p>
+<table>
+<thead>
+<tr><th>Concept</th><th>EPS relevance</th><th>Leadership question</th></tr>
+</thead>
+<tbody>
+<tr><td>Asset</td><td>Torque-control ECU, keys, calibration, communication.</td><td>“What are our critical EPS assets?”</td></tr>
+<tr><td>Threat scenario</td><td>Attacker injects torque commands or disables checks.</td><td>“Which realistic threats target steering?”</td></tr>
+<tr><td>TARA</td><td>Rates threats and guides control selection.</td><td>“How did we prioritize EPS threats?”</td></tr>
+<tr><td>Secure boot</td><td>Prevents unauthorized software from running.</td><td>“How do we enforce and test secure boot?”</td></tr>
+<tr><td>Pipeline security</td><td>Protects code, builds, and releases.</td><td>“Which controls protect our pipelines?”</td></tr>
+</tbody>
+</table>
+
+<h2>3. EPS example <span class="lvl l2">Working</span></h2>
+<p>Consider an EPS ECU with over-the-air update capability. The ECU stores torque-control software, calibration, and keys. It communicates with a gateway ECU over CAN or Ethernet.</p>
+<p>Assets include the torque-control binary, calibration data, cryptographic keys, update logic, and diagnostic interfaces. Threat scenarios include unauthorized software installation, calibration tampering, key theft, and misuse of debug ports.</p>
+<p>Secure boot verifies software integrity and authenticity at startup. Key management ensures keys are stored and used safely. Debug-port control disables or restricts hardware debug interfaces in production. Secure update verifies update packages before installation.</p>
+
+<h2>4. How it fails (concrete scenario) <span class="lvl l3">Interview depth</span></h2>
+<p>Imagine an EPS ECU where debug ports remain open in production. An attacker gains physical access to the vehicle. They connect to the debug port and bypass secure boot checks.</p>
+<p>The attacker installs modified torque-control software. The software accepts remote commands over a hidden channel. Steering assist can be manipulated during driving.</p>
+<p>Another failure involves weak key management. Keys are stored in plain Flash without hardware protection [VERIFY]. A compromised tool or insider extracts keys. Attackers sign malicious updates that pass secure boot checks.</p>
+<p>Pipeline security can fail too. A build server runs with weak access control. An attacker modifies build scripts or dependencies. The pipeline produces signed binaries with hidden backdoors.</p>
+<p>Supply-chain risk appears when third-party libraries or tools contain vulnerabilities. A communication stack has a known flaw. Attackers exploit it to crash the ECU or inject messages. Vulnerability management fails to track and patch the issue.</p>
+
+<h2>5. What a manager decides <span class="lvl l3">Interview depth</span></h2>
+<p>You decide how seriously cybersecurity is treated in EPS programs. You choose whether security is integrated into safety discussions. You decide whether DevSecOps practices are mandatory or optional.</p>
+<p>Customer implications are strong. OEMs expect clear cybersecurity concepts and compliance with ISO/SAE 21434 and UNECE R155/R156 [VERIFY]. They ask about secure boot, key management, update security, and vulnerability handling. Weak answers damage trust.</p>
+<p>Safety implications are direct. Security failures can break safety assumptions. If attackers can disable plausibility checks or inject torque commands, safety goals fail. The safety case must consider security dependencies.</p>
+<p>Cybersecurity implications include long-term maintenance. Vulnerabilities appear after release. You decide whether to invest in SBOM, vulnerability scanning, and patch processes. You decide how quickly to respond to new threats.</p>
+<p>Schedule implications involve security features and processes. Secure boot, key management, and pipeline controls take time to design and implement. Security reviews and TARA sessions require effort. You decide whether to delay features to maintain security.</p>
+
+<h2>6. Questions a strong manager asks the team <span class="lvl l3">Interview depth</span></h2>
+<p>Strong questions connect security to steering behavior and DevSecOps.</p>
+<ul>
+<li>“What are our critical EPS assets, and how are they protected?”</li>
+<li>“Show me the top three EPS threat scenarios and their TARA results.”</li>
+<li>“How is secure boot implemented, and how do we test failure modes?”</li>
+<li>“Where and how are cryptographic keys stored and rotated?”</li>
+<li>“Which debug ports exist on the EPS ECU, and how are they controlled in production?”</li>
+<li>“How do we secure our build and deployment pipelines for EPS software?”</li>
+<li>“Do we maintain an SBOM for the EPS ECU, and how do we track vulnerabilities?”</li>
+<li>“How do UNECE R155 and R156 requirements show up in our processes?”</li>
+</ul>
+
+<h2>7. Weak answer versus strong answer <span class="lvl l3">Interview depth</span></h2>
+<div class="cmp">
+<div class="box bad"><b class="tag">Weak</b>
+<p>“We follow ISO/SAE 21434, so security is covered. The ECU has secure boot, and updates are signed. Pipelines are internal, so they’re safe. Vulnerabilities are handled by IT.”</p>
+</div>
+<div class="box ok"><b class="tag">Strong</b>
+<p>“We identified EPS assets and performed TARA on steering-related threats. Secure boot verifies signed binaries at startup, and we test tampering scenarios. Keys are stored in hardware-protected memory and rotated according to policy. Debug ports are disabled or access-controlled in production. Pipelines use access control, code signing, and dependency scanning. We maintain an SBOM and track vulnerabilities across suppliers, aligning with ISO/SAE 21434 and UNECE R155/R156 expectations.”</p>
+</div>
+</div>
+<p>The weak answer hides behind standards and vague claims. It ignores assets, threats, and concrete controls. It treats pipelines and vulnerabilities as someone else’s problem.</p>
+<p>The strong answer shows structured analysis and specific measures. It connects security to steering behavior and regulatory expectations. It treats pipelines and supply-chain risk as part of the product.</p>
+
+<h2>8. What the interviewer is testing <span class="lvl l2">Working</span></h2>
+<p>Interviewers test whether you understand safety versus security. They want to see if you recognize that attacks can break safety assumptions. They check whether you can talk about ISO/SAE 21434 and UNECE R155/R156 at leadership depth.</p>
+<p>They also test your DevSecOps mindset. Do you treat pipelines, SBOM, and vulnerability management as core topics? Do you understand supply-chain risk? Do you connect security controls to EPS torque-control behavior?</p>
+<p>They test your ability to ask sharp questions. Do you probe assets, threats, and controls? Do you challenge vague claims about “secure boot” or “signed updates”? Do you insist on evidence?</p>
+
+<h2>9. Common mistakes (beginner and executive) <span class="lvl l2">Working</span></h2>
+<p>Beginners treat security as an add-on. They focus on encryption without understanding keys or boot. They ignore debug ports and update mechanisms.</p>
+<p>Beginners also confuse safety and security. They think safety mechanisms automatically handle attacks. They do not consider intentional misuse of diagnostics or communication.</p>
+<p>Executives may overtrust standards. They assume ISO/SAE 21434 compliance guarantees security. They treat UNECE R155/R156 as paperwork. They ignore pipeline security and SBOM.</p>
+<p>Executives may also separate security from development. They push security to a central team. DevSecOps becomes Dev plus occasional security reviews. Pipelines remain open to misuse.</p>
+<p>Another mistake is ignoring supply-chain risk. Leaders assume suppliers handle vulnerabilities. They do not track third-party components. They are surprised when a library flaw affects steering.</p>
+
+<h2>10. Self-check <span class="lvl l1">Core</span></h2>
+<p>Use these items to test your cybersecurity understanding.</p>
+<label class="chk"><input type="checkbox"> I can explain the difference between safety and security using an EPS example.</label>
+<label class="chk"><input type="checkbox"> I can describe at least three critical EPS assets and related threats.</label>
+<label class="chk"><input type="checkbox"> I can explain secure boot, key management, and debug-port control at leadership depth.</label>
+<label class="chk"><input type="checkbox"> I can outline how SBOM and vulnerability management apply to an EPS ECU.</label>
+<label class="chk"><input type="checkbox"> I can describe at least two pipeline security controls relevant to DevSecOps.</label>
+
+<h2>11. Exercise with answer notes <span class="lvl l4">Expert</span></h2>
+<p><b>EPS threat scenario:</b> An attacker gains access to a connected vehicle fleet. They exploit a vulnerability in the update server. They push a malicious update to EPS ECUs that weakens plausibility checks and allows remote torque manipulation.</p>
+<p><b>Task:</b> As lead software manager, outline your response across assets, TARA, controls, pipelines, and customer communication.</p>
+<p><b>Answer notes:</b></p>
+<ul>
+<li><b>Assets and impact:</b> Identify affected assets: EPS software, calibration, keys, update logic, and diagnostic interfaces. Assess steering impact: potential loss of control, violation of safety goals, and regulatory exposure. Classify severity and scope.</li>
+<li><b>TARA and root cause:</b> Review existing TARA for EPS. Check whether remote update threats were considered. Identify gaps in threat scenarios or risk ratings. Distinguish root cause (vulnerability in update server or process) from escape points (missing detection or monitoring).</li>
+<li><b>Controls and remediation:</b> Verify secure boot behavior on ECUs. Confirm whether malicious updates were signed with valid keys. If keys are compromised, plan key revocation and rotation. Strengthen update authentication, integrity checks, and rollback mechanisms. Consider temporary disabling of remote updates.</li>
+<li><b>Pipeline and DevSecOps:</b> Audit build and deployment pipelines. Check access control, logging, and dependency scanning. Ensure that only authorized changes can reach production. Introduce or tighten security gates, such as code signing, SBOM checks, and vulnerability scans.</li>
+<li><b>Supply-chain and SBOM:</b> Use SBOM to identify third-party components involved in the update path. Check for known vulnerabilities. Coordinate with suppliers on patches and mitigations. Establish regular vulnerability review cycles.</li>
+<li><b>Customer and regulatory communication:</b> Inform OEMs about the incident, impact, and mitigation plan. Provide clear timelines and technical explanations. Align responses with ISO/SAE 21434 and UNECE R155/R156 expectations. Document lessons learned and integrate them into processes.</li>
+<li><b>Long-term practice:</b> Integrate cybersecurity more deeply into safety case discussions. Ensure that safety goals dependent on security controls are explicitly documented. Make DevSecOps practices part of program standards, not optional extras.</li>
+</ul>
+<p>This exercise shows whether you can connect cybersecurity, DevSecOps, and EPS safety. It reveals your ability to lead under pressure, ask sharp questions, and drive structural improvements.</p>
+
+<div class="box warn"><b class="tag">Claims to verify</b><ul>
+<li>Typical interpretation of ISO/SAE 21434 lifecycle concepts for EPS ECUs [VERIFY].</li>
+<li>Representative application of UNECE R155 and R156 to steering-related ECUs and update processes [VERIFY].</li>
+<li>Common implementations of secure boot and key management in automotive microcontrollers used for EPS [VERIFY].</li>
+<li>Typical practices for debug-port control in production vehicles with EPS ECUs [VERIFY].</li>
+<li>Realistic EPS threat scenarios involving remote updates and calibration tampering [VERIFY].</li>
+<li>Standard use of SBOM and vulnerability management in automotive DevSecOps pipelines [VERIFY].</li>
+<li>Common supply-chain risk patterns affecting communication stacks or update infrastructure for EPS [VERIFY].</li>
+<li>Representative pipeline security controls used in automotive software development environments [VERIFY].</li>
+</ul></div>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

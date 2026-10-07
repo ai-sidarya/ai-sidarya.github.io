@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Integrated Case Studies — Part 2</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<h1>Chapter 22: Integrated Case Studies (Part 2)</h1>
+
+<h2>5. Case Study E — Pipeline Green but Vehicle Validation Fails <span class="lvl l1">Core</span></h2>
+
+<h3>Facts</h3>
+<p>All CI pipelines are green: SIL, HIL, static analysis, coding guidelines. Vehicle validation shows steering oscillations in a narrow maneuver. OEM is confused: “How can everything be green but the car fails?”</p>
+
+<h3>Unknowns</h3>
+<ul>
+<li>Is the maneuver missing from regression tests?</li>
+<li>Is the pipeline masking flaky tests?</li>
+<li>Is the integration environment different from vehicle environment?</li>
+<li>Is calibration misaligned with software version?</li>
+</ul>
+
+<h3>Options</h3>
+<ul>
+<li><b>Option A:</b> Declare pipeline unreliable and rebuild it (too slow).</li>
+<li><b>Option B:</b> Identify pipeline blind spots and patch coverage.</li>
+<li><b>Option C:</b> Freeze release and run full cross‑environment comparison.</li>
+</ul>
+
+<h3>Recommended Decision</h3>
+<p>Choose <b>Option B</b>: patch pipeline blind spots while running targeted vehicle tests. Avoid full rebuild unless systemic issues appear.</p>
+
+<h3>First 24 Hours</h3>
+<ul>
+<li>Reproduce maneuver in SIL/HIL; confirm missing coverage.</li>
+<li>Check calibration–software alignment.</li>
+<li>Audit pipeline for skipped or flaky tests.</li>
+<li>Prepare OEM briefing: root cause hypothesis, coverage gap, fix plan.</li>
+</ul>
+
+<h3>Communication</h3>
+<p>To OEM: “Pipeline is green but coverage gap exists for this maneuver. We are adding targeted tests and validating fixes. Vehicle behavior will be re‑tested within 72 hours.”</p>
+
+<h3>Prevention</h3>
+<ul>
+<li>Add vehicle‑derived maneuvers to regression suite.</li>
+<li>Introduce pipeline coverage dashboards.</li>
+<li>Track calibration–software alignment automatically.</li>
+</ul>
+
+<h3>Tough Follow‑Up</h3>
+<p>Ask test and pipeline leads: “Why did pipeline coverage diverge from vehicle reality? What structural guardrail prevents this again?”</p>
+
+<hr>
+
+<h2>6. Case Study F — Platform Versus Customer Scope <span class="lvl l1">Core</span></h2>
+
+<h3>Facts</h3>
+<p>EPS software is built on a shared platform used by multiple OEMs. One OEM requests a custom steering feel mode requiring platform changes. Platform team says “out of scope.” Customer team says “must deliver.” Conflict escalates.</p>
+
+<h3>Unknowns</h3>
+<ul>
+<li>Is the requested feature truly platform‑level?</li>
+<li>Can it be implemented as OEM‑specific configuration?</li>
+<li>Does platform roadmap allow such changes?</li>
+<li>What does contract say about platform flexibility?</li>
+</ul>
+
+<h3>Options</h3>
+<ul>
+<li><b>Option A:</b> Force platform change (risks other OEMs).</li>
+<li><b>Option B:</b> Implement OEM‑specific extension layer.</li>
+<li><b>Option C:</b> Reject feature (damages relationship).</li>
+</ul>
+
+<h3>Recommended Decision</h3>
+<p>Choose <b>Option B</b>: OEM‑specific extension layer unless platform change is clearly justified and safe.</p>
+
+<h3>First 24 Hours</h3>
+<ul>
+<li>Review interface agreements and platform scope.</li>
+<li>Identify whether feature touches safety‑critical logic.</li>
+<li>Draft extension‑layer proposal with constraints.</li>
+<li>Align with platform and customer teams.</li>
+</ul>
+
+<h3>Communication</h3>
+<p>To OEM: “Feature can be delivered via OEM‑specific extension without impacting other customers. Platform remains stable. Here is the timeline and safety analysis.”</p>
+
+<h3>Prevention</h3>
+<ul>
+<li>Define platform versus OEM scope explicitly.</li>
+<li>Introduce extension‑layer architecture for customization.</li>
+<li>Align platform roadmap with customer expectations.</li>
+</ul>
+
+<h3>Tough Follow‑Up</h3>
+<p>Ask platform lead: “Where is our boundary unclear? How do we prevent future scope conflicts?”</p>
+
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>
