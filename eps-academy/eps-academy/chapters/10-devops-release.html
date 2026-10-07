@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 10: DevOps and release engineering</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 10</div>
+<h1>Chapter 10: DevOps and release engineering</h1>
+<div class="box warn"><b class="tag">Source status</b>Practitioner knowledge. Not yet checked line by line against primary sources. Verify before quoting to a panel.</div>
+<div class="box ok"><b class="tag">Takeaway</b>A green pipeline is evidence. It is not approval. Vehicle readiness is a separate decision.</div>
+<h2>1. What DevOps means for an ECU <span class="lvl l1">Core</span></h2>
+<p><b>Continuous integration</b> merges and tests changes often. <b>Continuous delivery</b> keeps every build releasable. <b>Continuous deployment</b> pushes to users automatically. Steering ECUs do not do the last one. Flashing a vehicle needs hardware validation, safety release decisions and customer approval. So the goal is a pipeline that produces a trustworthy release candidate on demand.</p>
+<h2>2. The release pipeline <span class="lvl l2">Level 2</span></h2>
+<div class="flow"><span>Commit</span><i>&rarr;</i><span>Build</span><i>&rarr;</i><span>Static analysis</span><i>&rarr;</i><span>Unit tests</span><i>&rarr;</i><span>SIL</span><i>&rarr;</i><span>Security scan</span><i>&rarr;</i><span>HIL</span><i>&rarr;</i><span>Evidence pack</span><i>&rarr;</i><span>Sign and promote</span></div>
+<table><tr><th>Stage</th><th>Purpose</th><th>Typical timing</th></tr>
+<tr><td>Build</td><td>Cross-compile with a pinned compiler and tool versions</td><td>Every commit</td></tr>
+<tr><td>Static analysis</td><td>Coding-rule and defect checks (for example MISRA rules)</td><td>Every commit</td></tr>
+<tr><td>Unit tests, coverage</td><td>Fast logic checks</td><td>Every commit</td></tr>
+<tr><td>SIL (software-in-the-loop)</td><td>Run code against a simulated plant</td><td>Every merge</td></tr>
+<tr><td>Security scan, SBOM, license check</td><td>Find vulnerable or disallowed dependencies</td><td>Every merge</td></tr>
+<tr><td>HIL (hardware-in-the-loop)</td><td>Run on real ECU hardware with a simulated vehicle</td><td>Nightly, release candidates</td></tr>
+<tr><td>Evidence pack</td><td>Collect results with the exact build identity</td><td>Release candidate</td></tr></table>
+<h2>3. What makes it trustworthy <span class="lvl l3">Level 3</span></h2>
+<ul><li><b>Reproducible build:</b> same source and tools give the same binary. Without it, evidence cannot be tied to what ships.</li>
+<li><b>Baseline:</b> a frozen set of source, tools, configuration and calibration, with an identifier.</li>
+<li><b>Immutable artifacts:</b> a built binary is promoted, never rebuilt, between stages.</li>
+<li><b>Provenance and signing:</b> record who built what, and sign the result.</li>
+<li><b>Quality gates:</b> automatic checks block a merge or promotion. Manual approval is for decisions that need judgment, such as releasing with a deviation.</li></ul>
+<h2>4. Why green is not ready <span class="lvl l3">Level 3</span></h2>
+<div class="box warn"><b class="tag">Failure case</b>All checks pass. The vehicle shows a steering oscillation at low temperature. The simulated plant did not model friction at cold. Lesson: test environments have fidelity limits. Know what each stage cannot see, and keep vehicle validation in the plan.</div>
+<p>Also check: flaky tests that were rerun until green, gates that were skipped, and results from a different build than the one shipping.</p>
+<h2>5. Metrics and maturity</h2>
+<p>Track build time, pipeline failure causes, flaky-test rate, time to repair a broken pipeline, release lead time and defects found after release. Adapt DORA's ideas, but do not count customer deployments, because there are none.</p>
+<table><tr><th>Level</th><th>Looks like</th></tr>
+<tr><td>1 Manual</td><td>Builds on laptops, evidence assembled by hand</td></tr>
+<tr><td>2 Automated build</td><td>Shared CI, tests partly automated</td></tr>
+<tr><td>3 Gated</td><td>Blocking gates, baselines, reproducible builds</td></tr>
+<tr><td>4 Evidence-driven</td><td>Evidence packs generated automatically and traceable</td></tr></table>
+<h2>6. Questions a leader asks in a DevOps review</h2>
+<ul><li>Can we rebuild the shipped binary bit for bit?</li><li>What does HIL not cover?</li><li>How long does a broken pipeline stay broken?</li><li>Who can bypass a gate, and is it logged?</li></ul>
+<div class="box test"><b class="tag">What the interviewer tests</b>Whether you know automation shortens evidence collection but does not replace release judgment.</div>
+<h2>7. Self-check and exercise</h2>
+<label class="chk"><input type="checkbox"> I can say why automotive does not do continuous deployment.</label>
+<label class="chk"><input type="checkbox"> I can explain reproducible build and baseline.</label>
+<label class="chk"><input type="checkbox"> I can name what a green pipeline cannot prove.</label>
+<p><b>Exercise:</b> Customer asks for a release in two days; HIL is red on one flaky test. <i>Notes:</i> do not rerun until green. Classify the failure, check the build identity, ask the test owner for root cause, and give the customer a date range with the evidence still needed.</p>
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

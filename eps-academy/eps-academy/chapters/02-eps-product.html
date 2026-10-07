@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 02: Electronic power steering fundamentals</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 02</div>
+<h1>Chapter 02: Electronic power steering fundamentals</h1>
+<div class="box warn"><b class="tag">Source status</b>Written from practitioner knowledge. Not yet verified line by line against primary sources; confirm standards details before quoting them to a panel.</div>
+<div class="box ok"><b class="tag">One-page cheat sheet</b>EPS replaces hydraulic assist with an electric motor. Driver torque and vehicle speed go into an assist map; the output is a motor torque, delivered through closed-loop current control. Safety hazards are wrong assist (unintended, reversed, oscillating) and lost assist. Software leaders must know the signal chain, the degraded modes and where evidence comes from, not the control math. Print this page for the cheat sheet.</div>
+<h2>1. What steering must do <span class="lvl l1">Core</span></h2>
+<p>Steering turns driver intent into wheel angle, gives the driver feedback about the road, and stays controllable at every speed, even when something fails. Power assist exists because parking a heavy car with no assist takes high effort, but too much assist at speed feels vague and unsafe. So assist must vary with speed.</p>
+<h2>2. Four generations of assist <span class="lvl l1">Core</span></h2>
+<table><tr><th>Type</th><th>How it works</th><th>Trade-off</th></tr>
+<tr><td>Manual</td><td>Mechanical link only</td><td>No assist, heavy at low speed</td></tr>
+<tr><td>Hydraulic (HPS)</td><td>Engine-driven pump, fluid pressure assists</td><td>Pump drags the engine even when not steering</td></tr>
+<tr><td>Electro-hydraulic (EHPS)</td><td>Electric motor drives the pump</td><td>Still hydraulics, complex</td></tr>
+<tr><td>Electric (EPS)</td><td>Motor applies torque directly, controlled by software</td><td>Efficient and tunable; software and safety now dominate</td></tr></table>
+<p>EPS is categorized by where the motor acts: column (C-EPS), pinion (P-EPS), dual pinion (DP-EPS) and rack (R-EPS). Heavier vehicles and higher loads tend to use motors closer to the rack. Treat this as a conceptual rule; applications vary.</p>
+<h2>3. Signal flow <span class="lvl l2">Level 2</span></h2>
+<div class="flow"><span>Driver torque sensor</span><i>+</i><span>Vehicle speed (CAN)</span><i>&rarr;</i><span>Assist map</span><i>&rarr;</i><span>Torque command</span><i>&rarr;</i><span>Current controller</span><i>&rarr;</i><span>Inverter PWM</span><i>&rarr;</i><span>Motor</span><i>&rarr;</i><span>Rack</span></div>
+<p>Inputs: torque across a torsion bar, steering angle, vehicle speed, motor rotor position, phase currents, supply voltage and temperature. The <b>assist map</b> converts driver torque and speed into a requested assist torque. An inner loop controls motor current fast (typically thousands of times per second) so delivered torque follows the request. Sensor signals are conditioned (filtered, scaled) and checked for plausibility, for example a redundant torque signal must agree with its twin.</p>
+<h2>4. What makes it feel like a car <span class="lvl l2">Level 2</span></h2>
+<table><tr><th>Function</th><th>Purpose</th></tr>
+<tr><td>Returnability / active return</td><td>Wheel returns to center after a turn</td></tr>
+<tr><td>Damping</td><td>Prevents oscillation and kickback</td></tr>
+<tr><td>Friction compensation</td><td>Hides mechanical friction for smooth feel</td></tr>
+<tr><td>Pull-drift compensation</td><td>Corrects constant pull from road camber or alignment</td></tr></table>
+<p><b>Steering feel</b> is subjective, tuned by <b>calibration</b>: parameter sets that differ by vehicle. This is why customer acceptance of feel is a delivery risk, not just an engineering one.</p>
+<h2>5. Failure and degraded modes <span class="lvl l3">Level 3</span></h2>
+<table><tr><th>Failure</th><th>Effect</th><th>Typical response</th></tr>
+<tr><td>Loss of assist</td><td>Steering becomes heavy; mechanical link remains</td><td>Warn driver, controlled fade-out</td></tr>
+<tr><td>Unintended assist</td><td>Wheel pulls without driver input</td><td>Detect fast, shut down or limit</td></tr>
+<tr><td>Oscillation</td><td>Wheel shakes</td><td>Damping, limit, shut down</td></tr>
+<tr><td>Sensor or communication fault</td><td>Bad input to the map</td><td>Plausibility check, fallback signal, degrade</td></tr>
+<tr><td>Thermal or low voltage</td><td>Limited motor capability</td><td>Reduce assist gradually, warn</td></tr></table>
+<div class="box warn"><b class="tag">Why abrupt shutdown is a risk</b>Dropping assist suddenly at speed or mid-corner can itself surprise the driver. Degraded behavior is designed to fade, which is why it needs vehicle-level validation, not only bench tests.</div>
+<h2>6. Why it matters to a manager</h2>
+<p>Wrong assist is generally treated as the most severe failure class, so safety mechanisms, timing and evidence dominate schedule. Calibration and vehicle integration consume the end of the program. Interfaces (CAN speed signal, power supply, vehicle modes) are owned by the OEM, so late signal changes become customer escalations.</p>
+<h2>7. What you must know versus leave to specialists <span class="lvl l2">Level 2</span></h2>
+<table><tr><th>You must know</th><th>Leave to specialists</th></tr>
+<tr><td>Signal chain, degraded modes, hazards, calibration role</td><td>Control tuning, motor math, filter design</td></tr>
+<tr><td>Which failures are safety-relevant</td><td>Safety mechanism design</td></tr>
+<tr><td>Interfaces that drive customer risk</td><td>Detailed communication stack configuration</td></tr></table>
+<h2>8. Interview use <span class="lvl l3">Level 3</span></h2>
+<div class="cmp"><div class="box bad"><b class="tag">Weak</b>"EPS uses a motor and software to help the driver steer, and safety is very important."</div>
+<div class="box ok"><b class="tag">Strong</b>"The key hazards are wrong assist and lost assist. Wrong assist is more severe because it acts against driver intent, so detection time and safe-state behavior drive the software design and the evidence I would want before release."</div></div>
+<div class="box test"><b class="tag">What the interviewer tests</b>Whether you can describe the failure modes that justify the process, not whether you can recite the architecture.</div>
+<h2>9. Self-check and exercise</h2>
+<label class="chk"><input type="checkbox"> I can trace driver torque to motor torque and name the checks along the way.</label>
+<label class="chk"><input type="checkbox"> I can explain why unintended assist is worse than loss of assist.</label>
+<label class="chk"><input type="checkbox"> I can say why degraded modes need vehicle validation.</label>
+<p><b>Exercise:</b> Two customers want different steering feel for the same platform software. How do you decide what is calibration and what is a software change? <i>Notes:</i> keep behavior differences in parameters where possible, treat each software change as a safety-impact question, and ask the architect and safety manager before promising it.</p>
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

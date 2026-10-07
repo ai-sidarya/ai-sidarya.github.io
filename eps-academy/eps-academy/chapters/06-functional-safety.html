@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 06: Functional safety and ASIL D</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 06</div>
+<h1>Chapter 06: Functional safety and ASIL D</h1>
+<div class="box warn"><b class="tag">Source status</b>Written from practitioner knowledge. Not yet verified line by line against primary sources; confirm standards details before quoting them to a panel.</div>
+<h2>1. The core idea <span class="lvl l1">Core</span></h2>
+<p><b>Functional safety</b> is the discipline of preventing unreasonable risk from malfunctioning electronic behavior. ISO 26262 is the automotive standard. It does not tell you how to design EPS; it tells you how to show that you identified the hazards, built mechanisms against them, and verified the result.</p>
+<div class="flow"><span>Item definition</span><i>&rarr;</i><span>Hazard analysis (HARA)</span><i>&rarr;</i><span>Safety goals</span><i>&rarr;</i><span>Safety concept</span><i>&rarr;</i><span>Requirements</span><i>&rarr;</i><span>Verification</span><i>&rarr;</i><span>Safety case</span></div>
+<h2>2. How ASIL is assigned <span class="lvl l2">Level 2</span></h2>
+<p>For each hazardous event, rate <b>severity</b> (how bad the harm), <b>exposure</b> (how often the situation occurs) and <b>controllability</b> (can the driver avoid harm). The combination gives QM (no special measures) or ASIL A through D, with D the most stringent. The ratings come from the project's analysis; no function has a built-in ASIL.</p>
+<table><tr><th>Illustrative EPS event</th><th>S</th><th>E</th><th>C</th><th>Reasoning</th></tr>
+<tr><td>Unintended assist at highway speed</td><td>High</td><td>High</td><td>Hard to control</td><td>Often discussed as the highest class; the project's HARA decides</td></tr>
+<tr><td>Loss of assist in parking</td><td>Low</td><td>Moderate</td><td>Easy</td><td>Much lower class</td></tr></table>
+<div class="box warn"><b class="tag">Do not overclaim</b>Never say "everything in EPS is ASIL D." The label applies to a safety goal and flows to the requirements that implement it. Some software is QM, and mixed-criticality code needs <b>freedom from interference</b>: proof that lower-class code cannot corrupt higher-class code.</div>
+<h2>3. Safety goals to mechanisms <span class="lvl l3">Level 3</span></h2>
+<p><b>Safety goal</b> (example): the system shall not apply unintended assist torque above a threshold. <b>Safe state</b> is the condition with acceptable risk after a fault, for EPS usually a controlled reduction or removal of assist. A <b>fault tolerant time interval</b> is how long a fault may exist before it must be handled. A <b>safety mechanism</b> detects or controls faults, for example an independent monitor that compares commanded and measured motor torque and trips shutdown within the time interval. Hardware faults that would stay hidden are <b>latent faults</b>, which is why self-tests exist.</p>
+<p><b>ASIL decomposition</b> splits a requirement across independent elements of lower class. It only works if the elements are truly independent, which is tested by <b>dependent-failure analysis</b>. Treat claimed decomposition with skepticism until independence is shown.</p>
+<h2>4. Evidence and who owns it <span class="lvl l2">Level 2</span></h2>
+<table><tr><th>Artifact</th><th>Purpose</th></tr>
+<tr><td>Safety plan</td><td>What activities and roles this project commits to</td></tr>
+<tr><td>Safety analyses (FMEA, FTA, DFA)</td><td>Show how faults lead to hazards</td></tr>
+<tr><td>Verification results</td><td>Prove requirements are met</td></tr>
+<tr><td>Confirmation reviews, audit, assessment</td><td>Independent checks of the work</td></tr>
+<tr><td>Safety case</td><td>The argument that the product is acceptably safe, pointing to evidence</td></tr></table>
+<p>The safety manager owns the safety argument. The project leader owns planning the work and its resources, and escalates when evidence is missing. Tools used in development need <b>confidence</b> (classification, and qualification where needed) because a faulty compiler or test tool can invalidate evidence.</p>
+<h2>5. Release with missing evidence <span class="lvl l4">Level 4</span></h2>
+<p>You cannot declare safety evidence complete when it is not. Your options: reduce scope to what is covered, stage the release (for example a limited vehicle program), or ship with a documented deviation and residual-risk acceptance signed by the safety manager and the customer. What you must not do is pressure the evidence. Tell the customer early, with a date range for the missing items.</p>
+<p><b>Agile and safety:</b> they coexist if safety activities run every iteration (analysis updates, traceability, change-impact), not in a final phase. Fast delivery does not remove evidence; it requires automating the collection.</p>
+<h2>6. Interview use <span class="lvl l3">Level 3</span></h2>
+<div class="cmp"><div class="box bad"><b class="tag">Weak</b>"We follow ISO 26262 and everything is ASIL D, so we test a lot."</div>
+<div class="box ok"><b class="tag">Strong</b>"Classification sits on each safety goal. For unintended assist I would ask for the HARA rationale, the detection time against the fault tolerant interval, and independent evidence that the monitor works. If any is missing I change scope or plan, not the evidence."</div></div>
+<div class="box test"><b class="tag">What the interviewer tests</b>Whether you protect safety under date pressure and whether you can name evidence, not slogans.</div>
+<h2>7. Self-check and exercise</h2>
+<label class="chk"><input type="checkbox"> I can explain S, E, C and why ASIL is per hazard.</label>
+<label class="chk"><input type="checkbox"> I can define safe state and fault tolerant time interval with an EPS example.</label>
+<label class="chk"><input type="checkbox"> I can state three options when evidence is late.</label>
+<p><b>Exercise:</b> Two weeks before the customer milestone, the independence analysis for a decomposed requirement is incomplete. <i>Notes:</i> do not release as ASIL-decomposed; ask the safety manager for the minimum evidence, offer the customer a staged scope, communicate a date range, and record the decision.</p>
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

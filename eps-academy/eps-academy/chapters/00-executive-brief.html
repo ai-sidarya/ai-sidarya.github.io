@@ -1,0 +1,71 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>00 Role and interview strategy</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 00</div>
+<div class="box warn"><b class="tag">Source status</b>Role and process framing in this chapter is practitioner judgment, not drawn from a standard. Check the actual job posting (Chapter 01) before relying on the role table.</div>
+<h1>Chapter 00: Role and interview strategy</h1>
+
+<h2>1. What this role owns <span class="lvl l1">Level 1</span></h2>
+<p>A Lead Software Engineering Manager is accountable for one outcome: software that meets its technical content, quality, safety and security evidence, and date, delivered to a customer who trusts the team. The role owns delivery commitments, the staffing and health of globally distributed teams, and the customer relationship. It does not own every technical decision. Architecture belongs to the architect, safety argument to the safety manager, control behavior to the controls specialists. The manager owns the system that makes those people effective and the decision when their interests collide.</p>
+<table><tr><th>Role</th><th>Primary question it answers</th><th>Typical limit</th></tr>
+<tr><td>Project manager</td><td>Are scope, schedule, cost on plan?</td><td>Often no authority over technical content</td></tr>
+<tr><td>Software project manager</td><td>Same, with software release and dependency knowledge</td><td>Delivery focus, light on people growth</td></tr>
+<tr><td>Engineering manager</td><td>Is the team capable, staffed, and delivering well?</td><td>May not own customer commitments</td></tr>
+<tr><td>Technical lead</td><td>Is this component built correctly?</td><td>Scope of one team or area</td></tr>
+<tr><td>Architect</td><td>Does the structure meet quality attributes over time?</td><td>Not accountable for dates</td></tr>
+<tr><td>Product manager</td><td>What should be built and why?</td><td>Not accountable for how</td></tr>
+<tr><td>Program manager</td><td>Do multiple projects align to one outcome?</td><td>Coordination more than execution</td></tr></table>
+<p>The target role blends engineering manager and delivery owner, with heavy customer exposure. Exact scope varies by organization, so treat this as a likely interview consideration, not private knowledge of Bosch.</p>
+
+<h2>2. Technical authority versus delivery accountability <span class="lvl l2">Level 2</span></h2>
+<p>Technical authority is the right to decide how the product is built. Delivery accountability is answering for whether it ships. When they sit with different people, conflicts follow: the architect wants a refactor, the customer wants the date. A credible leader makes decision rights explicit: the architect decides the technical option space, the safety manager can block a release on evidence, and the manager decides sequencing, trade-offs and what is told to the customer. You cannot waive safety evidence for a date. You can negotiate scope, stage the release, or ship with documented residual risk and the safety manager's sign-off. And you never hide behind technical authority to avoid a commitment conversation.</p>
+<div class="box"><b class="tag">Expected depth for a non-daily-coder</b>You should read a design, follow a code review discussion, question a timing budget, and know why volatile, interrupt latency or freedom from interference matter. You should not be expected to write the fix. The test is whether your questions improve engineering decisions.</div>
+
+<h2>3. Transferring your hardware program experience <span class="lvl l2">Level 2</span></h2>
+<p>Hardware programs run on gated milestones, long lead times, tooling commitments and expensive late change. That discipline transfers directly: baseline control, change-impact thinking, supplier and customer escalation, risk registers with real mitigation, and cross-functional integration. The difference is that software changes cheaply but fails invisibly, so evidence, traceability and test environment fidelity replace physical inspection. Frame it as: <i>I know how to protect a date when late change is expensive; software lets me apply that with faster feedback.</i></p>
+
+<h2>4. The software gap: say it once, plainly <span class="lvl l3">Level 3</span></h2>
+<div class="cmp"><div class="box bad"><b class="tag">Weak</b>"I know I have been away from software for a while, so I am still catching up, but I learn fast."</div>
+<div class="box ok"><b class="tag">Executive answer</b>"My last decade was leading hardware programs through customer gates. Before that I worked in software. Recently I [state ONE verifiable thing you actually did: read a real release pipeline, shadowed a safety review, ran a Copilot trial], and I use that to ask engineers sharper questions. I rely on technical leads for design depth and hold myself accountable for evidence and dates."</div></div>
+<div class="box bad"><b class="tag">Evidence before the line</b>This answer only works if the bracket is filled with something real that you can discuss for two follow-up questions. If you have nothing yet, do one this week before the interview: walk through a real pipeline run, or sit in on a safety or release review. Then use the line.</div>
+<div class="box warn"><b class="tag">Do not overclaim</b>Do not claim recent hands-on AUTOSAR configuration, MISRA tooling or GitHub Actions authoring unless true. A senior engineer will probe once, and a bluff costs you the whole interview.</div>
+
+<h2>5. Earning engineer trust <span class="lvl l2">Level 2</span></h2>
+<ul><li>Ask for the reasoning, not reassurance: "What would make you change this design?"</li>
+<li>Protect engineers from noise: absorb customer pressure, pass on facts and decisions.</li>
+<li>Decide on what is yours at the speed the risk allows, and say why. Long decision latency erodes trust, but a rushed decision on safety content is worse than a slow one.</li>
+<li>Admit what you do not know, then close it by a stated time.</li>
+<li>Never pretend to be the architect. Say "that is the architect's call; here is the constraint I need honored."</li></ul>
+
+<h2>6. Answering "Why software now?" and "Why should engineers trust you?" <span class="lvl l3">Level 3</span></h2>
+<p><b>Why software now:</b> "The value and the risk in steering has moved to software. Schedule and quality problems now start in integration, release evidence and dependencies, which are exactly the places where my program discipline is most useful."</p>
+<p><b>Why trust you:</b> "Because I make decisions with evidence, tell customers the truth including bad news, and do not trade safety evidence for dates. Judge me by whether my teams' commitments hold."</p>
+
+<h2>7. Introductions <span class="lvl l2">Level 2</span></h2>
+<div class="box"><b class="tag">30 seconds</b>I have 20 years in automotive, the last ten leading hardware programs with global teams and OEM customers, after earlier software work. I lead delivery of complex products through escalation, safety-driven gates and tight dates, and I am moving into leading software-intensive, safety-critical products where that discipline now matters most.</div>
+<div class="box"><b class="tag">90 seconds adds</b>One concrete program: your scope, team size and regions, the customer milestone, a problem that nearly slipped it, what you decided and the measured result. Then one sentence on how you have built current software and AI-delivery knowledge.</div>
+<div class="box"><b class="tag">3 minutes adds</b>A second story showing people leadership, and a forward view: what you would assess in the first 90 days (release evidence, dependency age, decision latency, customer confidence) before changing anything.</div>
+
+<h2>8. Five stories to prepare <span class="lvl l3">Level 3</span></h2>
+<ol><li><b>Customer escalation recovered:</b> facts, containment, recovery plan, restored trust.</li>
+<li><b>Hard trade-off under a fixed date:</b> what you cut, what you refused to cut.</li>
+<li><b>Team or conflict leadership:</b> cross-site or cross-function disagreement resolved.</li>
+<li><b>Failure you owned:</b> what you got wrong, what changed systemically.</li>
+<li><b>Process or technology improvement with numbers:</b> baseline, intervention, result.</li></ol>
+<p>Use an extended STAR: Situation, Task, your Actions (say "I" for decisions), Result with a number, then <i>what I would do differently</i>. Avoid "we did everything"; interviewers listen for your decisions.</p>
+
+<h2>9. Structuring technical answers <span class="lvl l3">Level 3</span></h2>
+<div class="flow"><span>Clarify the context</span><i>&rarr;</i><span>State principle</span><i>&rarr;</i><span>Apply to EPS</span><i>&rarr;</i><span>Trade-off</span><i>&rarr;</i><span>What I would ask the team</span></div>
+<p>If you do not know: "I have not implemented that directly. My understanding is X. I would confirm with the architect by checking Y." That is credible. Guessing confidently is not.</p>
+<div class="box test"><b class="tag">What the interviewer is testing</b>Authenticity (do your stories hold under a second question), technical depth (do you know where your knowledge ends), and judgment (do you protect safety and customer trust at once).</div>
+<div class="box warn"><b class="tag">Technical rabbit hole</b>Do not volunteer register-level detail to impress. Go deeper only when asked, and stop at the level you can defend for two follow-ups.</div>
+
+<h2>10. Self-check <span class="lvl l2">Level 2</span></h2>
+<label class="chk"><input type="checkbox"> I can state who decides what between manager, architect and safety manager.</label>
+<label class="chk"><input type="checkbox"> I have a 30-second introduction and a gap answer I can say without defensiveness.</label>
+<label class="chk"><input type="checkbox"> I have five stories with numbers and my own decisions.</label>
+<label class="chk"><input type="checkbox"> I have rehearsed an honest "I do not know" answer.</label>
+<h2>11. Exercise and notes</h2>
+<p><b>Exercise:</b> An interviewer asks, "You have not written code in ten years. How would you handle a disagreement between a senior engineer and the architect about a timing budget?"</p>
+<div class="box ok"><b class="tag">Answer notes</b>Do not choose a side technically. Ask both for the evidence (measured worst-case execution time, margin, what fails if the budget is wrong), set a decision date, route to the architect for the call within safety constraints, and tell the customer only the schedule consequence. Name the metric you would watch: resource margin trend.</div>
+<h2>12. Executive takeaway</h2>
+<p>You are an engineering executive who is accountable for delivery and evidence. You earn credibility through the quality of your questions and decisions. You state your gap once and without apology. You prepare stories that show your own judgment. You do not waive safety evidence for a date; you change scope or plan instead.</p>
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>

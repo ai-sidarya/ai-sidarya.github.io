@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 09: Agile, SAFe and lean flow</title><link rel="stylesheet" href="../assets/styles.css"></head><body><main>
+<div class="crumbs"><a href="../index.html">Home</a> / Chapter 09</div>
+<h1>Chapter 09: Agile, SAFe and lean flow</h1>
+<div class="box warn"><b class="tag">Source status</b>Practitioner knowledge. Not yet checked line by line against primary sources. Verify before quoting to a panel.</div>
+<div class="box ok"><b class="tag">Takeaway</b>Dates slip in queues, not in effort. Fix the system, not the people.</div>
+<h2>1. Agile in safety-critical work <span class="lvl l1">Core</span></h2>
+<p>Agile means short feedback loops. It does not mean less evidence. Safety, security and traceability work run every iteration. Not at the end.</p>
+<p><b>Definition of Done</b> must include evidence: tests passed, trace links updated, change impact reviewed. If Done skips evidence, you are deferring risk to the release.</p>
+<h2>2. Why team Scrum is not enough <span class="lvl l2">Level 2</span></h2>
+<p>Scrum works inside one team. Steering software has many teams, shared platform code, hardware samples and customer gates. Most delays sit between teams. That is what SAFe tries to manage.</p>
+<h2>3. SAFe in one page <span class="lvl l2">Level 2</span></h2>
+<table><tr><th>Term</th><th>What it is</th></tr>
+<tr><td>Agile Release Train (ART)</td><td>A standing group of teams that plan and deliver together</td></tr>
+<tr><td>Program Increment (PI)</td><td>A planning period, typically 8 to 12 weeks</td></tr>
+<tr><td>PI Planning</td><td>Shared planning event where teams commit to objectives and expose dependencies</td></tr>
+<tr><td>Enabler</td><td>Work that builds architecture, tooling or compliance rather than customer features</td></tr>
+<tr><td>Architectural runway</td><td>Enablers delivered ahead of the features that need them</td></tr>
+<tr><td>Release Train Engineer</td><td>Facilitates the train: cadence, risks, dependencies</td></tr>
+<tr><td>Inspect and Adapt</td><td>End-of-PI demo and problem-solving workshop</td></tr>
+<tr><td>ROAM</td><td>Risk handling: Resolved, Owned, Accepted, Mitigated</td></tr></table>
+<p>Hardware and software run on different cadences. Hardware samples arrive on fixed dates. Plan software integration around them, not around sprint boundaries.</p>
+<h2>4. Flow: where time actually goes <span class="lvl l3">Level 3</span></h2>
+<ul><li><b>WIP:</b> work started but not finished. More WIP means slower finishing.</li>
+<li><b>Flow efficiency:</b> time someone works on an item divided by total elapsed time. Often below 20%. The rest is waiting.</li>
+<li><b>Decision latency:</b> time a decision waits for an owner.</li>
+<li><b>Dependency age:</b> how long a cross-team request has been open.</li>
+<li><b>Batch size:</b> big releases hide defects and delay feedback.</li>
+<li><b>Cost of delay:</b> what one week of delay costs. Use it to rank work.</li></ul>
+<div class="box warn"><b class="tag">Why 100% utilization causes slips</b>When people are fully loaded, any surprise queues behind existing work. Waiting time grows sharply as load nears 100%. Keep deliberate slack for defects and customer changes.</div>
+<h2>5. Fixed date, variable scope <span class="lvl l3">Level 3</span></h2>
+<p>For a customer gate, fix the date and quality bar. Flex scope. Rank features by customer value and cost of delay, and agree in advance which ones drop. Never flex safety evidence.</p>
+<p><b>Velocity</b> is a planning aid for one team. Never use it to compare teams or rate people. Teams will inflate it, and trust will go.</p>
+<h2>6. Interview use</h2>
+<div class="cmp"><div class="box bad"><b class="tag">Weak</b>"We run SAFe and hold PI planning, so we deliver on time."</div>
+<div class="box ok"><b class="tag">Strong</b>"Ceremonies do not create agility. I look at dependency age, WIP and decision latency. Those predict slips before the burndown does."</div></div>
+<div class="box test"><b class="tag">What the interviewer tests</b>Whether you treat SAFe as a tool and can diagnose delay with flow data.</div>
+<h2>7. Self-check and exercise</h2>
+<label class="chk"><input type="checkbox"> I can explain why high utilization causes slips.</label>
+<label class="chk"><input type="checkbox"> I can name three flow metrics and what each tells me.</label>
+<label class="chk"><input type="checkbox"> I can explain fixed date, variable scope without touching safety.</label>
+<p><b>Exercise:</b> Teams show 95% utilization and keep missing PI objectives. <i>Notes:</i> map one feature from idea to release and mark waiting time. Check WIP, dependency age and decision latency. Cut WIP, add slack, assign owners to old dependencies, then re-measure.</p>
+<div class="pn"></div></main><script src="../assets/app.js"></script></body></html>
