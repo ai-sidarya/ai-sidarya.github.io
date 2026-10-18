@@ -289,6 +289,12 @@
       transition: background 0.2s;
     }
     .cta-link:hover { background: var(--gold-dim); }
+    .cta-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
     .cta-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
 
     /* ── footer ── */
@@ -505,9 +511,17 @@
         <h2 class="cta-headline">
           Building something that <em>matters</em>?<br>Let's talk.
         </h2>
-        <a href="https://linkedin.com/in/thesidarya" class="cta-link" target="_blank" rel="noopener noreferrer">
-          CONNECT ON LINKEDIN &nbsp;→
-        </a>
+        <div class="cta-links">
+          <a href="https://linkedin.com/in/thesidarya" class="cta-link" target="_blank" rel="noopener noreferrer">
+            CONNECT ON LINKEDIN &nbsp;→
+          </a>
+          <a href="https://www.instagram.com/sidtecharya" class="cta-link" target="_blank" rel="noopener noreferrer">
+            INSTAGRAM &nbsp;→
+          </a>
+          <a href="https://x.com/SidTechArya" class="cta-link" target="_blank" rel="noopener noreferrer">
+            X &nbsp;→
+          </a>
+        </div>
       </div>
     </section>
 
