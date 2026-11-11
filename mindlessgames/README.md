@@ -11,6 +11,8 @@ mindlessgames/
 │   └── index.html        # Game 1 — touch/gesture reflex game
 ├── quiz-climb/
 │   └── index.html        # Game 2 — trivia ladder game (Open Trivia DB powered)
+├── trust-meter/
+│   └── index.html        # Game 3 — AI-safety judgment game (Trust / Check / Reject)
 └── shared/                # Reserved for any assets shared across games
     └── (fonts, shared CSS/JS, etc. as the collection grows)
 ```
