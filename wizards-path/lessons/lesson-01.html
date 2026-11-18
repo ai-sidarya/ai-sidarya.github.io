@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 1 · Know Your Board Self — The Wizard's Path</title>
+<meta name="description" content="A 60-minute lesson: discover your natural chess personality, your superpower and your growth edge.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-lesson="1">
+
+<header class="topbar">
+  <a class="brand" href="../index.html">The Wizard's Path</a>
+  <nav>
+    <a href="../index.html">All lessons</a>
+    <a href="lesson-02.html">Lesson 2 →</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<section class="lesson-head">
+  <div class="kicker">Lesson 1 of 5 · 60 minutes</div>
+  <h1>Know Your Board Self</h1>
+  <p class="lede">Before you improve your chess, meet the player who is making the moves.</p>
+  <div class="chips">
+    <span class="chip gold"><b>Chess skill</b> · Understanding your natural style</span>
+    <span class="chip gold"><b>Character muscle</b> · Self-awareness</span>
+  </div>
+  <nav class="jump" aria-label="Lesson sections">
+    <a href="#centre">1 Centre</a><a href="#idea">2 The Idea</a><a href="#assess">3 Assess</a><a href="#play">4 Play &amp; Observe</a><a href="#reflect">5 Reflect</a><a href="#deeper">Go deeper</a>
+  </nav>
+</section>
+
+<!-- STORY -->
+<section class="story" aria-label="Story from the Mahabharata">
+  <div class="story-tag">From the Mahabharata · Arjuna's doubt</div>
+  <p>On the field of Kurukshetra, two great armies stood ready. The archer Arjuna asked his charioteer and friend, Krishna, to drive him between them. He looked at the faces on both sides: teachers, cousins, friends. His hands shook and his bow slipped. In that moment he did not know who he was meant to be.</p>
+  <p>Krishna did not hand him a new weapon. He helped Arjuna see his own nature clearly, so that he could act from it.</p>
+  <p class="turn"><strong>The chess lesson:</strong> before you improve your play, understand the player. Today you meet your own nature on the board.</p>
+</section>
+
+<!-- 1 CENTRE -->
+<section class="step" id="centre">
+  <div class="step-head"><h2>1 · Centre</h2><span class="time">3 min</span></div>
+  <p class="wisdom">The board is a mirror. It never flatters and never lies.</p>
+  <ol>
+    <li>Sit tall. Three slow breaths: in through the nose for 4, out for 6.</li>
+    <li>Say it once, out loud or in your head: <em>"I am here to learn who I am as a player."</em></li>
+    <li>Agree with yourself: honest answers beat flattering ones. There are no wrong results today.</li>
+  </ol>
+</section>
+
+<!-- 2 IDEA -->
+<section class="step" id="idea">
+  <div class="step-head"><h2>2 · The Idea</h2><span class="time">7 min</span></div>
+  <p>Every move you play is a choice. Repeated choices become habits. Habits become <strong>style</strong>. You already have one, whether you know it or not.</p>
+  <p>Three truths guide this whole path:</p>
+  <ol>
+    <li><strong>Your strength and your weakness are the same trait.</strong> Courage, overused, becomes recklessness. Caution, overused, becomes passivity.</li>
+    <li><strong>Champions are not copies.</strong> The greats played very differently. Each sharpened the player they already were.</li>
+    <li><strong>Mastery has two steps:</strong> sharpen your strength until it is a weapon, then train the edge you avoid until it stops controlling you.</li>
+  </ol>
+  <p>Today's map has four board personalities, each with a guide from the Mahabharata. Most players are a blend of two.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Type</th><th>Plays like</th><th>Loves</th><th>Shadow</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--storm)">The Storm</strong><br><span class="hero-name">Bhima</span></td><td>Initiative, attack, sacrifice</td><td>Open lines, king hunts</td><td>Rushes, attacks before it's ready</td></tr>
+      <tr><td><strong style="color:var(--fortress)">The Fortress</strong><br><span class="hero-name">Bhishma</span></td><td>Safety, solidity, patience</td><td>Clean structure, no weaknesses</td><td>Passive, fears risk</td></tr>
+      <tr><td><strong style="color:var(--architect)">The Architect</strong><br><span class="hero-name">Drona</span></td><td>Plans, pawn structure, slow squeeze</td><td>Perfect piece placement</td><td>Overthinks, misses the short tactic</td></tr>
+      <tr><td><strong style="color:var(--fox)">The Fox</strong><br><span class="hero-name">Krishna's art</span></td><td>Tactics, timing, counter-strike</td><td>Traps, swindles, chaos</td><td>"Hope chess," drifting plans</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">This is a playful mirror, not a scientific test. It describes how you play <em>today</em>. Retake it in 30 days and watch yourself grow.</p>
+</section>
+
+<!-- 3 ASSESS -->
+<section class="step" id="assess">
+  <div class="step-head"><h2>3 · Assess</h2><span class="time">15 min</span></div>
+  <p><strong>Part A.</strong> Twelve moments. Choose the answer that is most like <em>you</em>, not the one you wish was you.</p>
+
+  <form id="assessment-form" autocomplete="off">
+    <div id="questions"></div>
+
+    <p><strong>Part B.</strong> Five inner dials. Slide each from 1 (rarely) to 5 (almost always) for how you really are at the board.</p>
+    <div id="dials"></div>
+
+    <div class="row">
+      <button class="btn" type="submit">Reveal my Board Self</button>
+      <button class="btn ghost" type="button" id="reset-assessment">Clear answers &amp; restart</button>
+    </div>
+    <p id="msg" role="status" style="color:var(--storm);font-weight:600"></p>
+  </form>
+
+  <div class="result" id="result" hidden></div>
+</section>
+
+<!-- 4 PLAY -->
+<section class="step" id="play">
+  <div class="step-head"><h2>4 · Play &amp; Observe</h2><span class="time">25 min</span></div>
+  <p class="wisdom">Play the game. Then watch the player.</p>
+  <p>Play <strong>one</strong> full game: online or across a real board. Use a time control that lets you think (15+10 or slower). Your only task: be a calm witness of yourself. Notice. Do not judge.</p>
+  <dl class="rule">
+    <dt>Before</dt><dd>Say your intention: "Today I watch myself."</dd>
+    <dt>During</dt><dd>At moves 10, 20 and 30, take one breath and ask: <em>what am I feeling right now?</em></dd>
+    <dt>After</dt><dd>Fill the Observer Sheet below while it is fresh. Do not open an engine yet.</dd>
+  </dl>
+
+  <h3>Observer Sheet</h3>
+  <label class="field"><span>When did I feel the strongest emotion? Which move was it, and what was the feeling?</span>
+    <textarea data-save="l1_obs1"></textarea></label>
+  <label class="field"><span>After my first mistake, what did I do next?</span>
+    <small>Speed up? Freeze? Blame? Stay calm? Honest is the goal.</small>
+    <textarea data-save="l1_obs2"></textarea></label>
+  <label class="field"><span>Where did my type show up? Where did it go missing?</span>
+    <textarea data-save="l1_obs3"></textarea></label>
+  <label class="field"><span>The moment I felt most confident</span>
+    <textarea data-save="l1_obs4"></textarea></label>
+</section>
+
+<!-- 5 REFLECT -->
+<section class="step" id="reflect">
+  <div class="step-head"><h2>5 · Reflect</h2><span class="time">10 min</span></div>
+  <p>Combine the quiz, the dials and your game. Complete your <strong>Board Self Card</strong>. It is saved on this device.</p>
+  <label class="field"><span>I am a ______ player who ______.</span>
+    <input type="text" data-save="l1_card1" placeholder="a Storm-Architect player who loves…"></label>
+  <label class="field"><span>My superpower is…</span>
+    <input type="text" data-save="l1_card2"></label>
+  <label class="field"><span>My growth edge is…</span>
+    <input type="text" data-save="l1_card3"></label>
+  <label class="field"><span>My promise for the next lesson (one small, doable sentence)</span>
+    <input type="text" data-save="l1_card4"></label>
+
+  <p class="wisdom">Self-awareness is not self-criticism. It is the first piece you develop.</p>
+
+  <details>
+    <summary>Adapt this lesson to your age</summary>
+    <div class="age">
+      <div><strong>Young wizard (6+)</strong><br>A parent or coach reads each choice aloud. Pick the first answer that feels like "me." Draw your type as an animal or a weather picture. Shorten the game; celebrate the noticing.</div>
+      <div><strong>Seasoned wizard (60+)</strong><br>Ask where the same pattern shows up in your work and relationships. Choose a relaxed time control. Breaks are strength, not weakness; split the lesson into two 30-minute sittings if you like.</div>
+    </div>
+  </details>
+</section>
+
+<!-- DEEPER -->
+<section class="step" id="deeper">
+  <div class="step-head"><h2>Go deeper</h2><span class="time">optional</span></div>
+  <p>Search these keywords to study further. Each lesson stands on its own; explore only what calls to you.</p>
+  <ul class="keywords">
+    <li>Arjuna's doubt (Bhagavad Gita, chapter 1)</li>
+    <li>Mahabharata retold for beginners</li>
+    <li>The Mahabharata (R. K. Narayan)</li>
+    <li>chess playing styles</li>
+    <li>Mikhail Tal attacking games</li>
+    <li>Tigran Petrosian prophylaxis</li>
+    <li>Anatoly Karpov positional squeeze</li>
+    <li>Emanuel Lasker practical chess</li>
+    <li>Seven Deadly Chess Sins (Rowson)</li>
+    <li>Inner Game of Tennis (Gallwey)</li>
+    <li>growth mindset (Dweck)</li>
+  </ul>
+</section>
+
+<div class="row"><button class="btn" data-complete type="button">Mark lesson complete</button></div>
+
+<div class="pager">
+  <a class="btn ghost off" href="#" aria-disabled="true">← Start</a>
+  <a class="btn ghost" href="lesson-02.html">Lesson 2: The Pause →</a>
+</div>
+<footer class="foot">The Wizard's Path · Lesson 1 · Progress is stored only in your browser.</footer>
+</main>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var QUESTIONS = [
+    ['Move 12. The position is calm. What do you most want to do?',
+      ['S', 'Open lines and create threats against the enemy king.'],
+      ['F', 'Fix any weakness in my camp and keep everything protected.'],
+      ['A', 'Improve my worst piece and shape the pawn structure.'],
+      ['X', 'Wait for the opponent to overreach, then strike.']],
+    ['A free pawn is offered. It might be a trap. You…',
+      ['S', 'Take it. I will calculate my way through the trouble.'],
+      ['F', 'Decline unless I am certain it is safe.'],
+      ['A', 'Take it only if my structure stays healthy.'],
+      ['X', 'Check whether the trap can be turned around on them.']],
+    ['Your opponent sacrifices a piece against you. Your first feeling?',
+      ['S', 'Excitement. Complications!'],
+      ['F', 'Caution. I count every threat before I touch a piece.'],
+      ['A', 'Curiosity. Does the sacrifice have a long-term point?'],
+      ['X', 'Hope. Sacrifices often have a hole in them.']],
+    ['After a loss, you usually…',
+      ['S', 'Want to play again right now and win it back.'],
+      ['F', 'Replay the game quietly to find where I lost control.'],
+      ['A', 'Look for the bigger lesson in my plan, not one move.'],
+      ['X', 'Shrug, remember the trick that beat me, move on.']],
+    ['Which win feels best?',
+      ['S', 'A crushing attack with a brilliant finish.'],
+      ['F', 'A game where my opponent never had a chance.'],
+      ['A', 'A slow strategic squeeze where every piece was perfect.'],
+      ['X', 'Rescuing a position that looked lost.']],
+    ['You have one minute left on the clock. You…',
+      ['S', 'Play fast and aggressive. Chaos favours me.'],
+      ['F', 'Play safe, simple moves and avoid risks.'],
+      ['A', 'Trust my plan and simplify toward it.'],
+      ['X', 'Set small problems and hope the opponent cracks.']],
+    ['Choose a coach.',
+      ['S', 'A fearless magician who sacrifices for beauty.'],
+      ['F', 'An iron defender who makes you feel safe.'],
+      ['A', 'A patient teacher of plans and structure.'],
+      ['X', 'A clever strategist who reads people.']],
+    ['Learning a new opening, you prefer…',
+      ['S', 'Sharp lines with traps and gambits.'],
+      ['F', 'Solid setups with clear rules.'],
+      ['A', 'Understanding the ideas, not memorising moves.'],
+      ['X', 'Flexible systems where I can improvise.']],
+    ['You are worse in a game. You…',
+      ['S', 'Throw everything at the enemy king.'],
+      ['F', 'Dig in and wait for my chance.'],
+      ['A', 'Look for a plan to untangle slowly.'],
+      ['X', 'Hunt for the swindle.']],
+    ['You feel best when you can think…',
+      ['S', 'Quickly, on intuition and momentum.'],
+      ['F', 'Carefully, checking each move.'],
+      ['A', 'Deeply, with long-range plans.'],
+      ['X', 'In bursts, reading the mood of the game.']],
+    ['A draw is offered in an equal position. You…',
+      ['S', 'Decline. I came to win.'],
+      ['F', 'Accept if it is honestly equal.'],
+      ['A', 'Decide by whether the position still has potential.'],
+      ['X', 'Decline if I sense my opponent is nervous.']],
+    ['After you win, you want your opponent to say you were…',
+      ['S', 'Fearless.'],
+      ['F', 'Unbreakable.'],
+      ['A', 'Wise.'],
+      ['X', 'Clever.']]
+  ];
+
+  var DIALS = [
+    ['Composure', 'I stay calm when things go wrong.', 'Breathe before critical moves. Box breathing: in 4, hold 4, out 4, hold 4. Do it three times before you resume.'],
+    ['Patience', 'I take my time when the position is quiet.', 'The 20-second rule. In the first ten moves, sit on your hands for 20 seconds before every move.'],
+    ['Boldness', 'I am willing to take a calculated risk.', 'One brave move per game: choose one moment to take the active option on purpose, after checking it is safe.'],
+    ['Self-belief', 'I believe I can keep improving.', 'The evidence journal. After each game, write three things you did well, however small.'],
+    ['Recovery', 'I bounce back quickly after a mistake or a loss.', 'The next-move rule. After any mistake, take one breath before your next move. Review within 24 hours, not 24 minutes.']
+  ];
+
+  var TYPES = {
+    S: { key: 'storm', name: 'The Storm', hero: 'Bhima',
+      heroLine: 'Bhima, the mighty Pandava, charged where others hesitated. His strength was greatest when it was guided, not merely unleashed.',
+      strength: 'You seize the initiative, create problems, and are not afraid of messy positions.',
+      shadow: 'You can move too fast, attack before the position is ready, and tilt into revenge games.',
+      edge: 'Verify before you strike. Learn to defend with calm.',
+      train: 'Tactics, attacking patterns, calculation. Add one pause per move.' },
+    F: { key: 'fortress', name: 'The Fortress', hero: 'Bhishma',
+      heroLine: 'Bhishma, the grandsire, stood unbroken through the great war. His strength was steadiness; his challenge was knowing when to act.',
+      strength: 'You are hard to beat. You see danger early and keep your pieces working together.',
+      shadow: 'You can drift into passivity, decline good chances, and fear losing more than you want to win.',
+      edge: 'Make one purposeful threat per game.',
+      train: 'Prophylaxis, endgames, converting small advantages. Practise attacking patterns to grow courage.' },
+    A: { key: 'architect', name: 'The Architect', hero: 'Drona',
+      heroLine: 'Drona, teacher of the princes, designed the great battle formations. His strength was structure and plan.',
+      strength: 'You see the long game: structure, plans, steady improvement.',
+      shadow: 'You can overthink, run short of time, and miss the short tactic while building the grand plan.',
+      edge: 'Check tactics first, plans second. Set time budgets.',
+      train: 'Pawn structures, strategic plans, endgames. Daily tactics to sharpen short-range vision.' },
+    X: { key: 'fox', name: 'The Fox', hero: "Krishna's art",
+      heroLine: 'Krishna, charioteer and counsellor, won through timing and the right word at the right moment. Here, his art is reading the moment.',
+      strength: 'You read opponents, spot tactics, and thrive when the position is unclear.',
+      shadow: 'You can fall into "hope chess" (playing for mistakes), skip deep study, and let plans drift.',
+      edge: 'Assume your opponent plays the best move. Build one solid plan per game.',
+      train: 'Calculation, a stable opening repertoire, and slow game review to build depth.' }
+  };
+
+  var qBox = document.getElementById('questions');
+  var dBox = document.getElementById('dials');
+  var form = document.getElementById('assessment-form');
+  var out = document.getElementById('result');
+  var msg = document.getElementById('msg');
+
+  /* build questions */
+  QUESTIONS.forEach(function (q, i) {
+    var fs = document.createElement('fieldset');
+    fs.className = 'q';
+    var html = '<legend>' + (i + 1) + '. ' + q[0] + '</legend>';
+    for (var k = 1; k < q.length; k++) {
+      html += '<label><input type="radio" name="q' + i + '" value="' + q[k][0] + '"><span>' + q[k][1] + '</span></label>';
+    }
+    fs.innerHTML = html;
+    qBox.appendChild(fs);
+  });
+  /* build dials */
+  DIALS.forEach(function (d, i) {
+    var div = document.createElement('div');
+    div.className = 'dial';
+    div.innerHTML = '<label for="d' + i + '"><span>' + d[0] + '<small>' + d[1] + '</small></span><output id="o' + i + '">3</output></label>' +
+      '<input type="range" id="d' + i + '" min="1" max="5" step="1" value="3">';
+    dBox.appendChild(div);
+    var r = div.querySelector('input');
+    r.addEventListener('input', function () { document.getElementById('o' + i).textContent = r.value; save(); });
+  });
+
+  function readAnswers() {
+    var a = [];
+    for (var i = 0; i < QUESTIONS.length; i++) {
+      var c = form.querySelector('input[name="q' + i + '"]:checked');
+      a.push(c ? c.value : null);
+    }
+    return a;
+  }
+  function readDials() {
+    return DIALS.map(function (d, i) { return parseInt(document.getElementById('d' + i).value, 10); });
+  }
+  function save() {
+    window.WP.set('wp_l1_answers', JSON.stringify(readAnswers()));
+    window.WP.set('wp_l1_dials', JSON.stringify(readDials()));
+  }
+  form.addEventListener('change', save);
+
+  function restore() {
+    try {
+      var a = JSON.parse(window.WP.get('wp_l1_answers') || 'null');
+      if (a) a.forEach(function (v, i) {
+        if (!v) return;
+        var el = form.querySelector('input[name="q' + i + '"][value="' + v + '"]');
+        if (el) el.checked = true;
+      });
+      var d = JSON.parse(window.WP.get('wp_l1_dials') || 'null');
+      if (d) d.forEach(function (v, i) {
+        var r = document.getElementById('d' + i);
+        if (r) { r.value = v; document.getElementById('o' + i).textContent = v; }
+      });
+      return a && a.every(function (v) { return v; });
+    } catch (e) { return false; }
+  }
+
+  function reveal() {
+    var a = readAnswers();
+    var left = a.filter(function (v) { return !v; }).length;
+    if (left) { msg.textContent = 'Please answer all 12 moments (' + left + ' left).'; out.hidden = true; return; }
+    msg.textContent = '';
+    var score = { S: 0, F: 0, A: 0, X: 0 };
+    a.forEach(function (v) { score[v]++; });
+    var order = ['S', 'F', 'A', 'X'].sort(function (x, y) { return score[y] - score[x]; });
+    var first = order[0], second = order[1];
+    var tie = score[first] === score[second];
+    var dials = readDials();
+    var hi = 0, lo = 0;
+    dials.forEach(function (v, i) { if (v > dials[hi]) hi = i; if (v < dials[lo]) lo = i; });
+    var flat = dials.every(function (v) { return v === dials[0]; });
+
+    window.WP.set('wp_arch', TYPES[first].key);
+    window.WP.set('wp_arch2', TYPES[second].key);
+    window.WP.set('wp_edge', flat ? '' : DIALS[lo][0].toLowerCase());
+    save();
+
+    var t = TYPES[first], t2 = TYPES[second];
+    var html = '<h3>Your Board Self: ' + t.name + (score[second] > 0 ? ' + ' + t2.name : '') + '</h3>';
+    html += '<p class="hero-name">Your guide from the epic: ' + t.hero + '</p>';
+    if (tie) html += '<p class="note">A tie between ' + t.name + ' and ' + t2.name + '. You are a true blend. Both guide you.</p>';
+    html += '<div>';
+    ['S', 'F', 'A', 'X'].forEach(function (k) {
+      html += '<div class="meter"><span>' + TYPES[k].name.replace('The ', '') + '</span><div class="bar"><i class="' + TYPES[k].key + '" style="width:' + Math.round(100 * score[k] / 12) + '%"></i></div><span>' + score[k] + '</span></div>';
+    });
+    html += '</div>';
+    html += '<p style="margin-top:14px"><strong>Superpower.</strong> ' + t.strength + '</p>';
+    html += '<p><strong>Shadow.</strong> ' + t.shadow + '</p>';
+    html += '<p><strong>Growth edge.</strong> ' + t.edge + '</p>';
+    html += '<p><strong>Train with.</strong> ' + t.train + '</p>';
+    html += '<p><strong>Your guide.</strong> ' + t.heroLine + '</p>';
+    if (score[second] > 0 && !tie) {
+      html += '<p><strong>Your second voice (' + t2.name + ').</strong> ' + t2.strength + '</p>';
+    }
+    html += '<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">';
+    html += '<h3>Your inner dials</h3>';
+    DIALS.forEach(function (d, i) {
+      html += '<div class="meter"><span>' + d[0] + '</span><div class="bar"><i style="width:' + (dials[i] * 20) + '%"></i></div><span>' + dials[i] + '</span></div>';
+    });
+    if (flat) {
+      html += '<p style="margin-top:12px">Your dials are even. Pick the one you most want to grow and start there.</p>';
+    } else {
+      html += '<p style="margin-top:12px"><strong>Highest dial: ' + DIALS[hi][0] + '.</strong> Lean on it when things get hard.</p>';
+      html += '<p><strong>Growth dial: ' + DIALS[lo][0] + '.</strong> Your practice this week: ' + DIALS[lo][2] + '</p>';
+    }
+    html += '<p class="note">Saved on this device. The next lessons will show the version written for your type first.</p>';
+    out.innerHTML = html;
+    out.hidden = false;
+    out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); reveal(); });
+  document.getElementById('reset-assessment').addEventListener('click', function () {
+    form.reset();
+    DIALS.forEach(function (d, i) { document.getElementById('o' + i).textContent = '3'; });
+    ['wp_l1_answers', 'wp_l1_dials', 'wp_arch', 'wp_arch2', 'wp_edge'].forEach(function (key) {
+      window.WP.remove(key);
+    });
+    out.hidden = true;
+    msg.textContent = 'Answers cleared. Start fresh whenever you are ready.';
+    var badge = document.querySelector('.mytype');
+    if (badge) badge.remove();
+  });
+
+  if (restore()) reveal();
+})();
+</script>
+</body>
+</html>

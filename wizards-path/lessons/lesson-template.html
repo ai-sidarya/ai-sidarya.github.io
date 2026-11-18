@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson N · TITLE — The Wizard's Path</title>
+<meta name="description" content="One sentence describing the lesson.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-lesson="N">
+<!-- Steps to add a lesson:
+     1. Copy this file to lessons/lesson-NN.html (two digits).
+     2. Replace N, TITLE, text, and the previous / next links.
+     3. Add a card to index.html (copy any card, change data-lesson and href).
+     4. Update the previous lesson's pager so its "next" link points here.
+     Boards: <div class="board" data-fen="FEN HERE"></div> inside a .boardbox with a .boardcap.
+     Fields: any input or textarea with data-save="unique_key" autosaves in the browser.
+     Personality tabs: wrap four .panel blocks (storm, fortress, architect, fox) inside <div data-tabs>. -->
+
+<header class="topbar">
+  <a class="brand" href="../index.html">The Wizard's Path</a>
+  <nav>
+    <a href="lesson-PREV.html">← Lesson PREV</a>
+    <a href="../index.html">All lessons</a>
+    <a href="lesson-NEXT.html">Lesson NEXT →</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<section class="lesson-head">
+  <div class="kicker">Lesson N · 60 minutes</div>
+  <h1>TITLE</h1>
+  <p class="lede">One line of wisdom.</p>
+  <div class="chips">
+    <span class="chip gold"><b>Chess skill</b> · SKILL</span>
+    <span class="chip gold"><b>Character muscle</b> · MUSCLE</span>
+  </div>
+  <nav class="jump" aria-label="Lesson sections">
+    <a href="#centre">1 Centre</a><a href="#idea">2 The Idea</a><a href="#train">3 Train</a><a href="#play">4 Play</a><a href="#reflect">5 Reflect</a><a href="#deeper">Go deeper</a>
+  </nav>
+</section>
+
+<section class="story" aria-label="Story from the Mahabharata">
+  <div class="story-tag">From the Mahabharata · EPISODE</div>
+  <p>Short retelling in your own words.</p>
+  <p class="turn"><strong>The chess lesson:</strong> the bridge from story to skill.</p>
+</section>
+
+<section class="step" id="centre">
+  <div class="step-head"><h2>1 · Centre</h2><span class="time">3 min</span></div>
+  <p class="wisdom">Wisdom line.</p>
+  <ol><li>Three slow breaths.</li><li>Intention.</li></ol>
+</section>
+
+<section class="step" id="idea">
+  <div class="step-head"><h2>2 · The Idea</h2><span class="time">10 min</span></div>
+  <p>The core idea in plain words.</p>
+</section>
+
+<section class="step" id="train">
+  <div class="step-head"><h2>3 · Train</h2><span class="time">20 min</span></div>
+  <div class="puzzle">
+    <div class="boardbox">
+      <div class="board" data-fen="6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1"></div>
+      <div class="boardcap"></div>
+    </div>
+    <div>
+      <p><strong>White to move.</strong> Question.</p>
+      <details><summary>Reveal the answer</summary><p>Answer.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="play">
+  <div class="step-head"><h2>4 · Play</h2><span class="time">20 min</span></div>
+  <p>The game task.</p>
+  <div data-tabs>
+    <div class="panel" data-arch="storm"><p>Storm version.</p></div>
+    <div class="panel" data-arch="fortress"><p>Fortress version.</p></div>
+    <div class="panel" data-arch="architect"><p>Architect version.</p></div>
+    <div class="panel" data-arch="fox"><p>Fox version.</p></div>
+  </div>
+</section>
+
+<section class="step" id="reflect">
+  <div class="step-head"><h2>5 · Reflect</h2><span class="time">7 min</span></div>
+  <label class="field"><span>Reflection prompt</span><textarea data-save="lN_r1"></textarea></label>
+  <details>
+    <summary>Adapt this lesson to your age</summary>
+    <div class="age">
+      <div><strong>Young wizard (6+)</strong><br>…</div>
+      <div><strong>Seasoned wizard (60+)</strong><br>…</div>
+    </div>
+  </details>
+</section>
+
+<section class="step" id="deeper">
+  <div class="step-head"><h2>Go deeper</h2><span class="time">optional</span></div>
+  <ul class="keywords"><li>search keyword</li></ul>
+</section>
+
+<div class="row"><button class="btn" data-complete type="button">Mark lesson complete</button></div>
+
+<div class="pager">
+  <a class="btn ghost" href="lesson-PREV.html">← Previous</a>
+  <a class="btn ghost" href="lesson-NEXT.html">Next →</a>
+</div>
+<footer class="foot">The Wizard's Path · Progress is stored only in your browser.</footer>
+</main>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
