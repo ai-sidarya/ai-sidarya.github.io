@@ -19,6 +19,11 @@ lessons/lesson-02.html  The Pause (discipline)
 lessons/lesson-03.html  Your Opening Identity (commitment)
 lessons/lesson-04.html  Dare and Defend (courage)
 lessons/lesson-05.html  The Loss Is the Lesson (resilience)
+lessons/lesson-06.html  Sanjaya's Sight (perspective)
+lessons/lesson-07.html  Indraprastha (patience)
+lessons/lesson-08.html  Hanuman's Tail (humility)
+lessons/lesson-09.html  The Yaksha's Questions (composure)
+lessons/lesson-10.html  Karma Without Clinging (self-mastery)
 lessons/lesson-template.html   starting point for new lessons
 ```
 
@@ -26,10 +31,10 @@ Every lesson is complete on its own. The numbered order is the recommended path.
 
 ## Add a lesson
 
-1. Copy `lessons/lesson-template.html` to `lessons/lesson-06.html`.
+1. Copy `lessons/lesson-template.html` to `lessons/lesson-11.html`.
 2. Write the content. Keep the five steps: Centre, Idea, Train, Play, Reflect.
-3. Add a card to `index.html` above the `ADD NEW LESSON CARDS` comment, with `data-lesson="6"`.
-4. Point the previous lesson's "next" links at the new page.
+3. Add a card to `index.html` above the `ADD NEW LESSON CARDS` comment, with `data-lesson="11"`.
+4. Update the lesson count and point the previous lesson's "next" links at the new page.
 
 ## Features
 
