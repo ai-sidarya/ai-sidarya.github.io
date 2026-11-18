@@ -20,7 +20,7 @@
 <main class="wrap">
 
 <section class="lesson-head">
-  <div class="kicker">Lesson 1 of 10 · 60 minutes</div>
+  <div class="kicker">Lesson 1 of 5 · 60 minutes</div>
   <h1>Know Your Board Self</h1>
   <p class="lede">Before you improve your chess, meet the player who is making the moves.</p>
   <div class="chips">
@@ -34,7 +34,7 @@
 
 <!-- STORY -->
 <section class="story" aria-label="Story from the Mahabharata">
-  <div class="story-tag">From the Mahabharata · Arjuna's doubt</div>
+  <div class="story-head"><svg class="emblem " viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 6Q-1 32 15 58"/><path d="M15 6V58" stroke-width="1.4"/><circle cx="40" cy="34" r="17"/><circle cx="40" cy="34" r="3"/><path d="M43.0 34.0L57.0 34.0M42.1 36.1L52.0 46.0M40.0 37.0L40.0 51.0M37.9 36.1L28.0 46.0M37.0 34.0L23.0 34.0M37.9 31.9L28.0 22.0M40.0 31.0L40.0 17.0M42.1 31.9L52.0 22.0"/></svg><div class="story-tag">From the Mahabharata · Arjuna's doubt</div></div>
   <p>On the field of Kurukshetra, two great armies stood ready. The archer Arjuna asked his charioteer and friend, Krishna, to drive him between them. He looked at the faces on both sides: teachers, cousins, friends. His hands shook and his bow slipped. In that moment he did not know who he was meant to be.</p>
   <p>Krishna did not hand him a new weapon. He helped Arjuna see his own nature clearly, so that he could act from it.</p>
   <p class="turn"><strong>The chess lesson:</strong> before you improve your play, understand the player. Today you meet your own nature on the board.</p>
@@ -81,7 +81,7 @@
   <div class="step-head"><h2>3 · Assess</h2><span class="time">15 min</span></div>
   <p><strong>Part A.</strong> Twelve moments. Choose the answer that is most like <em>you</em>, not the one you wish was you.</p>
 
-  <form id="assessment-form" autocomplete="off">
+  <form id="assess" autocomplete="off">
     <div id="questions"></div>
 
     <p><strong>Part B.</strong> Five inner dials. Slide each from 1 (rarely) to 5 (almost always) for how you really are at the board.</p>
@@ -89,7 +89,7 @@
 
     <div class="row">
       <button class="btn" type="submit">Reveal my Board Self</button>
-      <button class="btn ghost" type="button" id="reset-assessment">Clear answers &amp; restart</button>
+      <button class="btn ghost" type="button" id="reset">Start over</button>
     </div>
     <p id="msg" role="status" style="color:var(--storm);font-weight:600"></p>
   </form>
@@ -162,6 +162,8 @@
     <li>growth mindset (Dweck)</li>
   </ul>
 </section>
+
+<div class="lotus"><svg class="emblem " viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M32 6C40 14 40 24 32 32C24 24 24 14 32 6Z"/><path d="M30 32C20 30 12 24 10 14C20 14 28 22 30 32Z"/><path d="M34 32C44 30 52 24 54 14C44 14 36 22 34 32Z"/><path d="M6 38H58" stroke-width="1.6"/></svg></div>
 
 <div class="row"><button class="btn" data-complete type="button">Mark lesson complete</button></div>
 
@@ -277,7 +279,7 @@
 
   var qBox = document.getElementById('questions');
   var dBox = document.getElementById('dials');
-  var form = document.getElementById('assessment-form');
+  var form = document.getElementById('assess');
   var out = document.getElementById('result');
   var msg = document.getElementById('msg');
 
@@ -353,13 +355,13 @@
     var flat = dials.every(function (v) { return v === dials[0]; });
 
     window.WP.set('wp_arch', TYPES[first].key);
-    window.WP.set('wp_arch2', TYPES[second].key);
+    window.WP.set('wp_arch2', score[second] > 0 ? TYPES[second].key : '');
     window.WP.set('wp_edge', flat ? '' : DIALS[lo][0].toLowerCase());
     save();
 
     var t = TYPES[first], t2 = TYPES[second];
     var html = '<h3>Your Board Self: ' + t.name + (score[second] > 0 ? ' + ' + t2.name : '') + '</h3>';
-    html += '<p class="hero-name">Your guide from the epic: ' + t.hero + '</p>';
+    html += '<div class="result-guide">' + window.WP.emblem(t.key, 'emblem-lg') + '<span class="hero-name">Your guide from the epic: ' + t.hero + '</span></div>';
     if (tie) html += '<p class="note">A tie between ' + t.name + ' and ' + t2.name + '. You are a true blend. Both guide you.</p>';
     html += '<div>';
     ['S', 'F', 'A', 'X'].forEach(function (k) {
@@ -392,16 +394,11 @@
   }
 
   form.addEventListener('submit', function (e) { e.preventDefault(); reveal(); });
-  document.getElementById('reset-assessment').addEventListener('click', function () {
+  document.getElementById('reset').addEventListener('click', function () {
     form.reset();
     DIALS.forEach(function (d, i) { document.getElementById('o' + i).textContent = '3'; });
-    ['wp_l1_answers', 'wp_l1_dials', 'wp_arch', 'wp_arch2', 'wp_edge'].forEach(function (key) {
-      window.WP.remove(key);
-    });
-    out.hidden = true;
-    msg.textContent = 'Answers cleared. Start fresh whenever you are ready.';
-    var badge = document.querySelector('.mytype');
-    if (badge) badge.remove();
+    out.hidden = true; msg.textContent = '';
+    save();
   });
 
   if (restore()) reveal();
